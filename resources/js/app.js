@@ -21,4 +21,5 @@ async function getAuthUser() {
 const app = createApp({})
 
 app.component("test", require("./components/test.vue").default)
-app.mount("#app")    
+app.component("register", require("./components/auth/RegisterComponent").default)
+app.mount("#app")

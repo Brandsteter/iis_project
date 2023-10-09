@@ -19,7 +19,7 @@
     </head>
     <body>
         <div id="app">
-            <test></test>
+            @yield("content")
         </div>
     </body>
 </html>
