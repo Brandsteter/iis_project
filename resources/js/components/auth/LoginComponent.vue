@@ -1,9 +1,7 @@
 <template>
     <div>
-        <input v-model="fields.name" type="text">
         <input v-model="fields.email" type="email">
         <input v-model="fields.password" type="password">
-        <input v-model="fields.passwordRepeat" type="password">
         <button @click="submit">Submit</button>
     </div>
 </template>
@@ -13,17 +11,15 @@ export default {
     data(){
         return {
             fields: {
-                name: "",
                 email: "",
-                password: "",
-                passwordRepeat: ""
+                password: ""
             }
         }
     },
 
     methods: {
         submit(){
-            axios.post('/auth/register', this.fields).then((response)=>{
+            axios.post('/auth/login', this.fields).then((response)=>{
                 if (response)
                 {
                     window.location.href = '/'

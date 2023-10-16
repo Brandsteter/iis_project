@@ -18,6 +18,9 @@
 
     </head>
     <body>
+        @auth
+            <a href="/auth/logout"><button>logout</button></a>
+        @endauth
         <div id="app">
             @yield("content")
         </div>

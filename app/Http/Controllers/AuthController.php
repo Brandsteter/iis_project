@@ -36,4 +36,34 @@ class AuthController extends Controller
     {
         return view('auth.register');
     }
+
+    public function login(Request $request)
+    {
+        $data = $request->validate([
+            'email' => ['required', 'string'],
+            'password' => ['required', 'string']
+        ]);
+
+        if (!Auth::attempt(['email' => $data['email'], 'password' => $data['password']]))
+        {
+            return response([
+                'message' => 'wrong login'
+            ],400);
+        }
+
+        $user = User::where('email', $data['email'])->first();
+        Auth::login($user);
+    }
+
+    public function loginPage()
+    {
+        return view('auth.login');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        return redirect('/auth/login');
+    }
 }
