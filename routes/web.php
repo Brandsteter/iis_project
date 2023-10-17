@@ -29,3 +29,10 @@ Route::prefix('/auth')->group(function () {
         Route::get('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
     });
 });
+Route::prefix('/admin')->group(function () {
+    Route::prefix('/user')->group(function () {
+        Route::post('/', [\App\Http\Controllers\AdminUserController::class, 'create']);
+        Route::put('/{user}', [\App\Http\Controllers\AdminUserController::class, 'update']);
+        Route::delete('/{user}', [\App\Http\Controllers\AdminUserController::class, 'delete']);
+    });
+});

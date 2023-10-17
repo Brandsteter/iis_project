@@ -30,6 +30,10 @@ class AuthController extends Controller
         $user->roles()->attach($role);
 
         Auth::login($user);
+
+        return response([
+            'message' => 'Successfully registered'
+        ], 201);
     }
 
     public function registerPage()
@@ -53,6 +57,10 @@ class AuthController extends Controller
 
         $user = User::where('email', $data['email'])->first();
         Auth::login($user);
+
+        return response([
+            'message' => 'Successfully logged in'
+        ], 200);
     }
 
     public function loginPage()
