@@ -22,4 +22,9 @@ class CategoryController extends Controller
         ], 201);
     }
 
+    public function delete(Category $category)
+    {
+        $category->delete();
+        return response()->noContent();
+    }
 }

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('is_approved')->default(false);
             $table->foreignId('parent_category_id')->nullable();
 
             $table->foreign('parent_category_id')->references('id')->on('categories')->onDelete('cascade');
