@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('app');
 });
+
 Route::prefix('/auth')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('/register', [\App\Http\Controllers\AuthController::class, 'registerPage']);
@@ -31,10 +32,12 @@ Route::prefix('/auth')->group(function () {
 });
 
 Route::prefix('/admin')->group(function () {
-    Route::prefix('/user')->group(function () {
-        Route::post('/', [\App\Http\Controllers\AdminUserController::class, 'create']);
-        Route::put('/{user}', [\App\Http\Controllers\AdminUserController::class, 'update']);
-        Route::delete('/{user}', [\App\Http\Controllers\AdminUserController::class, 'delete']);
+    Route::middleware('admin')->group(function () {
+        Route::prefix('/user')->group(function () {
+            Route::post('/', [\App\Http\Controllers\AdminUserController::class, 'create']);
+            Route::put('/{user}', [\App\Http\Controllers\AdminUserController::class, 'update']);
+            Route::delete('/{user}', [\App\Http\Controllers\AdminUserController::class, 'delete']);
+        });
     });
 });
 
@@ -44,6 +47,20 @@ Route::prefix('/category')->group(function () {
 
         Route::middleware('moderator')->group(function () {
             Route::delete('/{category}', [\App\Http\Controllers\CategoryController::class, 'delete']);
+            Route::put('/{category}', [\App\Http\Controllers\CategoryController::class, 'update']);
+            Route::patch('/{category}', [\App\Http\Controllers\CategoryController::class, 'approve']);
+        });
+    });
+});
+
+Route::prefix('/place')->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::post('/', [\App\Http\Controllers\PlaceController::class, 'create']);
+
+        Route::middleware('moderator')->group(function () {
+            Route::delete('/{place}', [\App\Http\Controllers\PlaceController::class, 'delete']);
+            Route::put('/{place}', [\App\Http\Controllers\PlaceController::class, 'update']);
+            Route::patch('/{place}', [\App\Http\Controllers\PlaceController::class, 'approve']);
         });
     });
 });

@@ -27,4 +27,30 @@ class CategoryController extends Controller
         $category->delete();
         return response()->noContent();
     }
+
+    public function update(Category $category, Request $request)
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255']
+        ]);
+
+        $category->update($data);
+
+        return response([
+            'message' => 'Category successfully updated'
+        ], 201);
+    }
+
+    public function approve(Category $category)
+    {
+        $data = [
+            'is_approved' => true
+        ];
+
+        $category->update($data);
+
+        return response([
+            'message' => 'Category successfully approved'
+        ], 201);
+    }
 }
