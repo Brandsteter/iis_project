@@ -28,8 +28,15 @@
         </template>
       </v-navigation-drawer>
     </v-layout>
-    <div>
-      <h2>Simple Calendar</h2>
+    <div class="calendar-container">
+      <div class="calendar-header">
+        <v-btn icon @click="prevMonth">
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <v-btn icon @click="nextMonth">
+          <v-icon>mdi-chevron-right</v-icon>
+        </v-btn>
+      </div>
       <table>
         <thead>
         <tr>
@@ -46,84 +53,132 @@
       </table>
     </div>
     <!-- End Calendar -->
+
   </v-card>
-  <!-- Calendar -->
-
-  <div>
-
-  </div>
-
-
 </template>
 
-
 <script>
-  export default {
-    data() {
-      return {
-        today: new Date(),
-        currentMonth: null,
-        currentYear: null
-      };
-    },
-    mounted() {
-      this.updateCalendar();
-    },
+export default {
+  data() {
+    const today = new Date();
+    return {
+      today,
+      currentMonth: today.getMonth(),
+      currentYear: today.getFullYear(),
+    };
+  },
+  mounted() {
+    this.updateCalendar();
+  },
+  methods: {
+    updateCalendar() {
+      const calendarBody = document.getElementById('calendarBody');
+      calendarBody.innerHTML = '';
 
-    // async created() {
-    //   // Call the async function in a lifecycle hook or a method
-    //   await this.fetchAuthUser();
-    // },
-    methods: {
-      updateCalendar() {
-        const calendarBody = document.getElementById('calendarBody');
-        calendarBody.innerHTML = '';
+      const firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1);
+      const lastDayOfMonth = new Date(this.currentYear, this.currentMonth + 1, 0);
+      const daysInMonth = lastDayOfMonth.getDate();
 
-        const firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1);
-        const lastDayOfMonth = new Date(this.currentYear, this.currentMonth + 1, 0);
-        const daysInMonth = lastDayOfMonth.getDate();
+      let dayCounter = 1;
 
-        let dayCounter = 1;
+      for (let i = 0; i < 6; i++) {
+        const row = document.createElement('tr');
 
-        for (let i = 0; i < 6; i++) {
-          const row = document.createElement('tr');
+        for (let j = 0; j < 7; j++) {
+          const cell = document.createElement('td');
 
-          for (let j = 0; j < 7; j++) {
-            const cell = document.createElement('td');
+          if ((i === 0 && j < firstDayOfMonth.getDay()) || dayCounter > daysInMonth) {
+            // Empty cells before the first day of the month or after the last day of the month
+            cell.textContent = '';
+          } else {
+            cell.textContent = dayCounter;
 
-            if ((i === 0 && j < firstDayOfMonth.getDay()) || dayCounter > daysInMonth) {
-              // Empty cells before the first day of the month or after the last day of the month
-              cell.textContent = '';
-            } else {
-              cell.textContent = dayCounter;
-
-              // Highlight today's date
-              if (
-                  this.currentYear === this.today.getFullYear() &&
-                  this.currentMonth === this.today.getMonth() &&
-                  dayCounter === this.today.getDate()
-              ) {
-                cell.style.backgroundColor = '#99ccff';
-              }
-
-              dayCounter++;
+            // Highlight today's date
+            if (
+                this.currentYear === this.today.getFullYear() &&
+                this.currentMonth === this.today.getMonth() &&
+                dayCounter === this.today.getDate()
+            ) {
+              cell.classList.add('today');
             }
 
-            row.appendChild(cell);
+            // Highlight weekends
+            if (j === 0 || j === 6) {
+              cell.classList.add('weekend');
+            }
+
+            dayCounter++;
           }
 
-          calendarBody.appendChild(row);
+          row.appendChild(cell);
         }
-      },
-      // Add navigation methods if needed
-      // nextMonth() { /* ... */ },
-      // prevMonth() { /* ... */ },
-    },
-    watch: {
-      currentMonth: 'updateCalendar',
-      currentYear: 'updateCalendar',
-    },
-  };
 
+        calendarBody.appendChild(row);
+      }
+    },
+  },
+  nextMonth() {
+    this.currentMonth++;
+    if (this.currentMonth > 11) {
+      this.currentMonth = 0;
+      this.currentYear++;
+    }
+    this.updateCalendar();
+  },
+  prevMonth() {
+    this.currentMonth--;
+    if (this.currentMonth < 0) {
+      this.currentMonth = 11;
+      this.currentYear--;
+    }
+    this.updateCalendar();
+  },
+  watch: {
+    currentMonth: 'updateCalendar',
+    currentYear: 'updateCalendar',
+  },
+};
 </script>
 
+<style scoped>
+.calendar-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+th {
+  background-color: #4285f4;
+  color: #ffffff;
+}
+
+td {
+  position: relative;
+  cursor: pointer;
+}
+
+td:hover {
+  background-color: #f1f1f1;
+}
+
+.today {
+  background-color: #e0e0e0;
+}
+
+.weekend {
+  color: #ff5722;
+}
+
+/* Your custom styles here */
+</style>
