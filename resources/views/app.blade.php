@@ -19,10 +19,12 @@
     </head>
     <body>
         @auth
-            <a href="/auth/logout"><button>logout</button></a>
+            <a href="/auth/logout"><button> logout</button></a>
         @endauth
         <div id="app">
             @yield("content")
+            <root></root>
+{{--            <calendar></calendar>--}}
         </div>
     </body>
 </html>
