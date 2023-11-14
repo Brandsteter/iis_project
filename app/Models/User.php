@@ -42,4 +42,9 @@ class User extends Authenticatable
     {
         return $this->roles()->where('role', $role->name)->count() > 0;
     }
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'user_attends_event');
+    }
 }

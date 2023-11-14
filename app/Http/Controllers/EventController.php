@@ -28,5 +28,22 @@ class EventController extends Controller
         ], 201);
     }
 
+    public function delete(Event $event)
+    {
+        $event->delete();
+        return response()->noContent();
+    }
 
+    public function approve(Event $event)
+    {
+        $data = [
+            'is_approved' => true
+        ];
+
+        $event->update($data);
+
+        return response([
+            'message' => 'Event successfully approved'
+        ], 201);
+    }
 }

@@ -25,4 +25,9 @@ class Event extends Model
         return $this->belongsTo(Place::class);
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_attends_event');
+    }
+
 }

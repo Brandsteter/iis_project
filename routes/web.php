@@ -70,5 +70,11 @@ Route::prefix('/place')->group(function () {
 Route::prefix('/event')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\EventController::class, 'create']);
+        Route::post('/{event}', [\App\Http\Controllers\UserController::class, 'attend']);
+
+        Route::middleware('moderator')->group(function () {
+            Route::delete('/{event}', [\App\Http\Controllers\EventController::class, 'delete']);
+            Route::patch('/{event}', [\App\Http\Controllers\EventController::class, 'approve']);
+        });
     });
 });
