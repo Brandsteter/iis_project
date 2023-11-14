@@ -18,7 +18,14 @@
 
         <!-- Icons -->
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
-
+        <style>
+            .page-container {
+                display: flex; /* Use flexbox to position elements */
+                justify-content: center; /* Center items horizontally */
+                align-items: center; /* Center items vertically */
+                height: 100vh; /* Set height to 100% of viewport height */
+            }
+        </style>
 
     </head>
     <body>
@@ -27,8 +34,11 @@
         @endauth
         <div id="app">
             @yield("content")
-            <root></root>
-{{--            <calendar></calendar>--}}
+                <div class="page-container">
+                    <root></root>
+                    <calendar></calendar>
+                </div>
+
         </div>
     </body>
 </html>
