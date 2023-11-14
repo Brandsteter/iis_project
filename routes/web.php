@@ -33,6 +33,8 @@ Route::prefix('/auth')->group(function () {
 
 Route::prefix('/admin')->group(function () {
     Route::middleware('admin')->group(function () {
+        Route::get('/users', [\App\Http\Controllers\AdminUserController::class, 'getAllUsers']);
+
         Route::prefix('/user')->group(function () {
             Route::post('/', [\App\Http\Controllers\AdminUserController::class, 'create']);
             Route::put('/{user}', [\App\Http\Controllers\AdminUserController::class, 'update']);
@@ -62,5 +64,11 @@ Route::prefix('/place')->group(function () {
             Route::put('/{place}', [\App\Http\Controllers\PlaceController::class, 'update']);
             Route::patch('/{place}', [\App\Http\Controllers\PlaceController::class, 'approve']);
         });
+    });
+});
+
+Route::prefix('/event')->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::post('/', [\App\Http\Controllers\EventController::class, 'create']);
     });
 });
