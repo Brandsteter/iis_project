@@ -6,12 +6,14 @@
                     <label style="font-size: x-large" class="form-label">Login</label>
                     <div class="mb-3">
                         <label for="InputEmail" class="form-label">Email address</label>
-                        <input id="InputEmail" class="form-control" v-model="fields.email" type="email" aria-describedby="emailHelp">
+                        <input id="InputEmail" class="form-control" v-model="fields.email" type="email" maxlength="255" aria-describedby="emailHelp" required>
                     </div>
                     <div class="mb-3">
                         <label for="InputPassword" class="form-label">Password</label>
-                        <input class="form-control" id="InputPassword" v-model="fields.password" type="password">
+                        <input class="form-control" id="InputPassword" v-model="fields.password" maxlength="255" type="password" required>
+<!--                        <span v-if="errorMessages.password" style="color: red;">{{ errorMessages.password[0] }}</span>-->
                     </div>
+
                     <div class="d-flex justify-content-center">
                         <button class="btn btn-primary" @click="submit">Submit</button>
                     </div>
@@ -28,18 +30,22 @@ export default {
             fields: {
                 email: "",
                 password: ""
-            }
+            },
+            errorMessages: {}
         }
     },
 
     methods: {
         submit(){
-            axios.post('/auth/login', this.fields).then((response)=>{
-                if (response)
-                {
-                    window.location.href = '/'
-                }
-            })
+            this.errorMessages = {};
+            axios.post('/auth/login', this.fields)
+                .then((response)=>{
+                    if (response)
+                    {
+                        window.location.href = '/'
+                    }
+                })
+
         }
     }
 }
