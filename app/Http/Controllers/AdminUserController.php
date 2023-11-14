@@ -76,4 +76,11 @@ class AdminUserController extends Controller
             'message' => 'User successfully updated'
         ], 201);
     }
+
+    public function getAllUsers()
+    {
+        $users = User::with('roles')->get();
+
+        return response()->json($users);
+    }
 }
