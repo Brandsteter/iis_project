@@ -58,9 +58,9 @@ class AuthController extends Controller
         $user = User::where('email', $data['email'])->first();
         Auth::login($user);
 
-        return response([
-            'message' => 'Successfully logged in'
-        ], 200);
+        $user = User::with('roles')->where('email', $data['email'])->first();
+
+        return response()->json($user);
     }
 
     public function loginPage()

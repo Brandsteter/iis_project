@@ -38,5 +38,6 @@ app.component("register", require("./components/auth/RegisterComponent").default
 app.component("login", require("./components/auth/LoginComponent").default);
 app.component("root", require("./components/RootComponent.vue").default);
 app.component("calendar", require("./components/CalendarComponent.vue").default);
+app.component("admin", require("./components/AdminComponent.vue").default);
 
 app.mount('#app');

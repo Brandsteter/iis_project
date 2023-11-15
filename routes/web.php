@@ -33,6 +33,8 @@ Route::prefix('/auth')->group(function () {
 
 Route::prefix('/admin')->group(function () {
     Route::middleware('admin')->group(function () {
+        Route::get('/users', [\App\Http\Controllers\AdminUserController::class, 'getAllUsers']);
+
         Route::prefix('/user')->group(function () {
             Route::post('/', [\App\Http\Controllers\AdminUserController::class, 'create']);
             Route::put('/{user}', [\App\Http\Controllers\AdminUserController::class, 'update']);
@@ -61,6 +63,18 @@ Route::prefix('/place')->group(function () {
             Route::delete('/{place}', [\App\Http\Controllers\PlaceController::class, 'delete']);
             Route::put('/{place}', [\App\Http\Controllers\PlaceController::class, 'update']);
             Route::patch('/{place}', [\App\Http\Controllers\PlaceController::class, 'approve']);
+        });
+    });
+});
+
+Route::prefix('/event')->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::post('/', [\App\Http\Controllers\EventController::class, 'create']);
+        Route::post('/{event}', [\App\Http\Controllers\UserController::class, 'attend']);
+
+        Route::middleware('moderator')->group(function () {
+            Route::delete('/{event}', [\App\Http\Controllers\EventController::class, 'delete']);
+            Route::patch('/{event}', [\App\Http\Controllers\EventController::class, 'approve']);
         });
     });
 });
