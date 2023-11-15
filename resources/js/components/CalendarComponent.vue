@@ -1,52 +1,34 @@
 <template>
 <div class="calendar-container" >
-<!--  <div class="calendar-header">-->
-<!--    <v-toolbar flat  class="custom-toolbar">-->
-<!--      <v-btn icon @click="prevMonth">-->
-<!--        <v-icon>mdi-chevron-left</v-icon>-->
-<!--      </v-btn>-->
-<!--      <v-btn icon @click="nextMonth">-->
-<!--        <v-icon>mdi-chevron-right</v-icon>-->
-<!--      </v-btn>-->
-<!--    </v-toolbar>-->
-<!--  </div>-->
+    <v-toolbar height="50px" flat class="custom-toolbar">
+        <v-btn outlined class="mr-3" color="white" elevation="2" @click="setToday">
+            Today
+        </v-btn>
+      <v-btn icon @click="prevMonth">
+        <v-icon color="white">mdi-chevron-left</v-icon>
+      </v-btn>
+      <v-btn icon @click="nextMonth">
+        <v-icon color="white">mdi-chevron-right</v-icon>
+      </v-btn>
+        <h3 >
+        {{ monthName }} {{ currentYear }}
+        </h3>
+    </v-toolbar>
 
-<table>
-
-    <thead>
-    <tr>
-      <th>
-        <v-toolbar height="50px" flat  class="custom-toolbar">
-          <v-btn icon @click="prevMonth">
-            <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-btn icon @click="nextMonth">
-            <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
-        </v-toolbar>
-      </th>
-      <th>
-
-      </th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-
-    </tr>
-    <tr>
-        <th>Mon</th>
-        <th>Tue</th>
-        <th>Wed</th>
-        <th>Thu</th>
-        <th>Fri</th>
-        <th>Sat</th>
-        <th>Sun</th>
-    </tr>
-    </thead>
-    <tbody id="calendarBody"></tbody>
-</table>
+    <table>
+        <thead>
+        <tr>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+        </tr>
+        </thead>
+        <tbody id="calendarBody"></tbody>
+    </table>
 </div>
 
 </template>
@@ -60,6 +42,25 @@ export default {
             currentMonth: today.getMonth(),
             currentYear: today.getFullYear(),
         };
+    },
+    computed: {
+        monthName() {
+            const monthNames = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December',
+            ];
+            return monthNames[this.currentMonth];
+        },
     },
     mounted() {
         this.updateCalendar();
@@ -78,13 +79,11 @@ export default {
             for (let i = 0; i < 6; i++) {
                 const row = document.createElement('tr');
 
-
                 for (let j = 0; j < 7; j++) {
                     const cell = document.createElement('td');
                     cell.height="100";
                     cell.width="100";
-
-
+                    cell.classList.add('today');
 
 
                     if ((i === 0 && j < firstDayOfMonth.getDay()) || dayCounter > daysInMonth) {
@@ -93,13 +92,14 @@ export default {
                     } else {
                         cell.textContent = dayCounter;
 
+
                         // Highlight today's date
                         if (
                             this.currentYear === this.today.getFullYear() &&
                             this.currentMonth === this.today.getMonth() &&
                             dayCounter === this.today.getDate()
                         ) {
-                            cell.classList.add('today');
+                            cell.bgColor="aaf6f0";
                         }
 
                         // Highlight weekends
@@ -107,8 +107,6 @@ export default {
                             cell.classList.add('weekend');
                         }
                         cell.style.border = '1px solid #2f2f2f';
-
-
 
                         dayCounter++;
                     }
@@ -136,6 +134,11 @@ export default {
             }
             this.updateCalendar();
         },
+        setToday() {
+            this.currentMonth = this.today.getMonth();
+            this.currentYear = this.today.getFullYear();
+            this.updateCalendar();
+        },
     },
     watch: {
         currentMonth: 'updateCalendar',
@@ -145,8 +148,12 @@ export default {
 </script>
 
 <style scoped>
+
+
+
+
 .calendar-container {
-  text-align: center;
+    text-align: center;
   width: max-content;
 }
 
@@ -158,7 +165,7 @@ table {
 
 th, td {
   padding: 12px;
-  text-align: center;
+  text-align: left;
   font-size: 14px;
 }
 
@@ -181,18 +188,20 @@ th {
 }
 
 
-
 .custom-toolbar {
-  width: 100%; /* Set the width to 100% */
+  width: 100%;
+    background-color: #2f2f2f;
 }
 
 td:hover {
     background-color: #aaf6f0;
 }
 
-.today {
-    background-color: #e0e0e0;
+h3 {
+    margin: 10px;
+    color: #e0e0e0;
 }
+
 
 .weekend {
     color: #ff5722;
