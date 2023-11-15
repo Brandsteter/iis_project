@@ -36,7 +36,7 @@
             @yield("content")
                 <div class="page-container">
                     <root></root>
-                    <calendar></calendar>
+{{--                    <calendar></calendar>--}}
                 </div>
 
         </div>
