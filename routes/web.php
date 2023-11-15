@@ -76,5 +76,11 @@ Route::prefix('/event')->group(function () {
             Route::delete('/{event}', [\App\Http\Controllers\EventController::class, 'delete']);
             Route::patch('/{event}', [\App\Http\Controllers\EventController::class, 'approve']);
         });
+
+        Route::prefix('/{event}')->group(function () {
+            Route::prefix('/comments')->group(function () {
+                Route::post('/', [\App\Http\Controllers\CommentController::class, 'create']);
+            });
+        });
     });
 });

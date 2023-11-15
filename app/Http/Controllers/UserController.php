@@ -7,11 +7,19 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function attend(Event $event, Request $request)
+    public function attend(Event $event)
     {
         $user = auth()->user();
         if ($user->events()->where('event_id', $event->id)->exists()) {
-            return response()->json(['message' => 'User is already attending the event'], 400);
+            return response([
+                'message' => 'User is already attending the event'
+            ], 400);
+        }
+
+        if (!$event->is_approved) {
+            return response([
+                'message' => 'Event isnt approved yet'
+            ], 400);
         }
 
         $user->events()->attach($event);
