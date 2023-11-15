@@ -30,4 +30,9 @@ class Event extends Model
         return $this->belongsToMany(User::class, 'user_attends_event');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
 }
