@@ -72,11 +72,14 @@ Route::prefix('/place')->group(function () {
 
 Route::prefix('/event')->group(function () {
     Route::get('/', [\App\Http\Controllers\UserController::class, 'eventsPage']);
+    Route::get('/approved', [\App\Http\Controllers\EventController::class, 'getEventsApproved']);
+
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\EventController::class, 'create']);
         Route::post('/{event}', [\App\Http\Controllers\UserController::class, 'attend']);
 
         Route::middleware('moderator')->group(function () {
+            Route::get('/unapproved', [\App\Http\Controllers\EventController::class, 'getEventsUnapproved']);
             Route::delete('/{event}', [\App\Http\Controllers\EventController::class, 'delete']);
             Route::patch('/{event}', [\App\Http\Controllers\EventController::class, 'approve']);
         });
