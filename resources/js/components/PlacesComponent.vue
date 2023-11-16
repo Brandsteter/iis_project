@@ -29,7 +29,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(event, index) in placesUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+                    <tr v-for="(place, index) in placesUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
                         <td>{{ place.name }}</td>
                         <td>{{ place.address}}</td>
                         <td><v-btn variant="text"
@@ -66,41 +66,41 @@ export default {
         this.authUser = await this.getAuthUser()
     },
     mounted() {
-        this.fetchApprovedEvents();
-        this.fetchUnapprovedEvents();
+        this.fetchApprovedPlaces();
+        this.fetchUnapprovedPlaces();
     },
     methods: {
         fetchApprovedPlaces() {
-            axios.get('/event/approved')
+            axios.get('/place/approved')
                 .then(response => {
-                    this.eventsApproved = response.data;
+                    this.placesApproved = response.data;
                 })
                 .catch(error => {
                     console.error('Error fetching events:', error);
                 })
         },
         fetchUnapprovedPlaces() {
-            axios.get('/event/unapproved')
+            axios.get('/place/unapproved')
                 .then(response => {
-                    this.eventsUnapproved = response.data;
+                    this.placesUnapproved = response.data;
                 })
                 .catch(error => {
                     console.error('Error fetching events:', error);
                 })
         },
-        approvePlace(event) {
-            const url = `/event/${place.id}`;
-            axios.patch(url)
-                .then(response => {
-                    this.fetchApprovedPlaces();
-                    this.fetchUnapprovedPlaces();
-                })
-                .catch(error => {
-                    console.error('Error approving event:', error);
-                });
-        },
+        // approvePlace(event) {
+        //     const url = `/place/${place.id}`;
+        //     axios.patch(url)
+        //         .then(response => {
+        //             this.fetchApprovedPlaces();
+        //             this.fetchUnapprovedPlaces();
+        //         })
+        //         .catch(error => {
+        //             console.error('Error approving event:', error);
+        //         });
+        // },
         deletePlace(place) {
-            const url = `/event/${place.id}`;
+            const url = `/place/${place.id}`;
             axios.delete(url)
                 .then(() => {
                     this.fetchApprovedPlaces();
