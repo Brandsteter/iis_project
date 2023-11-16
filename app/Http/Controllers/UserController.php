@@ -28,4 +28,13 @@ class UserController extends Controller
             'message' => 'User is now attending the event'
         ], 201);
     }
+
+    public function calendarPage()
+    {
+        return view('calendar');
+    }
+    public function eventsPage()
+    {
+        return view('events');
+    }
 }
