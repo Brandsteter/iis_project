@@ -56,9 +56,16 @@ class PlaceController extends Controller
         ], 201);
     }
 
-    public function getPlaces()
+    public function getPlacesApproved()
     {
-        $places = Place::paginate(10);
+        $places = Place::where('is_approved', true)->paginate(10);
+
+        return response()->json($places);
+    }
+
+    public function getPlacesUnapproved()
+    {
+        $places = Place::where('is_approved', false)->paginate(10);
 
         return response()->json($places);
     }
