@@ -21,6 +21,7 @@ class EventController extends Controller
         $events = Event::where('is_approved', false)->with('place')->paginate(5);
 
         return response()->json($events);
+
     }
 
     public function create(Request $request)

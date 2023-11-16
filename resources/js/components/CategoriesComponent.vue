@@ -28,10 +28,6 @@
                 </tr>
                 </tbody>
             </table>
-            <Bootstrap5Pagination
-                :data="eventsApproved"
-                @pagination-change-page="fetchApprovedEvents"
-            />
         </div>
 
         <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
@@ -66,10 +62,6 @@
                     </tr>
                     </tbody>
                 </table>
-                <Bootstrap5Pagination
-                    :data="eventsUnapproved"
-                    @pagination-change-page="fetchUnapprovedEvents"
-                />
             </div>
         </div>
     </div>
@@ -78,12 +70,8 @@
 <script>
 import {isRole, getAuthUser} from "../app";
 import {RoleEnum} from "../enums/RoleEnum";
-import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
 export default {
-    components: {
-      Bootstrap5Pagination
-    },
     data() {
         return {
             eventsApproved: [],
@@ -100,8 +88,8 @@ export default {
         this.fetchUnapprovedEvents();
     },
     methods: {
-        fetchApprovedEvents(page=1) {
-            axios.get('/event/approved?page=' + page)
+        fetchApprovedEvents() {
+            axios.get('/event/approved')
                 .then(response => {
                     this.eventsApproved = response.data;
                 })
@@ -109,9 +97,8 @@ export default {
                     console.error('Error fetching events:', error);
                 })
         },
-        fetchUnapprovedEvents(page=1) {
-            console.log(page)
-            axios.get('/event/unapproved?page=' + page)
+        fetchUnapprovedEvents() {
+            axios.get('/event/unapproved')
                 .then(response => {
                     this.eventsUnapproved = response.data;
                 })
@@ -122,7 +109,7 @@ export default {
         approveEvent(event) {
             const url = `/event/${event.id}`;
             axios.patch(url)
-                .then(() => {
+                .then(response => {
                     this.fetchApprovedEvents();
                     this.fetchUnapprovedEvents();
                 })
