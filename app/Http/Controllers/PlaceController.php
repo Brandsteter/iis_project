@@ -55,4 +55,11 @@ class PlaceController extends Controller
             'message' => 'Place successfully approved'
         ], 201);
     }
+
+    public function getPlaces()
+    {
+        $places = Place::paginate(10);
+
+        return response()->json($places);
+    }
 }
