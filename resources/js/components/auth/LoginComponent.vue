@@ -15,37 +15,42 @@
                     </div>
 
                     <div class="d-flex justify-content-center">
-                        <button class="btn btn-primary" @click="submit">Submit</button>
+                      <v-btn @click="submit" color="grey-darken-3">
+                        Submit
+                      </v-btn>
+
                     </div>
                 </form>
             </div>
+
+
+
     </div>
+  <template>
+
+  </template>
 </template>
 
 
 <script>
 export default {
     data(){
-        return {
-            fields: {
-                email: "",
-                password: ""
-            },
-            errorMessages: {}
-        }
+      return {
+        fields: {
+          email: "",
+          password: ""
+        },
+        errorMessages: {}
+      }
     },
 
     methods: {
-        submit(){
-            this.errorMessages = {};
-            axios.post('/auth/login', this.fields)
-                .then((response)=>{
-                    if (response)
-                    {
-                        window.location.href = '/'
-                    }
-                })
-
+        submit() {
+            axios.post('/auth/login', this.fields).then((response) => {
+                if (response) {
+                    window.location.href = '/'
+                }
+            })
         }
     }
 }

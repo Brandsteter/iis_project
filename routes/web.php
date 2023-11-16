@@ -29,10 +29,13 @@ Route::prefix('/auth')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
     });
+
+    Route::get('/me', [\App\Http\Controllers\AuthController::class, 'me']);
 });
 
 Route::prefix('/admin')->group(function () {
     Route::middleware('admin')->group(function () {
+        Route::get('/', [\App\Http\Controllers\AdminUserController::class, 'adminPage']);
         Route::get('/users', [\App\Http\Controllers\AdminUserController::class, 'getAllUsers']);
 
         Route::prefix('/user')->group(function () {
@@ -69,6 +72,7 @@ Route::prefix('/place')->group(function () {
 });
 
 Route::prefix('/event')->group(function () {
+    Route::get('/', [\App\Http\Controllers\UserController::class, 'eventsPage']);
     Route::get('/approved', [\App\Http\Controllers\EventController::class, 'getEventsApproved']);
 
     Route::middleware('auth')->group(function () {
@@ -88,3 +92,11 @@ Route::prefix('/event')->group(function () {
         });
     });
 });
+
+Route::prefix('/calendar')->group(function () {
+    Route::middleware('auth')->group(function (){
+        Route::get('/', [\App\Http\Controllers\UserController::class, 'calendarPage']);
+    });
+});
+
+

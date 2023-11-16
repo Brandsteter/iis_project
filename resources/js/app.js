@@ -1,25 +1,43 @@
 import './bootstrap';
+import { createApp } from 'vue';
+import { createVuetify } from 'vuetify/framework';
+import 'vuetify/styles';
 
-import {createApp} from 'vue'
+// Import Vuetify modules
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
 
+// Create Vuetify instance
+const vuetify = createVuetify({
+    components,
+    directives,
+});
 
-function isRole(role, user) {
-  if (user) {
-    return user.roles.findIndex(item => item.name === role) !== -1
-  }
+export function isRole(role, user) {
+    if (user) {
+        return user.roles.findIndex(item => item.role === role) !== -1;
+    }
 }
 
-async function getAuthUser() {
-    let user = null
-    await axios.get(route("auth.me")).then((response) => {
-        user = response.data.data
-    })
-    return user
+export async function getAuthUser() {
+    let user = null;
+    await axios.get("/auth/me").then((response) => {
+        user = response.data.data;
+    });
+    return user;
 }
 
+const app = createApp({});
 
-const app = createApp({})
+// Use Vuetify
+app.use(vuetify);
 
-app.component("register", require("./components/auth/RegisterComponent").default)
-app.component("login", require("./components/auth/LoginComponent").default)
-app.mount("#app")
+
+app.component("register", require("./components/auth/RegisterComponent").default);
+app.component("login", require("./components/auth/LoginComponent").default);
+app.component("root", require("./components/RootComponent").default);
+app.component("calendar", require("./components/CalendarComponent").default);
+app.component("admin", require("./components/AdminComponent").default);
+app.component("events", require("./components/EventsComponent").default);
+
+app.mount('#app');
