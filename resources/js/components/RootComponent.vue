@@ -13,29 +13,32 @@
                 <v-divider></v-divider>
 
                 <v-list density="compact" nav>
-                    <v-list-item @click="updateContent('calendarView')" prepend-icon="mdi-calendar-blank" title="Events" value="calendarView"></v-list-item>
-                    <v-list-item @click="updateContent('myfiles')" prepend-icon="mdi-folder" title="Events" value="myfiles"></v-list-item>
-                    <v-list-item @click="updateContent('shared')" prepend-icon="mdi-account-multiple" title="Event Categories" value="shared"></v-list-item>
-                    <v-list-item @click="updateContent('adminPanel')" prepend-icon="mdi-security" title="Admin Panel" value="adminPanel"></v-list-item>
+                    <v-list-item href="/" prepend-icon="mdi-calendar-blank" title="Events" value="calendarView"></v-list-item>
+                    <v-list-item href="/" prepend-icon="mdi-folder" title="Events" value="myfiles"></v-list-item>
+                    <v-list-item href="/" prepend-icon="mdi-account-multiple" title="Event Categories" value="shared"></v-list-item>
+                    <v-list-item href="/admin" prepend-icon="mdi-security" title="Admin Panel" value="adminPanel"></v-list-item>
                 </v-list>
                 <template v-slot:append>
+                    <div >
+                      <a href="auth/logout"><v-btn block> Logout </v-btn></a>
+                    </div>
                     <div class="pa-2">
-                        <a href="auth/login"><v-btn block> Login </v-btn></a>
-                        <br>
-                        <a href="auth/register"><v-btn block> Register </v-btn></a>
+                      <a href="auth/login"><v-btn block> Login </v-btn></a>
+                      <br>
+                      <a href="auth/register"><v-btn block> Register </v-btn></a>
                     </div>
                 </template>
             </v-navigation-drawer>
-            <v-main>
-                <!-- Render content conditionally based on the selected value -->
-                <div v-if="selectedContent === 'calendarView'">
-                  <calendar ref="calendarRef"></calendar>
-                </div>
-                <!-- End Calendar -->
-                <div v-if="selectedContent === 'adminPanel'">
-                    <admin></admin>
-                </div>
-            </v-main>
+<!--            <v-main>-->
+<!--                &lt;!&ndash; Render content conditionally based on the selected value &ndash;&gt;-->
+<!--                <div v-if="selectedContent === 'calendarView'">-->
+<!--                  <calendar ref="calendarRef"></calendar>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End Calendar &ndash;&gt;-->
+<!--                <div v-if="selectedContent === 'adminPanel'">-->
+<!--                    <admin></admin>-->
+<!--                </div>-->
+<!--            </v-main>-->
         </v-layout>
     </v-card>
 </template>
@@ -46,6 +49,15 @@ import CalendarComponent from "./CalendarComponent.vue";
 
 export default {
     components: {AdminComponent, CalendarComponent},
+    data() {
+      return {
+      };
+    },
+    methods: {
+      updateContent(value) {
+        this.selectedContent = value; // Update selected value on item click
+      },
+    },
     mounted() {
       this.$nextTick(() => {
         this.updateContent('calendarView');
@@ -54,16 +66,6 @@ export default {
         }
       });
       this.updateContent();
-    },
-    data() {
-        return {
-            selectedContent: null, // New property for selected navigation item
-        };
-    },
-    methods: {
-        updateContent(value) {
-            this.selectedContent = value; // Update selected value on item click
-        },
     },
 };
 </script>

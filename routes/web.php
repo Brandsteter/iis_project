@@ -33,6 +33,7 @@ Route::prefix('/auth')->group(function () {
 
 Route::prefix('/admin')->group(function () {
     Route::middleware('admin')->group(function () {
+        Route::get('/', [\App\Http\Controllers\AdminUserController::class, 'adminPage']);
         Route::get('/users', [\App\Http\Controllers\AdminUserController::class, 'getAllUsers']);
 
         Route::prefix('/user')->group(function () {

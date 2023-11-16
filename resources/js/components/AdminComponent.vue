@@ -47,7 +47,6 @@ export default {
       axios.get('/admin/users')
         .then(response => {
           this.users = response.data; // Update the users data property
-          console.log(this.users); // Verify the fetched data
         })
         .catch(error => {
           console.error('Error fetching users:', error);

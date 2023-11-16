@@ -33,7 +33,6 @@ const app = createApp({});
 app.use(vuetify);
 
 
-
 app.component("register", require("./components/auth/RegisterComponent").default);
 app.component("login", require("./components/auth/LoginComponent").default);
 app.component("root", require("./components/RootComponent.vue").default);

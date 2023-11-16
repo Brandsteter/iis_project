@@ -10,6 +10,10 @@ use Illuminate\Validation\Rule;
 
 class AdminUserController extends Controller
 {
+    public function adminPage()
+    {
+        return view('admin');
+    }
     /**
      * @throws \Exception
      */

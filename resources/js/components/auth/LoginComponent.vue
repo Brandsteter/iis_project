@@ -35,26 +35,22 @@
 <script>
 export default {
     data(){
-        return {
-            fields: {
-                email: "",
-                password: ""
-            },
-            errorMessages: {}
-        }
+      return {
+        fields: {
+          email: "",
+          password: ""
+        },
+        errorMessages: {}
+      }
     },
 
     methods: {
-        submit(){
-            this.errorMessages = {};
-            axios.post('/auth/login', this.fields)
-                .then((response)=>{
-                    if (response)
-                    {
-                        window.location.href = '/'
-                    }
-                })
-
+        submit() {
+            axios.post('/auth/login', this.fields).then((response) => {
+                if (response) {
+                    window.location.href = '/'
+                }
+            })
         }
     }
 }
