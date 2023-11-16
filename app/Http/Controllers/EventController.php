@@ -11,14 +11,14 @@ class EventController extends Controller
 {
     public function getEventsApproved()
     {
-        $events = Event::with('is_approved', true)->paginate(5);
+        $events = Event::where('is_approved', true)->with('place')->paginate(5);
 
         return response()->json($events);
     }
 
     public function getEventsUnapproved()
     {
-        $events = Event::with('is_approved', false)->paginate(5);
+        $events = Event::where('is_approved', false)->with('place')->paginate(5);
 
         return response()->json($events);
     }

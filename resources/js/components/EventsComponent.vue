@@ -1,8 +1,6 @@
 <template>
     <div>
-        <h1>User List (Admin Page)</h1>
-        <div v-if="isRole(roleEnum.Admin, authUser)">
-        </div>
+        <h1>Approved events</h1>
         <div>
             <table>
                 <thead>
@@ -10,27 +8,61 @@
                     <th>Name</th>
                     <th>Start date</th>
                     <th>End date</th>
-                    <th>Email</th>
                     <th>Place</th>
                     <th>Capacity</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(user, index) in users" :key="user.id" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.roles[0].role }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{user.created_at}}</td>
-                    <td><v-btn variant="text"
-                               color="secondary"
-                               @click="selectedOpen = false">Edit</v-btn></td>
-                    <td><v-btn variant="text"
-                               color="red"
-                               @click="selectedOpen = false">Delete</v-btn></td>
+                <tr v-for="(event, index) in eventsApproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+                        <td>{{ event.name }}</td>
+                        <td>{{ event.event_start}}</td>
+                        <td>{{ event.event_end}}</td>
+                        <td>{{ event.place.name}}</td>
+                        <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
+                        <td><v-btn variant="text"
+                                   color="secondary"
+                                   @click="selectedOpen = false">Edit</v-btn></td>
+                        <td><v-btn variant="text"
+                                   color="red"
+                                   @click="deleteEvent(event)">Delete</v-btn></td>
                 </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+            <h1>Unapproved events</h1>
+            <div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Start date</th>
+                        <th>End date</th>
+                        <th>Place</th>
+                        <th>Capacity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(event, index) in eventsUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+                        <td>{{ event.name }}</td>
+                        <td>{{ event.event_start}}</td>
+                        <td>{{ event.event_end}}</td>
+                        <td>{{ event.place.name}}</td>
+                        <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
+                        <td><v-btn variant="text"
+                                   color="green"
+                                   @click="approveEvent(event)">Approve</v-btn></td>
+                        <td><v-btn variant="text"
+                                   color="secondary"
+                                   @click="selectedOpen = false">Edit</v-btn></td>
+                        <td><v-btn variant="text"
+                                   color="red"
+                                   @click="deleteEvent(event)">Delete</v-btn></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
@@ -39,11 +71,11 @@
 import {isRole, getAuthUser} from "../app";
 import {RoleEnum} from "../enums/RoleEnum";
 
-
 export default {
     data() {
         return {
-            users: [],
+            eventsApproved: [],
+            eventsUnapproved: [],
             authUser: null,
             roleEnum: RoleEnum,
         };
@@ -52,18 +84,59 @@ export default {
         this.authUser = await this.getAuthUser()
     },
     mounted() {
-        this.fetchUsers();
+        this.fetchApprovedEvents();
+        this.fetchUnapprovedEvents();
     },
     methods: {
-        fetchUsers() {
-            axios.get('/admin/users')
+        fetchApprovedEvents() {
+            axios.get('/event/approved')
                 .then(response => {
-                    this.users = response.data; // Update the users data property
+                    this.eventsApproved = response.data;
                 })
                 .catch(error => {
-                    console.error('Error fetching users:', error);
+                    console.error('Error fetching events:', error);
+                })
+        },
+        fetchUnapprovedEvents() {
+            axios.get('/event/unapproved')
+                .then(response => {
+                    this.eventsUnapproved = response.data;
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                })
+        },
+        approveEvent(event) {
+            const url = `/event/${event.id}`;
+            axios.patch(url)
+                .then(response => {
+                    this.fetchApprovedEvents();
+                    this.fetchUnapprovedEvents();
+                })
+                .catch(error => {
+                    console.error('Error approving event:', error);
                 });
         },
+        deleteEvent(event) {
+            const url = `/event/${event.id}`;
+            axios.delete(url)
+                .then(() => {
+                    this.fetchApprovedEvents();
+                    this.fetchUnapprovedEvents();
+                })
+                .catch(error => {
+                    console.error('Error deleting event:', error);
+                });
+        },
+        checkCapacityValue(event) {
+            if (event.capacity_max == null){
+                return "∞";
+            }
+            else {
+                return event.capacity_max;
+            }
+        },
+
         isRole,
         getAuthUser,
     }
