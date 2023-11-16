@@ -35,8 +35,9 @@ app.use(vuetify);
 
 app.component("register", require("./components/auth/RegisterComponent").default);
 app.component("login", require("./components/auth/LoginComponent").default);
-app.component("root", require("./components/RootComponent.vue").default);
-app.component("calendar", require("./components/CalendarComponent.vue").default);
-app.component("admin", require("./components/AdminComponent.vue").default);
+app.component("root", require("./components/RootComponent").default);
+app.component("calendar", require("./components/CalendarComponent").default);
+app.component("admin", require("./components/AdminComponent").default);
+app.component("events", require("./components/EventsComponent").default);
 
 app.mount('#app');

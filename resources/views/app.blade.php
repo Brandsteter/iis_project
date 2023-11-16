@@ -25,18 +25,60 @@
                 align-items: center; /* Center items vertically */
                 height: 100vh; /* Set height to 100% of viewport height */
             }
+            .navigation li{
+                border: 1px solid black;
+                padding: 10px;
+
+            }
         </style>
 
     </head>
     <body>
-        @auth
-            <a href="/auth/logout"><button> logout</button></a>
-        @endauth
-        <div id="app">
-            @yield("content")
-                <div class="page-container">
-                    <root></root>
-                </div>
+        <div class="d-flex flex-wrap" style="height: 100vh" id="app">
+            <nav class="col-3 bg-light-blue-accent-1">
+                <ul class="navigation" style="list-style-type: none; padding:0">
+
+                    <li>
+                        <a href="/event">Events</a>
+                    </li>
+
+                    @auth
+                    <li>
+                        <a href="/calendar">My calendar</a>
+                    </li>
+                    @endauth
+
+                    <li>
+                        <a href="/">Event Categories</a>
+                    </li>
+
+                    @auth
+                        @if(auth()->user()->isRole(\App\Enums\RoleEnum::Admin))
+                    <li>
+                        <a href="/admin">Admin</a>
+                    </li>
+                    @endif
+                    @endauth
+
+                    @auth
+                        <li>
+                            <a href="/auth/logout">logout</a>
+                        </li>
+                    @endauth
+
+                    @guest
+                        <li>
+                            <a href="/auth/login">login</a>
+                        </li>
+                        <li>
+                            <a href="/auth/register">register</a>
+                        </li>
+                    @endguest
+                </ul>
+            </nav>
+            <div class="col-9 p-2">
+                @yield("content")
+            </div>
         </div>
     </body>
 </html>

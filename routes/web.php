@@ -69,6 +69,7 @@ Route::prefix('/place')->group(function () {
 });
 
 Route::prefix('/event')->group(function () {
+    Route::get('/', [\App\Http\Controllers\UserController::class, 'eventsPage']);
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\EventController::class, 'create']);
         Route::post('/{event}', [\App\Http\Controllers\UserController::class, 'attend']);
@@ -85,3 +86,11 @@ Route::prefix('/event')->group(function () {
         });
     });
 });
+
+Route::prefix('/calendar')->group(function () {
+    Route::middleware('auth')->group(function (){
+        Route::get('/', [\App\Http\Controllers\UserController::class, 'calendarPage']);
+    });
+});
+
+
