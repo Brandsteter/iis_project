@@ -37,7 +37,6 @@
         <div class="d-flex flex-wrap" style="height: 100vh" id="app">
             <nav class="col-3 bg-light-blue-accent-1">
                 <ul class="navigation" style="list-style-type: none; padding:0">
-
                     <li>
                         <a href="/event">Events</a>
                     </li>
@@ -51,6 +50,12 @@
                     <li>
                         <a href="/">Event Categories</a>
                     </li>
+
+                    @auth
+                    <li>
+                        <a href="/place">Event places</a>
+                    </li>
+                    @endauth
 
                     @auth
                         @if(auth()->user()->isRole(\App\Enums\RoleEnum::Admin))

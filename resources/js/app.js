@@ -32,12 +32,13 @@ const app = createApp({});
 // Use Vuetify
 app.use(vuetify);
 
-
 app.component("register", require("./components/auth/RegisterComponent").default);
 app.component("login", require("./components/auth/LoginComponent").default);
 app.component("root", require("./components/RootComponent").default);
 app.component("calendar", require("./components/CalendarComponent").default);
 app.component("admin", require("./components/AdminComponent").default);
 app.component("events", require("./components/EventsComponent").default);
+app.component("places", require("./components/PlacesComponent").default);
+
 
 app.mount('#app');
