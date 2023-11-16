@@ -37,4 +37,9 @@ class UserController extends Controller
     {
         return view('events');
     }
+
+    public function placesPage()
+    {
+        return view('places');
+    }
 }

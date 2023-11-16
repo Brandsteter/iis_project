@@ -1,64 +1,46 @@
 <template>
     <div>
-        <h1>Approved categories</h1>
+        <h1>Places</h1>
         <div>
             <table>
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Start date</th>
-                    <th>End date</th>
-                    <th>Place</th>
-                    <th>Capacity</th>
+                    <th>Adress</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(event, index) in eventsApproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-                        <td>{{ event.name }}</td>
-                        <td>{{ event.event_start}}</td>
-                        <td>{{ event.event_end}}</td>
-                        <td>{{ event.place.name}}</td>
-                        <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
-                        <td><v-btn variant="text"
-                                   color="secondary"
-                                   @click="selectedOpen = false">Edit</v-btn></td>
-                        <td><v-btn variant="text"
-                                   color="red"
-                                   @click="deleteEvent(event)">Delete</v-btn></td>
+                <tr v-for="(place, index) in placesApproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+                      <td>{{ place.name }}</td>
+                      <td>{{ place.address}}</td>
                 </tr>
                 </tbody>
             </table>
         </div>
 
         <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-            <h1>Unapproved categories</h1>
+            <h1>Unapproved places</h1>
             <div>
                 <table>
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Start date</th>
-                        <th>End date</th>
-                        <th>Place</th>
-                        <th>Capacity</th>
+                      <th>Name</th>
+                      <th>Adress</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(event, index) in eventsUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-                        <td>{{ event.name }}</td>
-                        <td>{{ event.event_start}}</td>
-                        <td>{{ event.event_end}}</td>
-                        <td>{{ event.place.name}}</td>
-                        <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
+                    <tr v-for="(event, index) in placesUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+                        <td>{{ place.name }}</td>
+                        <td>{{ place.address}}</td>
                         <td><v-btn variant="text"
                                    color="green"
-                                   @click="approveEvent(event)">Approve</v-btn></td>
+                                   @click="approvePlace(place)">Approve</v-btn></td>
                         <td><v-btn variant="text"
                                    color="secondary"
                                    @click="selectedOpen = false">Edit</v-btn></td>
                         <td><v-btn variant="text"
                                    color="red"
-                                   @click="deleteEvent(event)">Delete</v-btn></td>
+                                   @click="deletePlace(place)">Delete</v-btn></td>
                     </tr>
                     </tbody>
                 </table>
@@ -74,8 +56,8 @@ import {RoleEnum} from "../enums/RoleEnum";
 export default {
     data() {
         return {
-            eventsApproved: [],
-            eventsUnapproved: [],
+            placesApproved: [],
+            placesUnapproved: [],
             authUser: null,
             roleEnum: RoleEnum,
         };
@@ -88,7 +70,7 @@ export default {
         this.fetchUnapprovedEvents();
     },
     methods: {
-        fetchApprovedEvents() {
+        fetchApprovedPlaces() {
             axios.get('/event/approved')
                 .then(response => {
                     this.eventsApproved = response.data;
@@ -97,7 +79,7 @@ export default {
                     console.error('Error fetching events:', error);
                 })
         },
-        fetchUnapprovedEvents() {
+        fetchUnapprovedPlaces() {
             axios.get('/event/unapproved')
                 .then(response => {
                     this.eventsUnapproved = response.data;
@@ -106,37 +88,28 @@ export default {
                     console.error('Error fetching events:', error);
                 })
         },
-        approveEvent(event) {
-            const url = `/event/${event.id}`;
+        approvePlace(event) {
+            const url = `/event/${place.id}`;
             axios.patch(url)
                 .then(response => {
-                    this.fetchApprovedEvents();
-                    this.fetchUnapprovedEvents();
+                    this.fetchApprovedPlaces();
+                    this.fetchUnapprovedPlaces();
                 })
                 .catch(error => {
                     console.error('Error approving event:', error);
                 });
         },
-        deleteEvent(event) {
-            const url = `/event/${event.id}`;
+        deletePlace(place) {
+            const url = `/event/${place.id}`;
             axios.delete(url)
                 .then(() => {
-                    this.fetchApprovedEvents();
-                    this.fetchUnapprovedEvents();
+                    this.fetchApprovedPlaces();
+                    this.fetchUnapprovedPlaces();
                 })
                 .catch(error => {
                     console.error('Error deleting event:', error);
                 });
         },
-        checkCapacityValue(event) {
-            if (event.capacity_max == null){
-                return "∞";
-            }
-            else {
-                return event.capacity_max;
-            }
-        },
-
         isRole,
         getAuthUser,
     }

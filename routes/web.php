@@ -61,6 +61,7 @@ Route::prefix('/category')->group(function () {
 Route::prefix('/place')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\PlaceController::class, 'create']);
+        Route::get('/', [\App\Http\Controllers\UserController::class, 'placesPage']);
 
         Route::middleware('moderator')->group(function () {
             Route::delete('/{place}', [\App\Http\Controllers\PlaceController::class, 'delete']);

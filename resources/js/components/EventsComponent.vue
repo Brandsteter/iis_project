@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Approved events</h1>
+        <h1>Events</h1>
         <div>
             <table>
                 <thead>

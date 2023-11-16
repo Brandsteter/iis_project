@@ -24,7 +24,7 @@
                      @click="selectedOpen = false">Edit</v-btn></td>
           <td><v-btn variant="text"
                      color="red"
-                     @click="selectedOpen = false">Delete</v-btn></td>
+                     @click="deleteUser(user)">Delete</v-btn></td>
         </tr>
         </tbody>
       </table>
@@ -51,6 +51,16 @@ export default {
         .catch(error => {
           console.error('Error fetching users:', error);
         });
+    },
+    deleteUser(user) {
+      const url = `/admin/user/${user.id}`
+      axios.delete(url)
+          .then(() => {
+            this.fetchUsers();
+          })
+          .catch(error => {
+            console.error('Error deleting user:', error);
+          });
     }
   }
 };
