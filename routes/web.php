@@ -29,6 +29,8 @@ Route::prefix('/auth')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
     });
+
+    Route::get('/me', [\App\Http\Controllers\AuthController::class, 'me']);
 });
 
 Route::prefix('/admin')->group(function () {

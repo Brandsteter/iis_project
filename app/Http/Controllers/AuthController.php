@@ -74,4 +74,11 @@ class AuthController extends Controller
 
         return redirect('/auth/login');
     }
+
+    public function me()
+    {
+        return response([
+            "data" => auth()->user()->load("roles"),
+        ]);
+    }
 }
