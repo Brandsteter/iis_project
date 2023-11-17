@@ -48,7 +48,7 @@ Route::prefix('/admin')->group(function () {
 
 Route::prefix('/category')->group(function () {
     Route::get('/top', [\App\Http\Controllers\CategoryController::class, 'getCategoriesTopLevelApproved']);
-    Route::get('/nevim', [\App\Http\Controllers\CategoryController::class, 'getCategoriesAll']);
+    Route::get('/all', [\App\Http\Controllers\CategoryController::class, 'getCategoriesAll']);
     Route::get('/{category}', [\App\Http\Controllers\CategoryController::class, 'getCategoriesChildrenApproved']);
 
     Route::middleware('auth')->group(function () {
