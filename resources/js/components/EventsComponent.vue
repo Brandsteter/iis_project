@@ -2,6 +2,10 @@
     <div>
         <h1>Events</h1>
         <div>
+            <h4>Halo</h4>
+            <h4></h4>
+        </div>
+        <div>
             <v-btn @click="toggleForm" prepend-icon="mdi-plus">Create a new place</v-btn>
             <table>
                 <thead>
@@ -76,26 +80,30 @@
     </div>
     <div v-if="showForm" class="card" style="width: 400px;  background-color: lightskyblue; padding: 20px; border-radius: 10px;">
         <form>
-            <label style="font-size: x-large" class="form-label">Create a new place for events</label>
+            <label style="font-size: x-large" class="form-label">Create a new event</label>
             <div class="mb-3">
                 <label for="InputName" class="form-label">Name of event</label>
                 <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
             </div>
             <div class="mb-3">
                 <label for="InputEventStart" class="form-label">Start of event</label>
-                <input type="date" id="datepickerStart" class="form-control" v-model="fields.event_start" maxlength="255" required>
+                <input type="date" id="InputEventStart" class="form-control" v-model="fields.event_start" maxlength="255" required>
             </div>
             <div class="mb-3">
                 <label for="InputEventEnd" class="form-label">End of event</label>
-                <input type="date" id="datepickerEnd" class="form-control" v-model="fields.event_end" maxlength="255" required>
+                <input type="date" id="InputEventEnd" class="form-control" v-model="fields.event_end" maxlength="255" required>
             </div>
           <div class="mb-3">
-            <label for="InputCapacityMax" class="form-label">Maximal capacity</label>
-            <input class="form-control" id="InputDescription" v-model="fields.capacity_max" maxlength="255" type="number" required>
+            <label for="InputCapacityMax" class="form-label">Maximal capacity (unlimited if not specified)</label>
+            <input class="form-control" id="InputCapacityMax" v-model="fields.capacity_max" maxlength="255" type="number">
           </div>
           <div class="mb-3">
             <label for="InputPlace" class="form-label">Select place</label>
-            <input class="form-control" id="InputPlace" v-model="fields.place_id" maxlength="255" type="number" required>
+            <select class="form-control" id="InputPlace" v-model="fields.place_id" required>
+                <option value="none" selected disabled hidden>Select an Option</option>
+<!--                <option v-for="(place) in placesApproved.data" value="{{place.place_id}}">{{place.name}}</option>-->
+                <option value="{{placesApproved.data[0].place_id}}">{{placesApproved.data[0].name}}</option>
+            </select>
           </div>
           <div class="mb-3">
               <label for="InputDescription" class="form-label">Description</label>
@@ -107,6 +115,7 @@
               </v-btn>
           </div>
         </form>
+
     </div>
 
 </template>
@@ -124,6 +133,7 @@ export default {
         return {
             eventsApproved: [],
             eventsUnapproved: [],
+            placesApproved: [],
             authUser: null,
             roleEnum: RoleEnum,
             showForm: false,
@@ -143,6 +153,7 @@ export default {
     mounted() {
         this.fetchApprovedEvents();
         this.fetchUnapprovedEvents();
+        this.fetchApprovedPlaces();
     },
     methods: {
         fetchApprovedEvents(page=1) {
@@ -203,6 +214,15 @@ export default {
         },
         toggleForm() {
             this.showForm = !this.showForm;
+        },
+        fetchApprovedPlaces() {
+            axios.get('/place/approved')
+                .then(response => {
+                    this.placesApproved = response.data;
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                })
         },
         isRole,
         getAuthUser,
