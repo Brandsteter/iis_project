@@ -2,6 +2,7 @@
     <div>
         <h1>Events</h1>
         <div>
+            <v-btn @click="toggleForm" prepend-icon="mdi-plus">Create a new place</v-btn>
             <table>
                 <thead>
                 <tr>
@@ -73,6 +74,41 @@
             </div>
         </div>
     </div>
+    <div v-if="showForm" class="card" style="width: 400px;  background-color: lightskyblue; padding: 20px; border-radius: 10px;">
+        <form>
+            <label style="font-size: x-large" class="form-label">Create a new place for events</label>
+            <div class="mb-3">
+                <label for="InputName" class="form-label">Name of event</label>
+                <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+                <label for="InputEventStart" class="form-label">Start of event</label>
+                <input type="date" id="datepickerStart" class="form-control" v-model="fields.event_start" maxlength="255" required>
+            </div>
+            <div class="mb-3">
+                <label for="InputEventEnd" class="form-label">End of event</label>
+                <input type="date" id="datepickerEnd" class="form-control" v-model="fields.event_end" maxlength="255" required>
+            </div>
+          <div class="mb-3">
+            <label for="InputCapacityMax" class="form-label">Maximal capacity</label>
+            <input class="form-control" id="InputDescription" v-model="fields.capacity_max" maxlength="255" type="number" required>
+          </div>
+          <div class="mb-3">
+            <label for="InputPlace" class="form-label">Select place</label>
+            <input class="form-control" id="InputPlace" v-model="fields.place_id" maxlength="255" type="number" required>
+          </div>
+          <div class="mb-3">
+              <label for="InputDescription" class="form-label">Description</label>
+            <textarea class="form-control" id="InputDescription" v-model="fields.description" maxlength="255" type="text" required></textarea>
+          </div>
+          <div class="d-flex justify-content-center">
+              <v-btn @click="submit" color="grey-darken-3">
+                  Submit
+              </v-btn>
+          </div>
+        </form>
+    </div>
+
 </template>
 
 <script>
@@ -90,6 +126,15 @@ export default {
             eventsUnapproved: [],
             authUser: null,
             roleEnum: RoleEnum,
+            showForm: false,
+            fields: {
+                name: "",
+                event_start: "",
+                event_end: "",
+                capacity_max: "",
+                place_id: "",
+                description: "",
+            },
         };
     },
     created: async function(){
@@ -149,7 +194,16 @@ export default {
                 return event.capacity_max;
             }
         },
-
+        submit() {
+          axios.post('/event', this.fields).then((response) => {
+            if (response) {
+              window.location.href = '/event'
+            }
+          })
+        },
+        toggleForm() {
+            this.showForm = !this.showForm;
+        },
         isRole,
         getAuthUser,
     }
