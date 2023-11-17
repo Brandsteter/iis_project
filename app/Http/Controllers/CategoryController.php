@@ -31,14 +31,14 @@ class CategoryController extends Controller
 
     public function getCategoriesApproved()
     {
-        $categories = Category::where('is_approved', true)->with('category')->paginate(10);
+        $categories = Category::where('is_approved', true)->with('category')->get();
 
         return response()->json($categories);
     }
 
     public function getCategoriesUnapproved()
     {
-        $categories = Category::where('is_approved', false)->with('category')->paginate(10);
+        $categories = Category::where('is_approved', false)->with('category')->get();
 
         return response()->json($categories);
 
