@@ -21,6 +21,7 @@
 
                     </div>
                 </form>
+                <a href="/auth/register">Don't have an account yet? Register here</a>
             </div>
 
 

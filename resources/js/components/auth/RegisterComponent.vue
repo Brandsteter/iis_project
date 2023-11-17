@@ -28,6 +28,7 @@
                     <button class="btn btn-primary" type="submit">Submit</button>
                 </div>
             </form>
+            <a href="/auth/login">Already have an account? Log in here</a>
         </div>
     </div>
 </template>
