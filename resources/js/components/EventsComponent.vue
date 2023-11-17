@@ -24,10 +24,14 @@
                         <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
                         <td><v-btn variant="text"
                                    color="secondary"
-                                   @click="selectedOpen = false">Edit</v-btn></td>
+                                   @click="selectedOpen = false"
+                                   v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                                   Edit</v-btn></td>
                         <td><v-btn variant="text"
                                    color="red"
-                                   @click="deleteEvent(event)">Delete</v-btn></td>
+                                   @click="deleteEvent(event)"
+                                   v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                                   Delete</v-btn></td>
                 </tr>
                 </tbody>
             </table>

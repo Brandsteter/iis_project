@@ -2,6 +2,7 @@
     <div>
         <h1>Categories</h1>
         <div>
+            <h4>Top Level Approved Categories</h4>
             <table>
                 <thead>
                 <tr>
@@ -9,7 +10,46 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(category, index) in categoriesApproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+                <tr v-for="(category, index) in categoriesTopLevelApproved" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+                    <td><a href="/category/{{ category.name }}">{{ category.name }}</a></td>
+                    <td><v-btn @click="getChildCategories(category)">V</v-btn></td>
+                    <td><v-btn @click="" prepend-icon="mdi-plus">New sub-category</v-btn></td>
+                    <td><v-btn variant="text"
+                               color="secondary"
+                               @click="selectedOpen = false"
+                               v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                        Edit</v-btn></td>
+                    <td><v-btn variant="text"
+                               color="red"
+                               @click="deleteCategory(category)"
+                               v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                        Delete</v-btn></td>
+                    <td><table v-if="(parentName === category.name) && (children.length > 0)">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <!-- ... other headers for child categories -->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(childCategory, index) in children" :key="childCategory.id">
+                            <td>{{ childCategory.name }}</td>
+                            <!-- ... other columns for child categories -->
+                        </tr>
+                        </tbody>
+                    </table></td>
+                </tr>
+                </tbody>
+            </table>
+            <h4>All Approved Categories</h4>
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(category, index) in categoriesApproved" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
                         <td><a href="/category/{{ category.name }}">{{ category.name }}</a></td>
                         <td><v-btn variant="text"
                                    color="secondary"
@@ -40,7 +80,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(category, index) in categoriesUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+                    <tr v-for="(category, index) in categoriesUnapproved" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
                         <td>{{ category.name }}</td>
                         <td><v-btn variant="text"
                                    color="green"
@@ -74,10 +114,14 @@ export default {
     components: {Bootstrap5Pagination},
     data() {
         return {
+            categoriesTopLevelApproved: [],
             categoriesApproved: [],
             categoriesUnapproved: [],
+            categoriesChildren: [],
             authUser: null,
             roleEnum: RoleEnum,
+            children: [],
+            parentName: null,
         };
     },
     created: async function(){
@@ -86,15 +130,25 @@ export default {
     mounted() {
         this.fetchApprovedCategories();
         this.fetchUnapprovedCategories();
+        this.fetchTopLevelApprovedCategories();
     },
     methods: {
+        fetchTopLevelApprovedCategories() {
+            axios.get('/category/top')
+                .then(response => {
+                    this.categoriesTopLevelApproved = response.data;
+                })
+                .catch(error => {
+                    console.error('Error fetching top level categories:', error);
+                })
+        },
         fetchApprovedCategories() {
             axios.get('/category/approved')
                 .then(response => {
                     this.categoriesApproved = response.data;
                 })
                 .catch(error => {
-                    console.error('Error fetching categories:', error);
+                    console.error('Error fetching approved categories:', error);
                 })
         },
         fetchUnapprovedCategories() {
@@ -103,7 +157,7 @@ export default {
                     this.categoriesUnapproved = response.data;
                 })
                 .catch(error => {
-                    console.error('Error fetching categories:', error);
+                    console.error('Error fetching unapproved categories:', error);
                 })
         },
         approveCategory(category) {
@@ -126,6 +180,18 @@ export default {
                 })
                 .catch(error => {
                     console.error('Error deleting category:', error);
+                });
+        },
+        getChildCategories(category) {
+            const url = `/category/${category.id}`;
+            axios.get(url)
+                .then(response => {
+                    this.parentName = category.name;
+                    this.children = response.data;
+                    console.log("Parent" + this.parentName)
+                })
+                .catch(error => {
+                    console.error('Error fetching unapproved categories:', error);
                 });
         },
 
