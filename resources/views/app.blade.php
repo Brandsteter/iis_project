@@ -48,7 +48,7 @@
                     @endauth
 
                     <li>
-                        <a href="/">Event Categories</a>
+                        <a href="/category">Event Categories</a>
                     </li>
 
                     @auth

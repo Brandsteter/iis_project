@@ -49,6 +49,9 @@ Route::prefix('/admin')->group(function () {
 Route::prefix('/category')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\CategoryController::class, 'create']);
+        Route::get('/', [\App\Http\Controllers\UserController::class, 'categoriesPage']);
+        Route::get('/approved', [\App\Http\Controllers\CategoryController::class, 'getCategoriesApproved']);
+        Route::get('/unapproved', [\App\Http\Controllers\CategoryController::class, 'getCategoriesUnapproved']);
 
         Route::middleware('moderator')->group(function () {
             Route::delete('/{category}', [\App\Http\Controllers\CategoryController::class, 'delete']);

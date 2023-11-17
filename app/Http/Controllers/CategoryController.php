@@ -8,6 +8,21 @@ use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
+    public function getCategoriesApproved()
+    {
+        $categories = Category::where('is_approved', true)->with('category')->paginate(10);
+
+        return response()->json($categories);
+    }
+
+    public function getCategoriesUnapproved()
+    {
+        $categories = Category::where('is_approved', false)->with('category')->paginate(10);
+
+        return response()->json($categories);
+
+    }
+
     public function create(Request $request)
     {
         $data = $request->validate([

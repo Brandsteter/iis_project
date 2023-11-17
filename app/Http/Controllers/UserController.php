@@ -42,4 +42,9 @@ class UserController extends Controller
     {
         return view('places');
     }
+
+    public function categoriesPage()
+    {
+        return view('categories');
+    }
 }

@@ -39,6 +39,7 @@ app.component("calendar", require("./components/CalendarComponent").default);
 app.component("admin", require("./components/AdminComponent").default);
 app.component("events", require("./components/EventsComponent").default);
 app.component("places", require("./components/PlacesComponent").default);
+app.component("categories", require("./components/CategoriesComponent").default);
 
 
 app.mount('#app');

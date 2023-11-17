@@ -88,17 +88,17 @@ export default {
                     console.error('Error fetching events:', error);
                 })
         },
-        // approvePlace(event) {
-        //     const url = `/place/${place.id}`;
-        //     axios.patch(url)
-        //         .then(response => {
-        //             this.fetchApprovedPlaces();
-        //             this.fetchUnapprovedPlaces();
-        //         })
-        //         .catch(error => {
-        //             console.error('Error approving event:', error);
-        //         });
-        // },
+        approvePlace(place) {
+            const url = `/place/${place.id}`;
+            axios.patch(url)
+                .then(response => {
+                    this.fetchApprovedPlaces();
+                    this.fetchUnapprovedPlaces();
+                })
+                .catch(error => {
+                    console.error('Error approving place:', error);
+                });
+        },
         deletePlace(place) {
             const url = `/place/${place.id}`;
             axios.delete(url)
