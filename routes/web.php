@@ -49,7 +49,6 @@ Route::prefix('/admin')->group(function () {
 Route::prefix('/category')->group(function () {
     Route::get('/top', [\App\Http\Controllers\CategoryController::class, 'getCategoriesTopLevelApproved']);
     Route::get('/all', [\App\Http\Controllers\CategoryController::class, 'getCategoriesAll']);
-    Route::get('/{category}', [\App\Http\Controllers\CategoryController::class, 'getCategoriesChildrenApproved']);
 
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\CategoryController::class, 'create']);
@@ -63,6 +62,8 @@ Route::prefix('/category')->group(function () {
             Route::patch('/{category}', [\App\Http\Controllers\CategoryController::class, 'approve']);
         });
     });
+
+    Route::get('/{category}', [\App\Http\Controllers\CategoryController::class, 'getCategoriesChildrenApproved']);
 });
 
 Route::prefix('/place')->group(function () {
