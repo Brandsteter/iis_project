@@ -2,11 +2,9 @@
     <div>
         <h1>Events</h1>
         <div>
-            <h4>Halo</h4>
-            <h4></h4>
         </div>
         <div>
-            <v-btn @click="toggleForm" prepend-icon="mdi-plus">Create a new place</v-btn>
+            <v-btn @click="toggleForm" prepend-icon="mdi-plus">Create a new event</v-btn>
             <table>
                 <thead>
                 <tr>
