@@ -101,8 +101,7 @@
             <label for="InputPlace" class="form-label">Select place</label>
             <select class="form-control" id="InputPlace" v-model="fields.place_id" required>
                 <option value="none" selected disabled hidden>Select an Option</option>
-<!--                <option v-for="(place) in placesApproved.data" value="{{place.place_id}}">{{place.name}}</option>-->
-                <option value="{{placesApproved.data[0].place_id}}">{{placesApproved.data[0].name}}</option>
+                <option v-for="(place) in placesApproved.data" :value="place.id">{{place.name}}</option>
             </select>
           </div>
           <div class="mb-3">
