@@ -13,10 +13,14 @@
                         <td><a href="/category/{{ category.name }}">{{ category.name }}</a></td>
                         <td><v-btn variant="text"
                                    color="secondary"
-                                   @click="selectedOpen = false">Edit</v-btn></td>
+                                   @click="selectedOpen = false"
+                                   v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                                   Edit</v-btn></td>
                         <td><v-btn variant="text"
                                    color="red"
-                                   @click="deleteCategory(category)">Delete</v-btn></td>
+                                   @click="deleteCategory(category)"
+                                   v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                                   Delete</v-btn></td>
                 </tr>
                 </tbody>
             </table>
@@ -40,7 +44,9 @@
                         <td>{{ category.name }}</td>
                         <td><v-btn variant="text"
                                    color="green"
-                                   @click="approveCategory(category)">Approve</v-btn></td>
+                                   @click="approveCategory(category)"
+                                   v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                                   Approve</v-btn></td>
                         <td><v-btn variant="text"
                                    color="secondary"
                                    @click="selectedOpen = false">Edit</v-btn></td>

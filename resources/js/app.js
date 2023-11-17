@@ -40,6 +40,7 @@ app.component("admin", require("./components/AdminComponent").default);
 app.component("events", require("./components/EventsComponent").default);
 app.component("places", require("./components/PlacesComponent").default);
 app.component("categories", require("./components/CategoriesComponent").default);
+//app.component("createPlace", require("./components/createForms/CreatePlaceComponent").default);
 
 
 app.mount('#app');

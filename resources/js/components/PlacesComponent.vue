@@ -2,6 +2,7 @@
     <div>
         <h1>Places</h1>
         <div>
+            <v-btn @click="toggleForm" prepend-icon="mdi-plus">Create a new place</v-btn>
             <table>
                 <thead>
                 <tr>
@@ -13,6 +14,16 @@
                 <tr v-for="(place, index) in placesApproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
                       <td>{{ place.name }}</td>
                       <td>{{ place.address}}</td>
+                      <td><v-btn variant="text"
+                                 color="secondary"
+                                 @click="selectedOpen = false"
+                                 v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                                 Edit</v-btn></td>
+                      <td><v-btn variant="text"
+                                 color="red"
+                                 @click="deleteCategory(category)"
+                                 v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                                 Delete</v-btn></td>
                 </tr>
                 </tbody>
             </table>
@@ -46,6 +57,31 @@
                 </table>
             </div>
         </div>
+
+        <div v-if="showForm" class="card" style="width: 400px;  background-color: lightskyblue; padding: 20px; border-radius: 10px;">
+            <form>
+                <label style="font-size: x-large" class="form-label">Create a new place for events</label>
+                <div class="mb-3">
+                    <label for="InputName" class="form-label">Name</label>
+                    <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+                </div>
+                <div class="mb-3">
+                    <label for="InputAddress" class="form-label">Address</label>
+                    <input class="form-control" id="InputAddress" v-model="fields.address" maxlength="255" type="text" required>
+                </div>
+                <div class="mb-3">
+                    <label for="InputDescription" class="form-label">Description</label>
+                    <input class="form-control" id="InputDescription" v-model="fields.description" maxlength="255" type="text" required>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <v-btn @click="submit" color="grey-darken-3">
+                        Submit
+                    </v-btn>
+
+                </div>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -60,6 +96,12 @@ export default {
             placesUnapproved: [],
             authUser: null,
             roleEnum: RoleEnum,
+            showForm: false,
+            fields: {
+                name: "",
+                address: "",
+                description: "",
+            },
         };
     },
     created: async function(){
@@ -109,6 +151,16 @@ export default {
                 .catch(error => {
                     console.error('Error deleting event:', error);
                 });
+        },
+        toggleForm() {
+            this.showForm = !this.showForm;
+        },
+        submit() {
+            axios.post('/place', this.fields).then((response) => {
+                if (response) {
+                    window.location.href = '/place'
+                }
+            })
         },
         isRole,
         getAuthUser,
