@@ -1,117 +1,25 @@
 <template>
+    <h1>Categories</h1>
     <div>
-        <h1>Categories</h1>
-        <div>
-            <h4>Top Level Approved Categories</h4>
-            <table>
-                <thead>
-                <tr>
-                    <th>Name</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(category, index) in categoriesTopLevelApproved" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-                    <td><a href="/category/{{ category.name }}">{{ category.name }}</a></td>
-                    <td><v-btn @click="getChildCategories(category)">V</v-btn></td>
-                    <td><v-btn @click="" prepend-icon="mdi-plus">New sub-category</v-btn></td>
-                    <td><v-btn variant="text"
-                               color="secondary"
-                               @click="selectedOpen = false"
-                               v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-                        Edit</v-btn></td>
-                    <td><v-btn variant="text"
-                               color="red"
-                               @click="deleteCategory(category)"
-                               v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-                        Delete</v-btn></td>
-                    <td><table v-if="(parentName === category.name) && (children.length > 0)">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <!-- ... other headers for child categories -->
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="(childCategory, index) in children" :key="childCategory.id">
-                            <td>{{ childCategory.name }}</td>
-                            <!-- ... other columns for child categories -->
-                        </tr>
-                        </tbody>
-                    </table></td>
-                </tr>
-                </tbody>
-            </table>
-            <h4>All Approved Categories</h4>
-            <table>
-                <thead>
-                <tr>
-                    <th>Name</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(category, index) in categoriesApproved" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-                        <td><a href="/category/{{ category.name }}">{{ category.name }}</a></td>
-                        <td><v-btn variant="text"
-                                   color="secondary"
-                                   @click="selectedOpen = false"
-                                   v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-                                   Edit</v-btn></td>
-                        <td><v-btn variant="text"
-                                   color="red"
-                                   @click="deleteCategory(category)"
-                                   v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-                                   Delete</v-btn></td>
-                </tr>
-                </tbody>
-            </table>
-            <Bootstrap5Pagination
-                :data="categoriesApproved"
-                @pagination-change-page="fetchApprovedCategories"
-            />
-        </div>
+        <hr>
+        <ul class="nested">
+            <li v-for="(category, index) in categoriesTopLevelApproved">
+                <a href="/category/{{category}}">{{category.name}}</a>
+                <categoryList :categoryId="category.id"></categoryList>
+            </li>
+        </ul>
 
-        <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-            <h1>Unapproved categories</h1>
-            <div>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(category, index) in categoriesUnapproved" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-                        <td>{{ category.name }}</td>
-                        <td><v-btn variant="text"
-                                   color="green"
-                                   @click="approveCategory(category)"
-                                   v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-                                   Approve</v-btn></td>
-                        <td><v-btn variant="text"
-                                   color="secondary"
-                                   @click="selectedOpen = false">Edit</v-btn></td>
-                        <td><v-btn variant="text"
-                                   color="red"
-                                   @click="deleteCategory(category)">Delete</v-btn></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <Bootstrap5Pagination
-                    :data="categoriesUnapproved"
-                    @pagination-change-page="fetchUnapprovedCategories"
-                />
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
 import {isRole, getAuthUser} from "../app";
+import categoryList from "./CategoryListComponent.vue";
 import {RoleEnum} from "../enums/RoleEnum";
 import {Bootstrap5Pagination} from "laravel-vue-pagination";
 
 export default {
-    components: {Bootstrap5Pagination},
+    components: {Bootstrap5Pagination, categoryList},
     data() {
         return {
             categoriesTopLevelApproved: [],
@@ -182,13 +90,11 @@ export default {
                     console.error('Error deleting category:', error);
                 });
         },
-        getChildCategories(category) {
-            const url = `/category/${category.id}`;
+        getChildCategories(categoryId) {
+            const url = `/category/${categoryId}`;
             axios.get(url)
                 .then(response => {
-                    this.parentName = category.name;
                     this.children = response.data;
-                    console.log("Parent" + this.parentName)
                 })
                 .catch(error => {
                     console.error('Error fetching unapproved categories:', error);
