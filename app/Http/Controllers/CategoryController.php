@@ -8,6 +8,13 @@ use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
+    public function getCategoryEvents(Category $category)
+    {
+        $events = $category->events()->paginate(5);
+
+        return response()->json($events);
+    }
+
     public function getCategoriesAll()
     {
         $categories = Category::all();

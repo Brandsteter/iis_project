@@ -63,6 +63,7 @@ Route::prefix('/category')->group(function () {
         });
     });
 
+    Route::get('/{category}/events', [\App\Http\Controllers\CategoryController::class, 'getCategoryEvents']);
     Route::get('/{category}', [\App\Http\Controllers\CategoryController::class, 'getCategoriesChildrenApproved']);
 });
 
