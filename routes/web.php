@@ -93,6 +93,7 @@ Route::prefix('/event')->group(function () {
         Route::middleware('moderator')->group(function () {
             Route::get('/unapproved', [\App\Http\Controllers\EventController::class, 'getEventsUnapproved']);
             Route::delete('/{event}', [\App\Http\Controllers\EventController::class, 'delete']);
+            Route::put('/{event}', [\App\Http\Controllers\EventController::class, 'update']);
             Route::patch('/{event}', [\App\Http\Controllers\EventController::class, 'approve']);
         });
 

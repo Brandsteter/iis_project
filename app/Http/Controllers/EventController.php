@@ -44,6 +44,25 @@ class EventController extends Controller
         ], 201);
     }
 
+    public function update(Event $event, Request $request)
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string','max:255', Rule::unique('events', 'name')->ignore($event->id)],
+            'event_start' => ['required', 'date', 'after_or_equal:' . now()->toDateString()],
+            'event_end' => ['required', 'date', 'after_or_equal:event_start'],
+            'capacity_max' => ['nullable', 'integer', 'max:255'],
+            'place_id' => ['required', Rule::exists('places', 'id')],
+            'event_start_time' => ['nullable', 'date_format:H:i'],
+            'description' => ['nullable', 'string', 'max:255']
+        ]);
+
+        $event->update($data);
+
+        return response([
+            'message' => 'Event successfully updated'
+        ], 201);
+    }
+
     public function delete(Event $event)
     {
         $event->delete();
