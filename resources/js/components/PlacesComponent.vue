@@ -21,7 +21,7 @@
                                  Edit</v-btn></td>
                       <td><v-btn variant="text"
                                  color="red"
-                                 @click="deletePlace(place)"
+                                 @click="showConfirm(place)"
                                  v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
                                  Delete</v-btn></td>
                 </tr>
@@ -48,10 +48,10 @@
                                    @click="approvePlace(place)">Approve</v-btn></td>
                         <td><v-btn variant="text"
                                    color="secondary"
-                                   @click="selectedOpen = false">Edit</v-btn></td>
+                                   @click="openEditModal(place)">Edit</v-btn></td>
                         <td><v-btn variant="text"
                                    color="red"
-                                   @click="deletePlace(place)">Delete</v-btn></td>
+                                   @click="showConfirm(place)">Delete</v-btn></td>
                     </tr>
                     </tbody>
                 </table>
@@ -87,6 +87,21 @@
             </v-card-text>
         </v-card>
     </v-dialog>
+
+    <!--Delete confirmation window-->
+    <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
+        <v-card class="card" style=" border-radius: 10px;">
+            <v-card-title class="confirm-title">Do you want to delete this place?</v-card-title>
+            <div class="button-container">
+                <v-btn @click="confirmDelete()"
+                       min-width="80"
+                       color="green">Yes</v-btn>
+                <v-btn @click="cancelDelete()"
+                       min-width="80"
+                       color="red">No</v-btn>
+            </div>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -102,7 +117,10 @@ export default {
             roleEnum: RoleEnum,
             showModal: false,
             modalMode: 'create',
+            showConfirmation: false,
+            placeDeleteConfirm: null,
             fields: {
+                id: "",
                 name: "",
                 address: "",
                 description: "",
@@ -179,12 +197,26 @@ export default {
                     }
                 })
             } else if (this.modalMode === 'edit') {
-                axios.put('/place', this.fields).then((response) => {
+                const url = `/place/${this.fields.id}`;
+                axios.put(url, this.fields).then((response) => {
                     if (response) {
                         window.location.href = '/place'
                     }
                 })
             }
+        },
+        showConfirm(place) {
+            this.showConfirmation = true;
+            this.placeDeleteConfirm = place;
+        },
+        confirmDelete() {
+            this.showConfirmation = false;
+            this.deletePlace(this.placeDeleteConfirm);
+            this.placeDeleteConfirm = null;
+        },
+        cancelDelete() {
+            this.showConfirmation = false;
+            this.placeDeleteConfirm = null;
         },
 
         isRole,
@@ -217,6 +249,15 @@ export default {
     gap: 10px;
     margin-top: 10px;
     /* Additional styles for action buttons */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-evenly; /* Adds space between buttons */
+}
+
+.confirm-title {
+    text-align: center;
 }
 
 th, td {

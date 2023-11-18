@@ -29,7 +29,7 @@
                                    Edit</v-btn></td>
                         <td><v-btn variant="text"
                                    color="red"
-                                   @click="deleteEvent(event)"
+                                   @click="showConfirm(event)"
                                    v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
                                    Delete</v-btn></td>
                 </tr>
@@ -69,7 +69,7 @@
                                    @click="openEditModal(event)">Edit</v-btn></td>
                         <td><v-btn variant="text"
                                    color="red"
-                                   @click="deleteEvent(event)">Delete</v-btn></td>
+                                   @click="showConfirm(event)">Delete</v-btn></td>
                     </tr>
                     </tbody>
                 </table>
@@ -125,6 +125,21 @@
         </v-card>
     </v-dialog>
 
+    <!--Delete confirmation window-->
+    <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
+        <v-card class="card" style=" border-radius: 10px;">
+            <v-card-title class="confirm-title">Do you want to delete this event?</v-card-title>
+            <div class="button-container">
+                <v-btn @click="confirmDelete()"
+                       min-width="80"
+                       color="green">Yes</v-btn>
+                <v-btn @click="cancelDelete()"
+                       min-width="80"
+                       color="red">No</v-btn>
+            </div>
+        </v-card>
+    </v-dialog>
+
 </template>
 
 <script>
@@ -145,6 +160,8 @@ export default {
             roleEnum: RoleEnum,
             showModal: false,
             modalMode: 'create',
+            showConfirmation: false,
+            eventDeleteConfirm: null,
             fields: {
                 name: "",
                 event_start: "",
@@ -216,6 +233,7 @@ export default {
             this.modalMode = 'create';
             this.showModal = true;
             this.fields = {
+                id: "",
                 name: "",
                 event_start: "",
                 event_end: "",
@@ -254,6 +272,20 @@ export default {
                     console.error('Error fetching events:', error);
                 })
         },
+        showConfirm(event) {
+            this.showConfirmation = true;
+            this.eventDeleteConfirm = event;
+        },
+        confirmDelete() {
+            this.showConfirmation = false;
+            this.deleteEvent(this.eventDeleteConfirm);
+            this.eventDeleteConfirm = null;
+        },
+        cancelDelete() {
+            this.showConfirmation = false;
+            this.eventDeleteConfirm = null;
+        },
+
         isRole,
         getAuthUser,
     }
@@ -285,6 +317,16 @@ export default {
     margin-top: 10px;
     /* Additional styles for action buttons */
 }
+
+.button-container {
+    display: flex;
+    justify-content: space-evenly; /* Adds space between buttons */
+}
+
+.confirm-title {
+    text-align: center;
+}
+
 
 th, td {
     padding: 5px;
