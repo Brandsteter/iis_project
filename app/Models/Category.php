@@ -24,4 +24,9 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_category_id', 'id');
     }
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'category_has_event');
+    }
 }

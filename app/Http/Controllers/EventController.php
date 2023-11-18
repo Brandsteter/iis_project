@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -80,5 +81,49 @@ class EventController extends Controller
         return response([
             'message' => 'Event successfully approved'
         ], 201);
+    }
+
+    public function addCategory(Event $event, Request $request)
+    {
+        $data = $request->validate([
+            'category_id' => ['required', Rule::exists('categories', 'id')]
+        ]);
+
+        $category = Category::find($data['category_id']);
+
+        if ($event->categories()->where('category_id', $category->id)->exists()) {
+            return response([
+                'message' => 'Event already has this category'
+            ], 400);
+        }
+
+        if (!$category->is_approved) {
+            return response([
+                'message' => 'Category isnt approved yet'
+            ], 400);
+        }
+
+        $event->categories()->attach($category);
+
+        return response([
+            'message' => 'Added category for event'
+        ], 201);
+
+    }
+
+    public function removeCategory(Event $event, Request $request)
+    {
+        $data = $request->validate([
+            'category_id' => ['required', Rule::exists('categories', 'id')]
+        ]);
+
+        $category = Category::find($data['category_id']);
+
+        $event->categories()->detach($category);
+
+        return response([
+            'message' => 'Removed category from event'
+        ], 201);
+
     }
 }
