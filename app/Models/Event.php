@@ -14,6 +14,7 @@ class Event extends Model
         'is_approved',
         'event_start',
         'event_end',
+        'event_start_time',
         'place_id',
         'description',
         'capacity_max',

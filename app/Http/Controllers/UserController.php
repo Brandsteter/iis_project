@@ -22,7 +22,15 @@ class UserController extends Controller
             ], 400);
         }
 
+        if ($event->capacity_max != null && $event->capacity_current >= $event->capacity_max) {
+            return response([
+                'message' => 'Event is full'
+            ], 400);
+        }
+
         $user->events()->attach($event);
+
+        $event->increment('capacity_current');
 
         return response([
             'message' => 'User is now attending the event'
