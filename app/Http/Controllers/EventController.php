@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -32,6 +33,7 @@ class EventController extends Controller
             'event_end' => ['required', 'date', 'after_or_equal:event_start'],
             'capacity_max' => ['nullable', 'integer', 'max:255'],
             'place_id' => ['required', Rule::exists('places', 'id')],
+            'event_start_time' => ['nullable', 'date_format:H:i'],
             'description' => ['nullable', 'string', 'max:255']
         ]);
 
@@ -40,6 +42,25 @@ class EventController extends Controller
 
         return response([
             'message' => 'Event successfully created'
+        ], 201);
+    }
+
+    public function update(Event $event, Request $request)
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string','max:255', Rule::unique('events', 'name')->ignore($event->id)],
+            'event_start' => ['required', 'date', 'after_or_equal:' . now()->toDateString()],
+            'event_end' => ['required', 'date', 'after_or_equal:event_start'],
+            'capacity_max' => ['nullable', 'integer', 'max:255'],
+            'place_id' => ['required', Rule::exists('places', 'id')],
+            'event_start_time' => ['nullable', 'date_format:H:i'],
+            'description' => ['nullable', 'string', 'max:255']
+        ]);
+
+        $event->update($data);
+
+        return response([
+            'message' => 'Event successfully updated'
         ], 201);
     }
 
@@ -60,5 +81,49 @@ class EventController extends Controller
         return response([
             'message' => 'Event successfully approved'
         ], 201);
+    }
+
+    public function addCategory(Event $event, Request $request)
+    {
+        $data = $request->validate([
+            'category_id' => ['required', Rule::exists('categories', 'id')]
+        ]);
+
+        $category = Category::find($data['category_id']);
+
+        if ($event->categories()->where('category_id', $category->id)->exists()) {
+            return response([
+                'message' => 'Event already has this category'
+            ], 400);
+        }
+
+        if (!$category->is_approved) {
+            return response([
+                'message' => 'Category isnt approved yet'
+            ], 400);
+        }
+
+        $event->categories()->attach($category);
+
+        return response([
+            'message' => 'Added category for event'
+        ], 201);
+
+    }
+
+    public function removeCategory(Event $event, Request $request)
+    {
+        $data = $request->validate([
+            'category_id' => ['required', Rule::exists('categories', 'id')]
+        ]);
+
+        $category = Category::find($data['category_id']);
+
+        $event->categories()->detach($category);
+
+        return response([
+            'message' => 'Removed category from event'
+        ], 201);
+
     }
 }
