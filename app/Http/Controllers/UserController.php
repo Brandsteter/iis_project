@@ -37,6 +37,24 @@ class UserController extends Controller
         ], 201);
     }
 
+    public function unattend(Event $event)
+    {
+        $user = auth()->user();
+        if (!$user->events()->where('event_id', $event->id)->exists()) {
+            return response([
+                'message' => 'User is not attending the event'
+            ], 400);
+        }
+
+        $user->events()->detach($event);
+
+        $event->decrement('capacity_current');
+
+        return response([
+            'message' => 'User is no longer attending the event'
+        ], 201);
+    }
+
     public function getUserEvents()
     {
         $user = auth()->user();
