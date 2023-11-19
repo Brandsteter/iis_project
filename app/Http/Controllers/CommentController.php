@@ -23,4 +23,17 @@ class CommentController extends Controller
             'message' => 'Comment successfully created'
         ], 201);
     }
+
+    public function delete(Event $event, Comment $comment)
+    {
+        $comment->delete();
+        return response()->noContent();
+    }
+
+    public function getEventComments(Event $event)
+    {
+        $comments = $event->comments;
+
+        return response()->json($comments);
+    }
 }
