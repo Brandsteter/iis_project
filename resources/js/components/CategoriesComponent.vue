@@ -1,25 +1,24 @@
 <template>
-    <h1>Categories</h1>
-    <div>
-        <hr>
-        <ul class="nested">
-            <li v-for="(category, index) in categoriesTopLevelApproved">
-                <a href="/category/{{category}}">{{category.name}}</a>
-                <categoryList :categoryId="category.id"></categoryList>
-            </li>
-        </ul>
-
-    </div>
+  <h1>Categories</h1>
+  <div>
+    <hr>
+    <ul class="nested">
+      <li v-for="(category, index) in categoriesTopLevelApproved">
+        <a href="/category/{{category}}">{{category.name}}</a>
+        <categoryList :categoryId="category.id"></categoryList>
+      </li>
+    </ul>
+  </div>
 </template>
+
 
 <script>
 import {isRole, getAuthUser} from "../app";
-import categoryList from "./CategoryListComponent.vue";
 import {RoleEnum} from "../enums/RoleEnum";
 import {Bootstrap5Pagination} from "laravel-vue-pagination";
 
 export default {
-    components: {Bootstrap5Pagination, categoryList},
+    components: {Bootstrap5Pagination},
     data() {
         return {
             categoriesTopLevelApproved: [],
@@ -90,11 +89,13 @@ export default {
                     console.error('Error deleting category:', error);
                 });
         },
-        getChildCategories(categoryId) {
-            const url = `/category/${categoryId}`;
+        getChildCategories(category) {
+            const url = `/category/${category.id}`;
             axios.get(url)
                 .then(response => {
+                    this.parentName = category.name;
                     this.children = response.data;
+                    console.log("Parent" + this.parentName)
                 })
                 .catch(error => {
                     console.error('Error fetching unapproved categories:', error);

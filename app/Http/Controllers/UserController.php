@@ -32,8 +32,11 @@ class UserController extends Controller
 
         $event->increment('capacity_current');
 
+        $event->load(['place', 'users']);
+
         return response([
-            'message' => 'User is now attending the event'
+            'message' => 'User is now attending the event',
+            'event' => $event,
         ], 201);
     }
 

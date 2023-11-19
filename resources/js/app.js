@@ -2,7 +2,7 @@ import './bootstrap';
 import { createApp } from 'vue';
 import { createVuetify } from 'vuetify/framework';
 import 'vuetify/styles';
-
+import { isProxy, toRaw } from 'vue';
 
 
 // Import Vuetify modules
@@ -29,11 +29,21 @@ export async function getAuthUser() {
     return user;
 }
 
+
+export function checkIfUserIsInArrayOfUsers(users, user){
+    if (isProxy(user)){
+        const userData = toRaw(user)
+        return users.filter(userInArray => {
+            return userInArray.id === userData.id
+        }).length > 0
+    }
+    return false
+}
+
 const app = createApp({});
 
 // Use Vuetify
 app.use(vuetify);
-
 
 
 app.component("register", require("./components/auth/RegisterComponent").default);
