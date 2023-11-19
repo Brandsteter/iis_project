@@ -64,6 +64,7 @@ Route::prefix('/category')->group(function () {
     });
 
     Route::get('/{category}', [\App\Http\Controllers\CategoryController::class, 'getCategoriesChildrenApproved']);
+    Route::get('/{category}/detail', [\App\Http\Controllers\CategoryController::class, 'categoryDetailPage']);
 });
 
 Route::prefix('/place')->group(function () {

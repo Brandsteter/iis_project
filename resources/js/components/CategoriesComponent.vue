@@ -4,7 +4,7 @@
         <hr>
         <ul class="nested">
             <li v-for="(category, index) in categoriesTopLevelApproved">
-                <a href="/category/{{category}}">{{category.name}}</a>
+                <a :href="`/category/${category.id}/detail`">{{ category.name }}</a>
                 <categoryList :categoryId="category.id"></categoryList>
             </li>
         </ul>
