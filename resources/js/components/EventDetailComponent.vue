@@ -1,6 +1,6 @@
 
 <template>
-
+<h6>{{event.id}}</h6>
 </template>
 
 <style scoped>
@@ -9,6 +9,12 @@
 
 <script>
 export default {
+    props: {
+        event: {
+            required: true,
+            type: Object,
+        }
+    },
     data() {
         return {
 

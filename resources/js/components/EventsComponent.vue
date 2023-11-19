@@ -32,11 +32,7 @@
                                    @click="showConfirm(event)"
                                    v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
                                    Delete</v-btn></td>
-                        <td><v-btn variant="text"
-                                   color="grey"
-                                   @click=""
-                                  >
-                            Detail</v-btn></td>
+                        <td><v-btn variant="text" color="grey" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
                 </tr>
                 </tbody>
             </table>

@@ -126,4 +126,10 @@ class EventController extends Controller
         ], 201);
 
     }
+
+    public function eventDetailPage(Event $event)
+    {
+        $event->load(['place']);
+        return view('eventdetail', compact('event'));
+    }
 }

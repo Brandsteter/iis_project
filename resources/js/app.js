@@ -3,6 +3,8 @@ import { createApp } from 'vue';
 import { createVuetify } from 'vuetify/framework';
 import 'vuetify/styles';
 
+
+
 // Import Vuetify modules
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
@@ -32,6 +34,8 @@ const app = createApp({});
 // Use Vuetify
 app.use(vuetify);
 
+
+
 app.component("register", require("./components/auth/RegisterComponent").default);
 app.component("login", require("./components/auth/LoginComponent").default);
 app.component("root", require("./components/RootComponent").default);
@@ -41,6 +45,6 @@ app.component("events", require("./components/EventsComponent").default);
 app.component("places", require("./components/PlacesComponent").default);
 app.component("categories", require("./components/CategoriesComponent").default);
 app.component("categoryList", require("./components/CategoryListComponent.vue").default);
-app.component("eventDetail", require("./components/EventDetailComponent.vue").default);
+app.component("eventdetail", require("./components/EventDetailComponent.vue").default);
 
 app.mount('#app');
