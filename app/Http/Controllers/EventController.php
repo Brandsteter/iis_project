@@ -99,7 +99,7 @@ class EventController extends Controller
 
         if (!$category->is_approved) {
             return response([
-                'message' => 'Category isnt approved yet'
+                'message' => 'Category is not approved yet'
             ], 400);
         }
 

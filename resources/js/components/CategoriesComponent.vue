@@ -1,5 +1,6 @@
 <template>
     <h1>Categories</h1>
+    <v-btn @click="newCategory" prepend-icon="mdi-plus">Add new category</v-btn>
     <div>
         <hr>
         <ul class="nested">
@@ -10,6 +11,63 @@
         </ul>
 
     </div>
+
+    <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+        <h1>Unapproved categories</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Parent</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(category, index) in categoriesUnapproved" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+                    <td>{{category.name}}</td>
+                    <td>{{category.parent_category_id}}</td>
+                    <td><v-btn variant="text"
+                               color="green"
+                               @click="approveCategory(category)">Approve</v-btn></td>
+                    <td><v-btn variant="text"
+                               color="red"
+                               @click="showConfirm(category)">Delete</v-btn></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--Create new scategory-->
+    <v-dialog v-model="showNewCategoryModal" max-width="400" max-height="250">
+        <v-card class="card" style=" border-radius: 10px;">
+            <v-card-title class="confirm-title">Create a new category</v-card-title>
+            <form>
+                <div class="mb-3">
+                    <label for="InputName" class="form-label">Name</label>
+                    <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <v-btn @click="submit()" color="grey-darken-3">
+                        Submit
+                    </v-btn>
+                </div>
+            </form>
+        </v-card>
+    </v-dialog>
+
+    <!--Delete confirmation window-->
+    <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
+        <v-card class="card" style=" border-radius: 10px;">
+            <v-card-title class="confirm-title">Do you want to delete this event?</v-card-title>
+            <div class="button-container">
+                <v-btn @click="confirmDelete()"
+                       min-width="80"
+                       color="green">Yes</v-btn>
+                <v-btn @click="cancelDelete()"
+                       min-width="80"
+                       color="red">No</v-btn>
+            </div>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -30,6 +88,13 @@ export default {
             roleEnum: RoleEnum,
             children: [],
             parentName: null,
+            categoryManipulate: null,
+            showConfirmation: false,
+            showNewCategoryModal: false,
+            fields: {
+                name: "",
+                parent_category_id: null,
+            }
         };
     },
     created: async function(){
@@ -72,8 +137,7 @@ export default {
             const url = `/category/${category.id}`;
             axios.patch(url)
                 .then(response => {
-                    this.fetchApprovedCategories();
-                    this.fetchUnapprovedCategories();
+                    window.location.href = "/category";
                 })
                 .catch(error => {
                     console.error('Error approving category:', error);
@@ -99,6 +163,29 @@ export default {
                 .catch(error => {
                     console.error('Error fetching unapproved categories:', error);
                 });
+        },
+        newCategory() {
+            this.showNewCategoryModal = true;
+        },
+        submit() {
+            axios.post('/category', this.fields).then((response) => {
+                if (response) {
+                    window.location.href = `/category`
+                }
+            })
+        },
+        showConfirm(category) {
+            this.showConfirmation = true;
+            this.categoryManipulate = category;
+        },
+        confirmDelete() {
+            this.showConfirmation = false;
+            this.deleteCategory(this.categoryManipulate);
+            this.categoryManipulate = null;
+        },
+        cancelDelete() {
+            this.showConfirmation = false;
+            this.categoryManipulate = null;
         },
 
         isRole,
