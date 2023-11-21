@@ -20,44 +20,49 @@
         <p class="text-description">{{ eventMutable.description }}</p>
     </div>
 
-    <v-btn v-if="!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)" class="attend-button" @click="attendEvent(eventMutable)">
-        Attend
-    </v-btn>
-    <v-btn v-else class="attend-button" color="red" @click="unattendEvent(eventMutable)">
-      Leave event
-    </v-btn>
+    <div v-if="checkIfIsLoggedIn()">
+      <v-btn v-if="!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)" class="attend-button" @click="attendEvent(eventMutable)">
+          Attend
+      </v-btn>
+      <v-btn v-else class="attend-button" color="red" @click="unattendEvent(eventMutable)">
+        Leave event
+      </v-btn>
+      </div>
+      <div v-else>
+        <br>
+        <a href="/auth/login">Login to be able to attend in event</a>
+      </div>
 
-    <br>
-    <br>
-    <div>
-        <h2>Rate this event</h2>
-
-    </div>
-
-    <div class="users-comment-input">
-        <h2>Comments:</h2>
+      <div v-if="(checkIfIsLoggedIn() && checkIfEventEnded(event)) && checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)">
         <div>
-            <div class="inline-components" v-for="(comment, index) in comments">
-              <p><b>{{comment.user.name}}:</b></p>
-              <p>{{comment.body}}</p>
-              <v-btn height="30px" v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)"
-                     color="light grey" @click="deleteComment(eventMutable,comment)">
-                Delete
-              </v-btn>
-            </div>
-
+          <h2>Rate this event</h2>
         </div>
         <div class="users-comment-input">
-            <label for="InputComment" class="form-label">Comment on this event:</label>
-            <br>
-            <div class="inline-components users-comment-input">
+          <h2>Comments:</h2>
+            <div>
+              <div class="inline-components" v-for="(comment, index) in comments">
+                <p><b>{{comment.user.name}}:</b></p>
+                <p>{{comment.body}}</p>
+                <v-btn height="30px" v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)"
+                       color="light grey" @click="deleteComment(eventMutable,comment)">
+                  Delete
+                </v-btn>
+              </div>
+            </div>
+            <div class="users-comment-input">
+              <label for="InputComment" class="form-label">Comment on this event:</label>
+              <br>
+              <div class="inline-components users-comment-input">
                 <input id="InputComment" class="form-control" v-model="commentBody" type="text" maxlength="255"  required>
                 <v-btn @click="createComment(eventMutable)">
                     Post
                 </v-btn>
+              </div>
             </div>
         </div>
-    </div>
+      </div>
+
+
 
 
 </template>
@@ -148,6 +153,15 @@ export default {
               .catch(error => {
                 console.error('Error deleting comment:', error);
               })
+        },
+        checkIfEventEnded(eventMutable) {
+          const currentDate = new Date();
+          const eventEndDate = new Date(eventMutable.event_end);
+
+          return eventEndDate < currentDate;
+        },
+        checkIfIsLoggedIn(){
+          return (isRole(this.roleEnum.User , this.authUser) || isRole(this.roleEnum.Moderator , this.authUser) || isRole(this.roleEnum.Admin , this.authUser));
         },
         isRole,
         getAuthUser,
