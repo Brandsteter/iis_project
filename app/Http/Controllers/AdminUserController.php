@@ -24,7 +24,7 @@ class AdminUserController extends Controller
             'email' => ['required', 'email', 'unique:users,email', 'max:255'],
             'password' => ['required', 'string', 'min:6'],
             'passwordRepeat' => ['required', 'same:password'],
-            'role' => ['required', Rule::enum(RoleEnum::class)]
+            'role' => ['required', 'string']
         ]);
 
         $data['password'] = Hash::make($data['password']);
@@ -57,8 +57,8 @@ class AdminUserController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'string', 'min:6'],
-            'passwordRepeat' => ['required', 'same:password'],
+            'password' => ['nullable', 'string', 'min:6'],
+            'passwordRepeat' => ['nullable', 'same:password'],
             'role' => ['required', 'string']
         ]);
 
@@ -69,10 +69,14 @@ class AdminUserController extends Controller
             ], 400);
         }
 
+        if (isset($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
         $user->roles()->detach();
         $user->roles()->attach(RoleEnum::fromString($data['role'])->getRole());
-
-        $data['password'] = Hash::make($data['password']);
 
         $user->update($data);
 
