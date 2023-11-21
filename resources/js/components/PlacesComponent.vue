@@ -65,7 +65,6 @@
             <v-card-title v-else-if="modalMode === 'edit'">Edit place</v-card-title>
             <v-card-text>
                 <form>
-                    <label style="font-size: x-large" class="form-label">Create a new place for events</label>
                     <div class="mb-3">
                         <label for="InputName" class="form-label">Name</label>
                         <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>

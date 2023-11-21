@@ -196,6 +196,7 @@ export default {
             showCategoryAssignment : false,
             eventDeleteConfirm: null,
             fields: {
+                id: "",
                 name: "",
                 event_start: "",
                 event_end: "",
@@ -299,7 +300,7 @@ export default {
               })
             }
             else if (this.modalMode === "edit") {
-                axios.put('/event', this.fields).then((response) => {
+                axios.put(`/event/${this.fields.id}`, this.fields).then((response) => {
                     if (response) {
                         window.location.href = '/event'
                     }

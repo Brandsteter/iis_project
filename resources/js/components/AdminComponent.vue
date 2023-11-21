@@ -2,12 +2,13 @@
   <div>
     <h1>User List (Admin Page)</h1>
     <div>
+      <v-btn @click="openCreateModal" prepend-icon="mdi-plus">Create a new user</v-btn>
       <table>
         <thead>
         <tr>
           <th>ID</th>
-          <th>Role</th>
           <th>Name</th>
+          <th>Role</th>
           <th>Email</th>
           <th>Date Created</th>
         </tr>
@@ -15,28 +16,112 @@
         <tbody>
         <tr v-for="(user, index) in users" :key="user.id" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
           <td>{{ user.id }}</td>
-          <td>{{ user.roles[0].role }}</td>
           <td>{{ user.name }}</td>
+          <td>{{ user.roles[0].role }}</td>
           <td>{{ user.email }}</td>
           <td>{{user.created_at}}</td>
           <td><v-btn variant="text"
                      color="secondary"
-                     @click="selectedOpen = false">Edit</v-btn></td>
+                     @click="openEditModal(user)">Edit User</v-btn></td>
           <td><v-btn variant="text"
                      color="red"
-                     @click="deleteUser(user)">Delete</v-btn></td>
+                     @click="showConfirm(user)">Delete</v-btn></td>
         </tr>
         </tbody>
       </table>
     </div>
   </div>
+
+    <!--Create/Edit User-->
+    <v-dialog v-model="showModal" max-width="600">
+        <v-card class="card" style=" border-radius: 10px;">
+            <v-card-title v-if="modalMode === 'create'">Create new user</v-card-title>
+            <v-card-title v-else-if="modalMode === 'edit'">Edit user</v-card-title>
+            <v-card-text>
+                <form>
+                    <div class="mb-3">
+                        <label for="InputName" class="form-label">Name</label>
+                        <input id="InputName" class="form-control" v-model="submitFields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputAddress" class="form-label">Email address</label>
+                        <input class="form-control" id="InputAddress" v-model="submitFields.email" maxlength="255" type="text" required>
+                    </div>
+                  <div class="mb-3">
+                    <label for="InputPlace" class="form-label">Select role</label>
+                    <select class="form-control" id="InputPlace" v-model="submitFields.role" required>
+                      <option value="none" selected disabled hidden>Select an Option</option>
+                      <option value="Admin">Admin</option>
+                      <option value="Moderator">Moderator</option>
+                      <option value="User">User</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="InputPassword" class="form-label">Password</label>
+                    <input class="form-control" id="InputPassword"  maxlength="255" v-model="submitFields.password" type="password">
+<!--                    <span v-if="errorMessages.password" style="color: red;">{{ errorMessages.password[0] }}</span>-->
+                  </div>
+                  <div class="mb-3">
+                    <label for="InputPasswordRepeat" class="form-label">Repeat password</label>
+                    <input class="form-control" id="InputPasswordRepeat" maxlength="255" v-model="submitFields.passwordRepeat" type="password">
+<!--                    <span v-if="errorMessages.passwordRepeat" style="color: red;">{{ errorMessages.passwordRepeat[0] }}</span>-->
+<!--                    <span v-if="passwordsDoNotMatch" style="color: red;">Passwords do not match</span>-->
+                  </div>
+
+                    <div class="d-flex justify-content-center">
+                        <v-btn @click="submit" color="grey-darken-3">
+                            Submit</v-btn>
+                    </div>
+                </form>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
+
+    <!--Delete confirmation window-->
+    <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
+        <v-card class="card" style=" border-radius: 10px;">
+            <v-card-title class="confirm-title">Do you want to delete this user?</v-card-title>
+            <div class="button-container">
+                <v-btn @click="confirmDelete()"
+                       min-width="80"
+                       color="green">Yes</v-btn>
+                <v-btn @click="cancelDelete()"
+                       min-width="80"
+                       color="red">No</v-btn>
+            </div>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
+import {isRole, getAuthUser} from "../app";
+import {RoleEnum} from "../enums/RoleEnum";
 export default {
   data() {
     return {
-      users: []
+      users: [],
+      fields: {
+        id: "",
+        name: "",
+        email: "",
+        password: null,
+        passwordRepeat: null,
+        roles: null,
+      },
+      submitFields: {
+        id: "",
+        name: "",
+        email: "",
+        password: "",
+        passwordRepeat: null,
+        roles: null,
+        role: "",
+      },
+      roles: RoleEnum,
+      showModal: false,
+      modalMode: 'create',
+      showConfirmation: false,
+      userDeleteConfirm: false,
     };
   },
   mounted() {
@@ -61,7 +146,58 @@ export default {
           .catch(error => {
             console.error('Error deleting user:', error);
           });
-    }
+    },
+    openEditModal(user) {
+      this.modalMode = 'edit';
+      this.showModal = true;
+      this.submitFields = { ...user };
+      this.submitFields.role = this.submitFields.roles[0].role;
+    },
+    openCreateModal() {
+      this.modalMode = 'create';
+      this.showModal = true;
+      this.submitFields = {
+        id: "",
+        name: "",
+        email: "",
+        password: null,
+        passwordRepeat: null,
+        roles: null,
+        role: "",
+      };
+    },
+    showConfirm(user) {
+      this.showConfirmation = true;
+      this.userDeleteConfirm = user;
+    },
+    confirmDelete() {
+      this.showConfirmation = false;
+      this.deleteEvent(this.userDeleteConfirm);
+      this.userDeleteConfirm = null;
+    },
+    cancelDelete() {
+      this.showConfirmation = false;
+      this.userDeleteConfirm = null;
+    },
+    submit() {
+      if (this.modalMode === 'create') {
+        console.log(this.submitFields.role)
+        axios.post('/admin/user/', this.submitFields).then((response) => {
+          if (response) {
+            window.location.href = '/admin'
+          }
+        })
+      } else if (this.modalMode === 'edit') {
+        const url = `/admin/user/${this.submitFields.id}`;
+        axios.put(url, this.submitFields).then((response) => {
+          if (response) {
+            window.location.href = '/admin'
+          }
+        })
+      }
+    },
+    isRole,
+    getAuthUser,
   }
 };
 </script>
