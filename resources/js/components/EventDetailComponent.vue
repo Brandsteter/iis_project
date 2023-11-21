@@ -85,6 +85,7 @@ export default {
             axios.post(url, eventMutable)
                 .then(response => {
                     this.eventMutable = response.data;
+                    window.location.href = `${url}/detail`;
                 })
                 .catch(error => {
                     console.error('Error attending event:', error);

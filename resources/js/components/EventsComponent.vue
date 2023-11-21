@@ -37,9 +37,6 @@
                                @click="assignCategory(event)"
                                v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
                                Add category</v-btn></td>
-                        <td><v-btn variant="text"
-                               color="green"
-                               @click="getInfo(event)">Get info</v-btn></td>
                         <td><v-btn variant="text" color="grey" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
                 </tr>
                 </tbody>

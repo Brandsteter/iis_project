@@ -21,9 +21,6 @@
             <td>{{ event.event_end}}</td>
 <!--            <td>{{ event.place.name}}</td>-->
             <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
-            <td><v-btn variant="text"
-                       color="green"
-                       @click="getInfo(event)">Get info</v-btn></td>
 <!--            <td><v-btn variant="text"-->
 <!--                       color="secondary"-->
 <!--                       @click="openEditModal(event)">Edit</v-btn></td>-->
@@ -88,10 +85,6 @@ export default {
       },
       isRole,
       getAuthUser,
-      getInfo(event) {
-        console.log(event);
-        console.log(event.place + " name");
-      },
       newSubcategory() {
         this.showNewSubcategoryModal = true;
       },
@@ -102,7 +95,6 @@ export default {
             }
         })
       },
-
     },
     created: async function(){
         this.authUser = await this.getAuthUser()
