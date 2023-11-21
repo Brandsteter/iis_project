@@ -2,6 +2,7 @@ import './bootstrap';
 import { createApp } from 'vue';
 import { createVuetify } from 'vuetify/framework';
 import 'vuetify/styles';
+import { isProxy, toRaw } from 'vue';
 
 // Import Vuetify modules
 import * as components from 'vuetify/components';
@@ -27,6 +28,16 @@ export async function getAuthUser() {
     return user;
 }
 
+export function checkIfUserIsInArrayOfUsers(users, user){
+    if (isProxy(user)){
+        const userData = toRaw(user)
+        return users.filter(userInArray => {
+            return userInArray.id === userData.id
+        }).length > 0
+    }
+    return false
+}
+
 const app = createApp({});
 
 // Use Vuetify
@@ -40,7 +51,8 @@ app.component("admin", require("./components/AdminComponent").default);
 app.component("events", require("./components/EventsComponent").default);
 app.component("places", require("./components/PlacesComponent").default);
 app.component("categories", require("./components/CategoriesComponent").default);
-//app.component("createPlace", require("./components/createForms/CreatePlaceComponent").default);
-
+app.component("categoryList", require("./components/CategoryListComponent.vue").default);
+app.component("categorydetail", require("./components/CategorydetailComponent.vue").default);
+app.component("eventdetail", require("./components/EventDetailComponent.vue").default);
 
 app.mount('#app');

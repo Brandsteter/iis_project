@@ -1,47 +1,98 @@
 <template>
-    <div class="calendar-container" >
-        <v-toolbar height="50px" flat class="custom-toolbar">
-            <v-btn outlined class="mr-3" color="white" elevation="2" @click="setToday">
-                Today
-            </v-btn>
-            <v-btn icon @click="prevMonth">
-                <v-icon color="white">mdi-chevron-left</v-icon>
-            </v-btn>
-            <v-btn icon @click="nextMonth">
-                <v-icon color="white">mdi-chevron-right</v-icon>
-            </v-btn>
-            <h3 >
-                {{ monthName }} {{ currentYear }}
-            </h3>
-        </v-toolbar>
 
-        <table>
+
+
+<!--    <div class="calendar-container" >-->
+<!--        <v-toolbar height="50px" flat class="custom-toolbar">-->
+<!--            <v-btn outlined class="mr-3" color="white" elevation="2" @click="setToday">-->
+<!--                Today-->
+<!--            </v-btn>-->
+<!--            <v-btn icon @click="prevMonth">-->
+<!--                <v-icon color="white">mdi-chevron-left</v-icon>-->
+<!--            </v-btn>-->
+<!--            <v-btn icon @click="nextMonth">-->
+<!--                <v-icon color="white">mdi-chevron-right</v-icon>-->
+<!--            </v-btn>-->
+<!--            <h3 >-->
+<!--                {{ monthName }} {{ currentYear }}-->
+<!--            </h3>-->
+<!--        </v-toolbar>-->
+
+<!--        <table>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>Mon</th>-->
+<!--                <th>Tue</th>-->
+<!--                <th>Wed</th>-->
+<!--                <th>Thu</th>-->
+<!--                <th>Fri</th>-->
+<!--                <th>Sat</th>-->
+<!--                <th>Sun</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody id="calendarBody"></tbody>-->
+<!--        </table>-->
+
+<!--    </div>-->
+
+      <FullCalendar :options='calendarOptions' />
+      <div v-if="isRole(roleEnum.User , authUser)">
+        <h1>My events</h1>
+        <div>
+          <table>
             <thead>
             <tr>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Thu</th>
-                <th>Fri</th>
-                <th>Sat</th>
-                <th>Sun</th>
+              <th>Name</th>
+              <th>Start date</th>
+              <th>End date</th>
             </tr>
             </thead>
-            <tbody id="calendarBody"></tbody>
-        </table>
+            <tbody>
+            <tr v-for="(event, index) in usersEvents" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+              <td>{{ event.name }}</td>
+              <td>{{ event.event_start}}</td>
+              <td>{{ event.event_end}}</td>
+            </tr>
+            </tbody>
+          </table>
+      </div>
     </div>
 
 </template>
 
 <script>
+import {isRole, getAuthUser} from "../app";
+import {RoleEnum} from "../enums/RoleEnum";
+import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
+
 export default {
+    components: {
+      FullCalendar,
+    },
     data() {
         const today = new Date();
         return {
             today,
             currentMonth: today.getMonth(),
             currentYear: today.getFullYear(),
-        };
+            usersEvents: [],
+            authUser: null,
+            roleEnum: RoleEnum,
+            calendarOptions: {
+              plugins: [ dayGridPlugin ],
+              initialView: 'dayGridMonth',
+              events: [
+                {
+                  title: "vianocne trhy",
+                  start: "2023-11-19T12:00:00",
+                  end: "2023-11-20T14:00:00",
+                  color: "#aaf6f0",
+                }
+              ],
+              allDayText: 'Celý deň',
+            },
+          };
     },
     computed: {
         monthName() {
@@ -62,8 +113,12 @@ export default {
             return monthNames[this.currentMonth];
         },
     },
+    created: async function(){
+      this.authUser = await this.getAuthUser()
+    },
     mounted() {
         this.updateCalendar();
+        this.getUsersEvents();
     },
     methods: {
         updateCalendar() {
@@ -139,6 +194,20 @@ export default {
             this.currentYear = this.today.getFullYear();
             this.updateCalendar();
         },
+        getUsersEvents(){
+          axios.get('/event/attended')
+              .then(response => {
+                this.usersEvents = response.data;
+                console.log(this.usersEvents);
+              })
+              .catch(error => {
+                console.error('Error fetching events:', error);
+              })
+        },
+        isRole,
+        getAuthUser,
+
+
     },
     watch: {
         currentMonth: 'updateCalendar',

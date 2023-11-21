@@ -96,4 +96,10 @@ class CategoryController extends Controller
             'message' => 'Category successfully approved'
         ], 201);
     }
+
+    public function categoryDetailPage(Category $category)
+    {
+        $category -> load(['events']);
+        return view('categorydetail', compact("category"));
+    }
 }

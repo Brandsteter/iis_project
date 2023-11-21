@@ -65,6 +65,7 @@ Route::prefix('/category')->group(function () {
 
     Route::get('/{category}/events', [\App\Http\Controllers\CategoryController::class, 'getCategoryEvents']);
     Route::get('/{category}', [\App\Http\Controllers\CategoryController::class, 'getCategoriesChildrenApproved']);
+    Route::get('/{category}/detail', [\App\Http\Controllers\CategoryController::class, 'categoryDetailPage']);
 });
 
 Route::prefix('/place')->group(function () {
@@ -85,6 +86,7 @@ Route::prefix('/place')->group(function () {
 Route::prefix('/event')->group(function () {
     Route::get('/', [\App\Http\Controllers\UserController::class, 'eventsPage']);
     Route::get('/approved', [\App\Http\Controllers\EventController::class, 'getEventsApproved']);
+    Route::get('/{event}/detail', [\App\Http\Controllers\EventController::class, 'eventDetailPage']);
 
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\EventController::class, 'create']);

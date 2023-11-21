@@ -99,7 +99,7 @@ class EventController extends Controller
 
         if (!$category->is_approved) {
             return response([
-                'message' => 'Category isnt approved yet'
+                'message' => 'Category is not approved yet'
             ], 400);
         }
 
@@ -126,4 +126,11 @@ class EventController extends Controller
         ], 201);
 
     }
+
+    public function eventDetailPage(Event $event)
+    {
+        $event->load(['place', 'users']);
+        return view('eventdetail', compact('event'));
+    }
+
 }
