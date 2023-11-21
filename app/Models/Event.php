@@ -16,10 +16,16 @@ class Event extends Model
         'event_end',
         'event_start_time',
         'place_id',
+        'creator_user_id',
         'description',
         'capacity_max',
         'capacity_current'
     ];
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function place()
     {

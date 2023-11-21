@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\User;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -37,6 +38,8 @@ class EventController extends Controller
             'description' => ['nullable', 'string', 'max:255']
         ]);
 
+        $user = auth()->user();
+        $data['creator_user_id'] = $user->id;
 
         $event = Event::create($data);
 
