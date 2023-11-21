@@ -85,6 +85,7 @@ Route::prefix('/place')->group(function () {
 Route::prefix('/event')->group(function () {
     Route::get('/', [\App\Http\Controllers\UserController::class, 'eventsPage']);
     Route::get('/approved', [\App\Http\Controllers\EventController::class, 'getEventsApproved']);
+    Route::get('/{event}/detail', [\App\Http\Controllers\EventController::class, 'eventDetailPage']);
 
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\EventController::class, 'create']);

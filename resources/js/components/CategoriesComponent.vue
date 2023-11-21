@@ -158,7 +158,9 @@ export default {
             const url = `/category/${categoryId}`;
             axios.get(url)
                 .then(response => {
+                    this.parentName = category.name;
                     this.children = response.data;
+                    console.log("Parent" + this.parentName)
                 })
                 .catch(error => {
                     console.error('Error fetching unapproved categories:', error);

@@ -40,6 +40,7 @@
                         <td><v-btn variant="text"
                                color="green"
                                @click="getInfo(event)">Get info</v-btn></td>
+                        <td><v-btn variant="text" color="grey" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
                 </tr>
                 </tbody>
             </table>
@@ -54,13 +55,13 @@
             <div>
                 <table>
                     <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Start date</th>
-                            <th>End date</th>
-                            <th>Place</th>
-                            <th>Capacity</th>
-                        </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Start date</th>
+                        <th>End date</th>
+                        <th>Place</th>
+                        <th>Capacity</th>
+                    </tr>
                     </thead>
                     <tbody>
                     <tr v-for="(event, index) in eventsUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
@@ -78,11 +79,6 @@
                         <td><v-btn variant="text"
                                    color="red"
                                    @click="showConfirm(event)">Delete</v-btn></td>
-                        <td><v-btn variant="text"
-                                   color="secondary"
-                                   @click="assignCategory(event)"
-                                   v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-                                   Add category</v-btn></td>
                     </tr>
                     </tbody>
                 </table>
@@ -153,27 +149,6 @@
         </v-card>
     </v-dialog>
 
-    <!--Select Category for event-->
-    <v-dialog v-model="showCategoryAssignment" max-width="400" max-height="250">
-        <v-card class="card" style=" border-radius: 10px;">
-            <v-card-title class="confirm-title">Select a category for this event</v-card-title>
-            <form>
-                <div class="mb-3">
-                    <label for="InputPlace" class="form-label">Select category</label>
-                    <select class="form-control" id="InputPlace" v-model="eventCategory.category_id" required>
-                        <option value="none" selected disabled hidden>Select an Option</option>
-                        <option v-for="(category) in categoriesApproved" :value="category.id">{{category.name}}</option>
-                    </select>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <v-btn @click="addCategory()" color="grey-darken-3">
-                        Submit
-                    </v-btn>
-                </div>
-            </form>
-        </v-card>
-    </v-dialog>
-
 </template>
 
 <script>
@@ -190,17 +165,12 @@ export default {
             eventsApproved: [],
             eventsUnapproved: [],
             placesApproved: [],
-            categoriesApproved: [],
             authUser: null,
             roleEnum: RoleEnum,
             showModal: false,
             modalMode: 'create',
             showConfirmation: false,
-            eventManipulate: null,
-            eventCategory: {
-                category_id: "",
-            },
-            showCategoryAssignment : false,
+            eventDeleteConfirm: null,
             fields: {
                 name: "",
                 event_start: "",
@@ -218,7 +188,6 @@ export default {
         this.fetchApprovedEvents();
         this.fetchUnapprovedEvents();
         this.fetchApprovedPlaces();
-        this.fetchApprovedCategories();
     },
     methods: {
         fetchApprovedEvents(page=1) {
@@ -287,29 +256,16 @@ export default {
             this.showModal = true;
             this.fields = { ...event };
         },
-        addCategory() {
-            const url = `/event/${this.eventManipulate.id}/add-category`;
-            console.log(this.eventCategory + " cat")
-            axios.post(url, this.eventCategory)
-                .then((response) => {
-                    if (response) {
-                        window.location.href = '/event'
-                    }
-                })
-        },
         submit() {
             if (this.modalMode === "create") {
-
               axios.post('/event', this.fields).then((response) => {
                 if (response) {
-                    window.location.href = '/event'
+                  window.location.href = '/event'
                 }
               })
             }
             else if (this.modalMode === "edit") {
-                const url = `/event/${this.fields.id}`;
-                console.log(this.fields + " fields");
-                axios.put(url, this.fields).then((response) => {
+                axios.put('/event', this.fields).then((response) => {
                     if (response) {
                         window.location.href = '/event'
                     }
@@ -320,46 +276,27 @@ export default {
             axios.get('/place/approved')
                 .then(response => {
                     this.placesApproved = response.data;
-                    console.log(this.placesApproved);
                 })
                 .catch(error => {
                     console.error('Error fetching events:', error);
                 })
         },
-        fetchApprovedCategories() {
-            axios.get('/category/approved')
-                .then(response => {
-                    this.categoriesApproved = response.data;
-                    console.log(this.categoriesApproved)
-                })
-                .catch(error => {
-                    console.error('Error fetching categories', error);
-                })
-        },
         showConfirm(event) {
             this.showConfirmation = true;
-            this.eventManipulate = event;
+            this.eventDeleteConfirm = event;
         },
         confirmDelete() {
             this.showConfirmation = false;
-            this.deleteEvent(this.eventManipulate);
-            this.eventManipulate = null;
+            this.deleteEvent(this.eventDeleteConfirm);
+            this.eventDeleteConfirm = null;
         },
         cancelDelete() {
             this.showConfirmation = false;
-            this.eventManipulate = null;
-        },
-        assignCategory(event) {
-            this.showCategoryAssignment = true;
-            this.eventManipulate = event;
+            this.eventDeleteConfirm = null;
         },
 
         isRole,
         getAuthUser,
-        getInfo(event) {
-            console.log(event);
-            console.log(event.place.name + " name");
-        },
     }
 };
 </script>
