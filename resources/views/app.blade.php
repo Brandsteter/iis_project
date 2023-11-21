@@ -42,6 +42,12 @@
                     </li>
 
                     @auth
+                      <li>
+                        <a href="/calendar">My events</a>
+                      </li>
+                    @endauth
+
+                    @auth
                     <li>
                         <a href="/calendar">My calendar</a>
                     </li>

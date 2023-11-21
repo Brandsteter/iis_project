@@ -62,6 +62,7 @@
     <v-dialog v-model="showModal" max-width="600">
         <v-card class="card" style=" border-radius: 10px;">
             <v-card-title v-if="modalMode === 'create'">Create new place</v-card-title>
+            <h4 v-if="modalMode === 'create'"> Place will be sent to a page moderator for confirmation</h4>
             <v-card-title v-else-if="modalMode === 'edit'">Edit place</v-card-title>
             <v-card-text>
                 <form>

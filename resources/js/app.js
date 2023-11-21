@@ -54,5 +54,6 @@ app.component("categories", require("./components/CategoriesComponent").default)
 app.component("categoryList", require("./components/CategoryListComponent.vue").default);
 app.component("categorydetail", require("./components/CategorydetailComponent.vue").default);
 app.component("eventdetail", require("./components/EventDetailComponent.vue").default);
+app.component("usermyevents", require("./components/UserMyEventsComponent.vue").default);
 
 app.mount('#app');

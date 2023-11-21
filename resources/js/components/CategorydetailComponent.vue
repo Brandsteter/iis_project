@@ -40,6 +40,7 @@
     <v-dialog v-model="showNewSubcategoryModal" max-width="400" max-height="250">
         <v-card class="card" style=" border-radius: 10px;">
             <v-card-title class="confirm-title">Create a new sub-category for {{category.name}}</v-card-title>
+            <h4>Category will be sent to a page moderator for confirmation</h4>
             <form>
                 <div class="mb-3">
                     <label for="InputName" class="form-label">Name</label>

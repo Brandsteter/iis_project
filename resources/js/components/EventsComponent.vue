@@ -90,6 +90,7 @@
     <v-dialog v-model="showModal" max-width="400">
         <v-card class="card" style="background-color: lightskyblue; border-radius: 10px;">
             <v-card-title v-if="modalMode === 'create'">Create new event</v-card-title>
+            <h4 v-if="modalMode === 'create'">Event will be sent to a page moderator for confirmation</h4>
             <v-card-title v-else-if="modalMode === 'edit'">Edit event</v-card-title>
             <v-card-text>
                 <form>
