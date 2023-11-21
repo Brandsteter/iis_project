@@ -104,6 +104,10 @@
                         <input type="date" id="InputEventStart" class="form-control" v-model="fields.event_start" maxlength="255" required>
                     </div>
                     <div class="mb-3">
+                      <label for="InputEventStart" class="form-label">Start of event</label>
+                      <input type="time" id="InputEventStart" class="form-control" v-model="fields.event_start_time" maxlength="255" required>
+                    </div>
+                    <div class="mb-3">
                         <label for="InputEventEnd" class="form-label">End of event</label>
                         <input type="date" id="InputEventEnd" class="form-control" v-model="fields.event_end" maxlength="255" required>
                     </div>
@@ -200,6 +204,7 @@ export default {
                 id: "",
                 name: "",
                 event_start: "",
+                event_start_time: "",
                 event_end: "",
                 capacity_max: "",
                 place_id: "",

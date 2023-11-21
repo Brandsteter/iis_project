@@ -26,64 +26,67 @@
                 height: 100vh; /* Set height to 100% of viewport height */
             }
             .navigation li{
-                border: 1px solid black;
+                border: none;
                 padding: 10px;
 
+            }
+            .nav-button {
+              width: 100%;
             }
         </style>
 
     </head>
     <body>
         <div class="d-flex flex-wrap" style="height: 100vh" id="app">
-            <nav class="col-3 bg-light-blue-accent-1">
-                <ul class="navigation" style="list-style-type: none; padding:0">
-                    <li>
-                        <a href="/event">Events</a>
-                    </li>
-
-                    @auth
-                      <li>
-                        <a href="/calendar">My events</a>
-                      </li>
-                    @endauth
-
-                    @auth
-                    <li>
-                        <a href="/calendar">My calendar</a>
-                    </li>
-                    @endauth
-
-                    <li>
-                        <a href="/category">Event Categories</a>
+            <nav class="col-2 bg-light-blue-accent-1">
+                <ul class="navigation" style="list-style-type: none; padding: 0; ">
+                    <li class="nav-button">
+                        <v-btn class="w-100" href="/event">Events</v-btn>
                     </li>
 
                     @auth
                     <li>
-                        <a href="/place">Event places</a>
+                      <v-btn class="w-100" href="/calendar">My events</v-btn>
                     </li>
                     @endauth
 
                     @auth
-                        @if(auth()->user()->isRole(\App\Enums\RoleEnum::Admin))
                     <li>
-                        <a href="/admin">Admin Panel</a>
+                      <v-btn class="w-100" href="/calendar">My calendar</v-btn>
+                    </li>
+                    @endauth
+
+                    <li>
+                        <v-btn class="w-100" href="/category">Event Categories</v-btn>
+                    </li>
+
+                    @auth
+                    <li>
+                        <v-btn class="w-100" href="/place">Event places</v-btn>
+                    </li>
+                    @endauth
+
+                    @auth
+                    @if(auth()->user()->isRole(\App\Enums\RoleEnum::Admin))
+                    <li>
+                        <v-btn class="w-100" href="/admin">Admin Panel</v-btn>
                     </li>
                     @endif
                     @endauth
 
                     @auth
-                        <li>
-                            <a href="/auth/logout">logout</a>
-                        </li>
+                    <li>
+                        <v-btn class="w-100" href="/auth/logout">Logout</v-btn>
+                    </li>
                     @endauth
 
                     @guest
-                        <li>
-                            <a href="/auth/login">login</a>
-                        </li>
-                        <li>
-                            <a href="/auth/register">register</a>
-                        </li>
+                    <li>
+                        <v-btn class="w-100" href="/auth/login">Login</v-btn>
+                    </li>
+                    <li>
+                        <v-btn class="w-100" href="/auth/register">Register</v-btn>
+                    </li>
                     @endguest
                 </ul>
             </nav>

@@ -41,15 +41,15 @@
                 <form>
                     <div class="mb-3">
                         <label for="InputName" class="form-label">Name</label>
-                        <input id="InputName" class="form-control" v-model="submitFields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+                        <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
                     </div>
                     <div class="mb-3">
                         <label for="InputAddress" class="form-label">Email address</label>
-                        <input class="form-control" id="InputAddress" v-model="submitFields.email" maxlength="255" type="text" required>
+                        <input class="form-control" id="InputAddress" v-model="fields.email" maxlength="255" type="text" required>
                     </div>
                   <div class="mb-3">
                     <label for="InputPlace" class="form-label">Select role</label>
-                    <select class="form-control" id="InputPlace" v-model="submitFields.role" required>
+                    <select class="form-control" id="InputPlace" v-model="fields.role" required>
                       <option value="none" selected disabled hidden>Select an Option</option>
                       <option value="Admin">Admin</option>
                       <option value="Moderator">Moderator</option>
@@ -58,12 +58,12 @@
                   </div>
                   <div class="mb-3">
                     <label for="InputPassword" class="form-label">Password</label>
-                    <input class="form-control" id="InputPassword"  maxlength="255" v-model="submitFields.password" type="password">
+                    <input class="form-control" id="InputPassword"  maxlength="255" v-model="fields.password" type="password">
 <!--                    <span v-if="errorMessages.password" style="color: red;">{{ errorMessages.password[0] }}</span>-->
                   </div>
                   <div class="mb-3">
                     <label for="InputPasswordRepeat" class="form-label">Repeat password</label>
-                    <input class="form-control" id="InputPasswordRepeat" maxlength="255" v-model="submitFields.passwordRepeat" type="password">
+                    <input class="form-control" id="InputPasswordRepeat" maxlength="255" v-model="fields.passwordRepeat" type="password">
 <!--                    <span v-if="errorMessages.passwordRepeat" style="color: red;">{{ errorMessages.passwordRepeat[0] }}</span>-->
 <!--                    <span v-if="passwordsDoNotMatch" style="color: red;">Passwords do not match</span>-->
                   </div>
@@ -107,14 +107,6 @@ export default {
         password: null,
         passwordRepeat: null,
         roles: null,
-      },
-      submitFields: {
-        id: "",
-        name: "",
-        email: "",
-        password: "",
-        passwordRepeat: null,
-        roles: null,
         role: "",
       },
       roles: RoleEnum,
@@ -150,13 +142,13 @@ export default {
     openEditModal(user) {
       this.modalMode = 'edit';
       this.showModal = true;
-      this.submitFields = { ...user };
-      this.submitFields.role = this.submitFields.roles[0].role;
+      this.fields = { ...user };
+      this.fields.role = this.fields.roles[0].role;
     },
     openCreateModal() {
       this.modalMode = 'create';
       this.showModal = true;
-      this.submitFields = {
+      this.fields = {
         id: "",
         name: "",
         email: "",
@@ -181,15 +173,15 @@ export default {
     },
     submit() {
       if (this.modalMode === 'create') {
-        console.log(this.submitFields.role)
-        axios.post('/admin/user/', this.submitFields).then((response) => {
+        console.log(this.fields.role)
+        axios.post('/admin/user/', this.fields).then((response) => {
           if (response) {
             window.location.href = '/admin'
           }
         })
       } else if (this.modalMode === 'edit') {
-        const url = `/admin/user/${this.submitFields.id}`;
-        axios.put(url, this.submitFields).then((response) => {
+        const url = `/admin/user/${this.fields.id}`;
+        axios.put(url, this.fields).then((response) => {
           if (response) {
             window.location.href = '/admin'
           }
