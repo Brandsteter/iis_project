@@ -32,7 +32,7 @@ class CommentController extends Controller
 
     public function getEventComments(Event $event)
     {
-        $comments = $event->comments;
+        $comments = $event->comments()->with('user')->get();
 
         return response()->json($comments);
     }

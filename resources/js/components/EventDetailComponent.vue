@@ -23,7 +23,7 @@
     <v-btn v-if="!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)" class="attend-button" @click="attendEvent(eventMutable)">
         Attend
     </v-btn>
-    <v-btn v-else class="attend-button" color="red" @click="">
+    <v-btn v-else class="attend-button" color="red" @click="unattendEvent(eventMutable)">
       Leave event
     </v-btn>
 
@@ -36,15 +36,23 @@
 
     <div class="users-comment-input">
         <h2>Comments:</h2>
-        <div class="users-comment-input">
-            <p>tu budu zobrazene komentare</p>
+        <div>
+            <div class="inline-components" v-for="(comment, index) in comments">
+              <p><b>{{comment.user.name}}:</b></p>
+              <p>{{comment.body}}</p>
+              <v-btn height="30px" v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)"
+                     color="light grey" @click="deleteComment(eventMutable,comment)">
+                Delete
+              </v-btn>
+            </div>
+
         </div>
         <div class="users-comment-input">
             <label for="InputComment" class="form-label">Comment on this event:</label>
             <br>
             <div class="inline-components users-comment-input">
                 <input id="InputComment" class="form-control" v-model="commentBody" type="text" maxlength="255"  required>
-                <v-btn  @click="createComment(eventMutable)">
+                <v-btn @click="createComment(eventMutable)">
                     Post
                 </v-btn>
             </div>
@@ -77,7 +85,11 @@ export default {
             commentBody: "",
             userEvents: [],
             eventMutable: this.event,
+            comments: [],
         };
+    },
+    mounted() {
+      this.fetchComments(this.eventMutable)
     },
     methods: {
         attendEvent(eventMutable){
@@ -91,6 +103,17 @@ export default {
                     console.error('Error attending event:', error);
                 })
         },
+        unattendEvent(eventMutable){
+          const url = `/event/${eventMutable.id}/unattend`;
+          axios.post(url, eventMutable)
+              .then(response => {
+                window.location.href = `/event/${eventMutable.id}/detail`;
+              })
+              .catch(error => {
+                console.error('Error unattending event:', error);
+              })
+
+        },
         createComment(eventMutable){
           const url = `/event/${eventMutable.id}/comments`;
           const requestData = {
@@ -100,10 +123,30 @@ export default {
           };
           axios.post(url, requestData)
               .then(response => {
-                console.log("Comment successfully created?");
+                this.fetchComments(eventMutable);
               })
               .catch(error => {
                 console.error('Error attending event:', error);
+              })
+        },
+        fetchComments(eventMutable){
+          const url = `/event/${eventMutable.id}/comments/`;
+          axios.get(url)
+              .then(response => {
+                this.comments = response.data;
+              })
+              .catch(error => {
+                console.error('Error fetching comments:', error);
+              })
+        },
+        deleteComment(eventMutable, comment){
+          const url = `/event/${eventMutable.id}/comments/${comment.id}`;
+          axios.delete(url)
+              .then(response => {
+                this.fetchComments(eventMutable)
+              })
+              .catch(error => {
+                console.error('Error deleting comment:', error);
               })
         },
         isRole,

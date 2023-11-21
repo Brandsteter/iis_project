@@ -1,41 +1,6 @@
 <template>
 
-
-
-<!--    <div class="calendar-container" >-->
-<!--        <v-toolbar height="50px" flat class="custom-toolbar">-->
-<!--            <v-btn outlined class="mr-3" color="white" elevation="2" @click="setToday">-->
-<!--                Today-->
-<!--            </v-btn>-->
-<!--            <v-btn icon @click="prevMonth">-->
-<!--                <v-icon color="white">mdi-chevron-left</v-icon>-->
-<!--            </v-btn>-->
-<!--            <v-btn icon @click="nextMonth">-->
-<!--                <v-icon color="white">mdi-chevron-right</v-icon>-->
-<!--            </v-btn>-->
-<!--            <h3 >-->
-<!--                {{ monthName }} {{ currentYear }}-->
-<!--            </h3>-->
-<!--        </v-toolbar>-->
-
-<!--        <table>-->
-<!--            <thead>-->
-<!--            <tr>-->
-<!--                <th>Mon</th>-->
-<!--                <th>Tue</th>-->
-<!--                <th>Wed</th>-->
-<!--                <th>Thu</th>-->
-<!--                <th>Fri</th>-->
-<!--                <th>Sat</th>-->
-<!--                <th>Sun</th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody id="calendarBody"></tbody>-->
-<!--        </table>-->
-
-<!--    </div>-->
-
-      <FullCalendar :options='calendarOptions' />
+  <FullCalendar :options='calendarOptions' />
       <div v-if="isRole(roleEnum.User , authUser)">
         <h1>My events</h1>
         <div>
@@ -82,16 +47,10 @@ export default {
             calendarOptions: {
               plugins: [ dayGridPlugin ],
               initialView: 'dayGridMonth',
-              events: [
-                {
-                  title: "vianocne trhy",
-                  start: "2023-11-19T12:00:00",
-                  end: "2023-11-20T14:00:00",
-                  color: "#aaf6f0",
-                }
-              ],
+              events: [],
               allDayText: 'Celý deň',
             },
+            eventColors: ['#aaf6f0', '#f0aaf6', '#aaf6aa', '#f6aaf0', '#aaf0f6'],
           };
     },
     computed: {
@@ -117,101 +76,32 @@ export default {
       this.authUser = await this.getAuthUser()
     },
     mounted() {
-        this.updateCalendar();
         this.getUsersEvents();
     },
     methods: {
-        updateCalendar() {
-            const calendarBody = document.getElementById('calendarBody');
-            calendarBody.innerHTML = '';
+      getUsersEvents() {
+        axios.get('/event/attended')
+            .then(response => {
+              this.usersEvents = response.data;
 
-            const firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1);
-            const lastDayOfMonth = new Date(this.currentYear, this.currentMonth + 1, 0);
-            const daysInMonth = lastDayOfMonth.getDate();
+              // Update the events property in calendarOptions with the fetched events
+              this.calendarOptions.events = this.usersEvents.map((event, index) => ({
+                title: event.name,
+                start: event.event_start,
+                end: event.event_end,
+                color: this.eventColors[index % this.eventColors.length]
+            }));
 
-            let dayCounter = 1;
-
-            for (let i = 0; i < 6; i++) {
-                const row = document.createElement('tr');
-
-                for (let j = 0; j < 7; j++) {
-                    const cell = document.createElement('td');
-                    cell.height="100";
-                    cell.width="100";
-                    cell.classList.add('today');
-
-
-                    if ((i === 0 && j < firstDayOfMonth.getDay()) || dayCounter > daysInMonth) {
-                        // Empty cells before the first day of the month or after the last day of the month
-                        cell.textContent = '';
-                    } else {
-                        cell.textContent = dayCounter;
-
-
-                        // Highlight today's date
-                        if (
-                            this.currentYear === this.today.getFullYear() &&
-                            this.currentMonth === this.today.getMonth() &&
-                            dayCounter === this.today.getDate()
-                        ) {
-                            cell.bgColor="aaf6f0";
-                        }
-
-                        // Highlight weekends
-                        if (j === 0 || j === 6) {
-                            cell.classList.add('weekend');
-                        }
-                        cell.style.border = '1px solid #2f2f2f';
-
-                        dayCounter++;
-                    }
-
-                    row.appendChild(cell);
-                }
-
-                calendarBody.appendChild(row);
-            }
-        },
-
-        nextMonth() {
-            this.currentMonth++;
-            if (this.currentMonth > 11) {
-                this.currentMonth = 0;
-                this.currentYear++;
-            }
-            this.updateCalendar();
-        },
-        prevMonth() {
-            this.currentMonth--;
-            if (this.currentMonth < 0) {
-                this.currentMonth = 11;
-                this.currentYear--;
-            }
-            this.updateCalendar();
-        },
-        setToday() {
-            this.currentMonth = this.today.getMonth();
-            this.currentYear = this.today.getFullYear();
-            this.updateCalendar();
-        },
-        getUsersEvents(){
-          axios.get('/event/attended')
-              .then(response => {
-                this.usersEvents = response.data;
-                console.log(this.usersEvents);
-              })
-              .catch(error => {
-                console.error('Error fetching events:', error);
-              })
-        },
-        isRole,
-        getAuthUser,
-
-
+              console.log(this.usersEvents);
+            })
+            .catch(error => {
+              console.error('Error fetching events:', error);
+            });
+      },
+      isRole,
+      getAuthUser,
     },
     watch: {
-        currentMonth: 'updateCalendar',
-        currentYear: 'updateCalendar',
     },
 };
 </script>
