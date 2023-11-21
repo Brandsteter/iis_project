@@ -7,12 +7,16 @@
                     <div class="mb-3">
                         <label for="InputEmail" class="form-label">Email address</label>
                         <input id="InputEmail" class="form-control" v-model="fields.email" type="email" maxlength="255" aria-describedby="emailHelp" required>
+                        <span v-if="errorMessages.email" style="color: red;">{{ errorMessages.email[0] }}</span>
                     </div>
                     <div class="mb-3">
                         <label for="InputPassword" class="form-label">Password</label>
                         <input class="form-control" id="InputPassword" v-model="fields.password" maxlength="255" type="password" required>
-<!--                        <span v-if="errorMessages.password" style="color: red;">{{ errorMessages.password[0] }}</span>-->
+                      <span v-if="errorMessages.password" style="color: red;">{{ errorMessages.password[0] }}</span>
                     </div>
+                  <div v-if="errorMessages.message">
+                    <span style="color: red;">{{ errorMessages.message }}</span>
+                  </div>
 
                     <div class="d-flex justify-content-center">
                       <v-btn @click="submit" color="grey-darken-3">
@@ -21,7 +25,7 @@
 
                     </div>
                 </form>
-                <a href="/auth/register">Don't have an account yet? Register here</a>
+                <a href="/auth/register">No account yet? Register here</a>
             </div>
 
 
@@ -41,7 +45,7 @@ export default {
           email: "",
           password: ""
         },
-        errorMessages: {}
+        errorMessages: {},
       }
     },
 
@@ -52,6 +56,12 @@ export default {
                     window.location.href = '/'
                 }
             })
+            .catch((error) => {
+              if (error.response && error.response.data.message) {
+                this.errorMessages.message = error.response.data.message;
+              }
+            });
+
         }
     }
 }

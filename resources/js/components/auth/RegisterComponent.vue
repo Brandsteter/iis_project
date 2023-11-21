@@ -27,6 +27,9 @@
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-primary" type="submit">Submit</button>
                 </div>
+                <div v-if="errorMessages.message !== ''">
+                  <span style="color: red;">{{ errorMessages.message }}</span>
+                </div>
             </form>
             <a href="/auth/login">Already have an account? Log in here</a>
         </div>
@@ -65,8 +68,8 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    if (error.response && error.response.data.errors) {
-                        this.errorMessages = error.response.data.errors;
+                    if (error.response && error.response.data.message) {
+                        this.errorMessages.message = error.response.data.message;
                     }
                 });
         }

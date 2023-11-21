@@ -60,7 +60,7 @@
                     @auth
                         @if(auth()->user()->isRole(\App\Enums\RoleEnum::Admin))
                     <li>
-                        <a href="/admin">Admin</a>
+                        <a href="/admin">Admin Panel</a>
                     </li>
                     @endif
                     @endauth
