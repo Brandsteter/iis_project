@@ -146,6 +146,27 @@
         </v-card>
     </v-dialog>
 
+    <!--Select Category for event-->
+    <v-dialog v-model="showCategoryAssignment" max-width="400" max-height="250">
+        <v-card class="card" style=" border-radius: 10px;">
+            <v-card-title class="confirm-title">Select a category for this event</v-card-title>
+            <form>
+                <div class="mb-3">
+                    <label for="InputPlace" class="form-label">Select category</label>
+                    <select class="form-control" id="InputPlace" v-model="eventCategory.category_id" required>
+                        <option value="none" selected disabled hidden>Select an Option</option>
+                        <option v-for="(category) in categoriesApproved" :value="category.id">{{category.name}}</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <v-btn @click="addCategory()" color="grey-darken-3">
+                        Submit
+                    </v-btn>
+                </div>
+            </form>
+        </v-card>
+    </v-dialog>
+
 </template>
 
 <script>
@@ -162,11 +183,17 @@ export default {
             eventsApproved: [],
             eventsUnapproved: [],
             placesApproved: [],
+            categoriesApproved: [],
             authUser: null,
             roleEnum: RoleEnum,
             showModal: false,
             modalMode: 'create',
             showConfirmation: false,
+            eventManipulate: null,
+            eventCategory: {
+                category_id: "",
+            },
+            showCategoryAssignment : false,
             eventDeleteConfirm: null,
             fields: {
                 name: "",
@@ -185,6 +212,7 @@ export default {
         this.fetchApprovedEvents();
         this.fetchUnapprovedEvents();
         this.fetchApprovedPlaces();
+        this.fetchApprovedCategories();
     },
     methods: {
         fetchApprovedEvents(page=1) {
@@ -235,6 +263,15 @@ export default {
                 return event.capacity_max;
             }
         },
+        addCategory() {
+            const url = `/event/${this.eventManipulate.id}/add-category`;
+            axios.post(url, this.eventCategory)
+                .then((response) => {
+                    if (response) {
+                        window.location.href = '/event'
+                    }
+                })
+        },
         openCreateModal() {
             this.modalMode = 'create';
             this.showModal = true;
@@ -278,6 +315,15 @@ export default {
                     console.error('Error fetching events:', error);
                 })
         },
+        fetchApprovedCategories() {
+            axios.get('/category/approved')
+                .then(response => {
+                    this.categoriesApproved = response.data;
+                })
+                .catch(error => {
+                    console.error('Error fetching categories', error);
+                })
+        },
         showConfirm(event) {
             this.showConfirmation = true;
             this.eventDeleteConfirm = event;
@@ -290,6 +336,10 @@ export default {
         cancelDelete() {
             this.showConfirmation = false;
             this.eventDeleteConfirm = null;
+        },
+        assignCategory(event) {
+            this.showCategoryAssignment = true;
+            this.eventManipulate = event;
         },
 
         isRole,
