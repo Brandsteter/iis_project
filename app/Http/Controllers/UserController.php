@@ -66,6 +66,14 @@ class UserController extends Controller
         return response()->json($events);
     }
 
+    public function getUserMadeEvents()
+    {
+        $user = auth()->user();
+        $events = $user->myEvents;
+        
+        return response()->json($events);
+    }
+
     public function calendarPage()
     {
         return view('calendar');

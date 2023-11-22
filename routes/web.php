@@ -91,6 +91,7 @@ Route::prefix('/event')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\EventController::class, 'create']);
         Route::get('/attended', [\App\Http\Controllers\UserController::class, 'getUserEvents']);
+        Route::get('/my-events', [\App\Http\Controllers\UserController::class, 'getUserMadeEvents']);
         Route::post('/{event}', [\App\Http\Controllers\UserController::class, 'attend']);
         Route::post('/{event}/unattend', [\App\Http\Controllers\UserController::class, 'unattend']);
 
