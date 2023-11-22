@@ -69,7 +69,7 @@
             </v-btn>
             <h5><b>{{comment.user.name}}</b></h5>
             <span v-for="starIndex in 5" :key="starIndex">
-              <i :class="{ 'fas': starIndex < comment.rating, 'far': starIndex >= comment.rating }" class="fa-star"></i>
+              <i :class="{ 'fas': starIndex <= comment.rating, 'far': starIndex >= comment.rating }" class="fa-star"></i>
             </span>
             <p class="comment-text">{{comment.body}}</p>
         </div>
