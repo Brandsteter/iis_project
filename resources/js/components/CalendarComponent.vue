@@ -62,12 +62,28 @@ export default {
               this.usersEvents = response.data;
 
               // Update the events property in calendarOptions with the fetched events
-              this.calendarOptions.events = this.usersEvents.map((event, index) => ({
-                title: event.name,
-                start: event.event_start,
-                end: event.event_end,
-                color: this.eventColors[index % this.eventColors.length]
-            }));
+            //   this.calendarOptions.events = this.usersEvents.map((event, index) => ({
+            //     title: event.name,
+            //     start: event.event_start,
+            //     end: event.event_end,
+            //     color: this.eventColors[index % this.eventColors.length]
+            // }));
+
+              this.calendarOptions.events = this.usersEvents.map((event, index) => {
+                // Check if start and end times are specified
+                const startTime = event.event_start_time ? `T${event.event_start_time}` : '';
+                const endTime = event.event_end_time ? `T${event.event_end_time}` : 'T23:59:59';
+
+                return {
+                  title: event.name,
+                  start: `${event.event_start}${startTime}`,
+                  end: `${event.event_end}${endTime}`,
+                  color: this.eventColors[index % this.eventColors.length]
+                };
+              });
+
+              console.log(this.calendarOptions.events);
+
 
             })
             .catch(error => {

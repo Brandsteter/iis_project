@@ -4,49 +4,9 @@
     <div>
       <v-btn @click="openCreateModal" prepend-icon="mdi-plus">Create a new event</v-btn>
     </div>
-    <div>
-      <h3>Approved events</h3>
-      <table>
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Start date</th>
-          <th>End date</th>
-          <th>Place</th>
-          <th>Capacity</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(event, index) in events.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-          <td>{{ event.name }}</td>
-          <td>{{ event.event_start}}</td>
-          <td>{{ event.event_end}}</td>
-          <td>{{ event.place.name}}</td>
-          <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
-          <td><v-btn variant="text"
-                     color="secondary"
-                     @click="openEditModal(event)">
-            Edit</v-btn></td>
-          <td><v-btn variant="text"
-                     color="red"
-                     @click="showConfirm(event)">
-            Delete</v-btn></td>
-          <td><v-btn variant="text"
-                     color="secondary"
-                     @click="assignCategory(event)">
-            Add category</v-btn></td>
-          <td><v-btn variant="text" color="grey" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
-        </tr>
-        </tbody>
-      </table>
-      <Bootstrap5Pagination
-        :data="events"
-        @pagination-change-page="fetchMyEvents"
-      />
-    </div>
 
     <div>
-      <h3>Unpproved events</h3>
+      <h3>My events</h3>
       <div>
         <table>
           <thead>
@@ -56,6 +16,7 @@
             <th>End date</th>
             <th>Place</th>
             <th>Capacity</th>
+            <th>Approved</th>
           </tr>
           </thead>
           <tbody>
@@ -65,15 +26,18 @@
             <td>{{ event.event_end}}</td>
             <td>{{ event.place.name}}</td>
             <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
-            <td><v-btn variant="text"
-                       color="green"
-                       @click="approveEvent(event)">Approve</v-btn></td>
+            <td v-if="event.is_approved"><v-icon color="green">mdi-check</v-icon></td>
+            <td v-else><v-icon color="red">mdi-close</v-icon></td>
             <td><v-btn variant="text"
                        color="secondary"
                        @click="openEditModal(event)">Edit</v-btn></td>
             <td><v-btn variant="text"
                        color="red"
                        @click="showConfirm(event)">Delete</v-btn></td>
+            <td v-if="(isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)) && (!event.is_approved)">
+              <v-btn variant="text"
+                     color="green"
+                     @click="approveEvent(event)">Approve</v-btn></td>
           </tr>
           </tbody>
         </table>
@@ -236,13 +200,23 @@ export default {
     this.fetchApprovedCategories();
   },
   methods: {
-      fetchMyEvents(page = 1) {
-          axios.get('/event/my-events?page=' + page)
+      fetchMyEvents(page=1) {
+          axios.get('/event/my-events?page= + page')
               .then(response => {
                   this.events = response.data;
               })
               .catch(error => {
                   console.error('Error fetching events:', error);
+              });
+      },
+      approveEvent(event) {
+          const url = `/event/${event.id}`;
+          axios.patch(url)
+              .then(() => {
+                  this.fetchMyEvents();
+              })
+              .catch(error => {
+                  console.error('Error approving event:', error);
               });
       },
     deleteEvent(event) {
@@ -301,7 +275,7 @@ export default {
       if (this.modalMode === "create") {
         axios.post('/event', this.fields).then((response) => {
           if (response) {
-            window.location.href = '/event'
+            window.location.href = '/userMyEvents'
           }
         })
         .catch((error) => {
@@ -313,7 +287,7 @@ export default {
       else if (this.modalMode === "edit") {
         axios.put(`/event/${this.fields.id}`, this.fields).then((response) => {
           if (response) {
-            window.location.href = '/event'
+            window.location.href = '/userMyEvents'
           }
         })
         .catch((error) => {
