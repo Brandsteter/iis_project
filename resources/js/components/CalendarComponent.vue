@@ -61,13 +61,6 @@ export default {
             .then(response => {
               this.usersEvents = response.data;
 
-              // Update the events property in calendarOptions with the fetched events
-            //   this.calendarOptions.events = this.usersEvents.map((event, index) => ({
-            //     title: event.name,
-            //     start: event.event_start,
-            //     end: event.event_end,
-            //     color: this.eventColors[index % this.eventColors.length]
-            // }));
 
               this.calendarOptions.events = this.usersEvents.map((event, index) => {
                 // Check if start and end times are specified

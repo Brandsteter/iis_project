@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->time('event_end_time')->nullable();
+        Schema::table('comments', function (Blueprint $table) {
+            $table->integer('rating');
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn('event_end_time')->nullable();
+        Schema::table('comments', function (Blueprint $table) {
+            $table->dropColumn('rating');
         });
     }
 };

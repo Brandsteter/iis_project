@@ -3,6 +3,7 @@ import { createApp } from 'vue';
 import { createVuetify } from 'vuetify/framework';
 import 'vuetify/styles';
 import { isProxy, toRaw } from 'vue';
+import '@fortawesome/fontawesome-free/css/all.css'
 
 // Import Vuetify modules
 import * as components from 'vuetify/components';
@@ -42,6 +43,8 @@ const app = createApp({});
 
 // Use Vuetify
 app.use(vuetify);
+
+
 
 app.component("register", require("./components/auth/RegisterComponent").default);
 app.component("login", require("./components/auth/LoginComponent").default);

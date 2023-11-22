@@ -13,6 +13,7 @@ class Comment extends Model
         'body',
         'user_id',
         'event_id',
+        'rating'
     ];
 
     public function event()

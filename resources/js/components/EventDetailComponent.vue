@@ -20,11 +20,11 @@
         <p class="text-description">{{ eventMutable.description }}</p>
     </div>
 
-    <div v-if="checkIfIsLoggedIn()">
+    <div v-if="checkIfIsLoggedIn() && !checkIfEventEnded(event)" >
       <v-btn v-if="(!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)) && (eventMutable.capacity_current !== checkCapacityValue(eventMutable)) " class="attend-button" @click="attendEvent(eventMutable)">
           Attend
       </v-btn>
-      <v-btn v-else-if="!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)" :disabled class="attend-button-disabled">
+      <v-btn v-else-if="!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)" disabled class="attend-button-disabled">
           Attend
       </v-btn>
       <v-btn v-else class="attend-button" color="red" @click="unattendEvent(eventMutable)">
@@ -33,37 +33,49 @@
       </div>
       <div v-else>
         <br>
-        <a href="/auth/login">Login to be able to attend in event</a>
+        <a v-if="!checkIfEventEnded(event)" href="/auth/login">Login to be able to attend in event</a>
       </div>
 
+    <div v-if="checkIfEventEnded(event)" >
       <div v-if="(checkIfIsLoggedIn() && checkIfEventEnded(event)) && checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)">
-        <div>
-          <h2>Rate this event</h2>
-        </div>
         <div class="users-comment-input">
-          <h2>Comments:</h2>
-            <div>
-              <div class="inline-components" v-for="(comment, index) in comments">
-                <p><b>{{comment.user.name}}:</b></p>
-                <p>{{comment.body}}</p>
-                <v-btn height="30px" v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)"
-                       color="light grey" @click="deleteComment(eventMutable,comment)">
-                  Delete
-                </v-btn>
-              </div>
-            </div>
-            <div class="users-comment-input">
-              <label for="InputComment" class="form-label">Comment on this event:</label>
-              <br>
-              <div class="inline-components users-comment-input">
-                <input id="InputComment" class="form-control" v-model="commentBody" type="text" maxlength="255"  required>
-                <v-btn @click="createComment(eventMutable)">
-                    Post
-                </v-btn>
-              </div>
-            </div>
+          <h5>Rate this event</h5>
+          <div class="star-rating">
+                <span
+                    v-for="index in 5"
+                    :key="index"
+                    @mouseover="hoverOver(index)"
+                    @click="selectRating(index)"
+                    @mouseleave="hoverOut">
+                   <i :class="{ 'fas': index <= (hoverValue || selectedRating), 'far': index > (hoverValue || selectedRating) }" class="fa-star"></i>
+                </span>
+          </div>
+
+          <br>
+          <div class="inline-components comment-input-box" >
+            <input id="InputComment" class="form-control" v-model="commentBody" type="text" maxlength="255"  required>
+            <v-btn class="post-button" variant="text" @click="createComment(eventMutable)">
+              Post
+            </v-btn>
+          </div>
         </div>
       </div>
+      <h2>Comments:</h2>
+      <div class="users-comment-input-all">
+        <div class="comment-box" v-for="(comment, index) in comments">
+            <v-btn  class="delete-button" density="compact" variant="text"  v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)"
+                   color="red" @click="deleteComment(eventMutable,comment)">
+              Delete
+            </v-btn>
+            <h5><b>{{comment.user.name}}</b></h5>
+            <span v-for="starIndex in 5" :key="starIndex">
+              <i :class="{ 'fas': starIndex < comment.rating, 'far': starIndex >= comment.rating }" class="fa-star"></i>
+            </span>
+            <p class="comment-text">{{comment.body}}</p>
+        </div>
+      </div>
+
+    </div>
 
 
 
@@ -73,6 +85,8 @@
 <script>
 import {isRole, getAuthUser, checkIfUserIsInArrayOfUsers} from "../app";
 import {RoleEnum} from "../enums/RoleEnum";
+
+
 
 export default {
     props: {
@@ -86,7 +100,8 @@ export default {
     },
     data() {
         return {
-            value: null,
+            hoverValue: 0,
+            selectedRating: 0,
             isAttending: true,
             authUser: null,
             roleEnum: RoleEnum,
@@ -128,6 +143,8 @@ export default {
             body: this.commentBody,
             event_id: eventMutable.id,
             user_id: this.authUser.id,
+            rating: this.selectedRating,
+
           };
           axios.post(url, requestData)
               .then(response => {
@@ -174,6 +191,15 @@ export default {
             return event.capacity_max;
           }
         },
+        hoverOver(value) {
+          this.hoverValue = value;
+        },
+        hoverOut() {
+          this.hoverValue = 0;
+        },
+        selectRating(value) {
+          this.selectedRating = value;
+        },
         isRole,
         getAuthUser,
         checkIfUserIsInArrayOfUsers,
@@ -202,10 +228,10 @@ export default {
 }
 .description-box{
     padding: 10px;
-    border-radius: 10px; /* Adjust the value to change the roundness of the corners */
-    width: 75%; /* Adjust the value to set the width as a percentage of the page */
-    margin-right: auto; /* Center the box horizontally */
-    box-sizing: border-box; /* Include padding and border in the box's total width and height */
+    border-radius: 10px;
+    width: 75%;
+    margin-right: auto;
+    box-sizing: border-box;
     border: 1px solid black;
 
 }
@@ -221,12 +247,61 @@ export default {
   color: black;
 }
 
-.users-comment-input {
+.comment-box {
+  position: relative;
+  margin: 10px;
+  background-color: white;
+  color: black;
+  padding: 10px;
+}
+
+.delete-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+
+.comment-text {
+  color: #5c5c5c;
+  padding: 10px;
+}
+
+.users-comment-input-all {
+    position: relative;
     padding: 10px;
     background-color: #bbbbbb;
-    border-radius: 10px; /* Adjust the value to change the roundness of the corners */
-    width: 75%; /* Adjust the value to set the width as a percentage of the page */
+    width: 100%; /* Adjust the value to set the width as a percentage of the page */
     margin-right: auto; /* Center the box horizontally */
     box-sizing: border-box; /* Include padding and border in the box's total width and height */
+
+}
+
+.users-comment-input {
+  position: relative;
+  margin: 10px;
+  background-color: white;
+  color: black;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+
+}
+.post-button{
+  padding: 10px;
+}
+
+.comment-input-box {
+  padding: 10px;
+  width: 100%;
+}
+
+
+.star-rating {
+  cursor: pointer;
+}
+
+.fa-star {
+  transition: color 0.5s;
 }
 </style>

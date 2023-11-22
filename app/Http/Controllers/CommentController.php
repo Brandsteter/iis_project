@@ -14,7 +14,8 @@ class CommentController extends Controller
         $data = $request->validate([
             'body' => ['required', 'string', 'max:1000'],
             'event_id' => ['required', Rule::exists('events', 'id')],
-            'user_id' => ['required', Rule::exists('users', 'id')]
+            'user_id' => ['required', Rule::exists('users', 'id')],
+            'rating' => ['required', 'integer', 'min:1', 'max:5']
         ]);
 
         $comment = Comment::create($data);
