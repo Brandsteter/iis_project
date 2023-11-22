@@ -40,6 +40,10 @@
               <v-btn variant="text"
                      color="green"
                      @click="approveEvent(event)">Approve</v-btn></td>
+            <td><v-btn variant="text"
+                       color="secondary"
+                       @click="assignCategory(event)">Add category</v-btn></td>
+            <td><v-btn variant="text" color="grey" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
           </tr>
           </tbody>
         </table>
@@ -83,6 +87,7 @@
                     <div class="mb-3">
                         <label for="InputCapacityMax" class="form-label">Maximal capacity (unlimited if not specified)</label>
                         <input class="form-control" id="InputCapacityMax" v-model="fields.capacity_max" maxlength="255" type="number">
+                        <span v-if="errorMessages.errors.capacity_max" style="color: red;">{{errorMessages.errors.capacity_max[0]}}</span>
                     </div>
                     <div class="mb-3">
                         <label for="InputPlace" class="form-label">Select place</label>
@@ -188,6 +193,7 @@ export default {
           event_start: null,
           event_end: null,
           place_id: null,
+          capacity_max: null,
           category_id: null,
         }
       },
@@ -244,7 +250,7 @@ export default {
       axios.post(url, this.eventCategory)
         .then((response) => {
           if (response) {
-            window.location.href = '/event'
+            window.location.href = '/userMyEvents'
           }
         })
         .catch((error) => {
