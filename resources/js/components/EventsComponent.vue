@@ -111,6 +111,10 @@
                         <label for="InputEventEnd" class="form-label">End of event</label>
                         <input type="date" id="InputEventEnd" class="form-control" v-model="fields.event_end" maxlength="255" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="InputEventEnd" class="form-label">End of event</label>
+                        <input type="time" id="InputEventEnd" class="form-control" v-model="fields.event_end_time" maxlength="255" required>
+                    </div>
                   <div class="mb-3">
                     <label for="InputCapacityMax" class="form-label">Maximal capacity (unlimited if not specified)</label>
                     <input class="form-control" id="InputCapacityMax" v-model="fields.capacity_max" maxlength="255" type="number">

@@ -1,28 +1,5 @@
 <template>
-
   <FullCalendar :options='calendarOptions' />
-      <div v-if="isRole(roleEnum.User , authUser)">
-        <h1>My events</h1>
-        <div>
-          <table>
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Start date</th>
-              <th>End date</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(event, index) in usersEvents" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-              <td>{{ event.name }}</td>
-              <td>{{ event.event_start}}</td>
-              <td>{{ event.event_end}}</td>
-            </tr>
-            </tbody>
-          </table>
-      </div>
-    </div>
-
 </template>
 
 <script>
@@ -92,7 +69,6 @@ export default {
                 color: this.eventColors[index % this.eventColors.length]
             }));
 
-              console.log(this.usersEvents);
             })
             .catch(error => {
               console.error('Error fetching events:', error);
