@@ -69,14 +69,17 @@
                     <div class="mb-3">
                         <label for="InputName" class="form-label">Name</label>
                         <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+                        <span v-if="errorMessages.errors.name" style="color: red;">{{errorMessages.errors.name[0]}}</span>
                     </div>
                     <div class="mb-3">
                         <label for="InputAddress" class="form-label">Address</label>
                         <input class="form-control" id="InputAddress" v-model="fields.address" maxlength="255" type="text" required>
+                        <span v-if="errorMessages.errors.address" style="color: red;">{{errorMessages.errors.address[0]}}</span>
                     </div>
                     <div class="mb-3">
                         <label for="InputDescription" class="form-label">Description</label>
                         <input class="form-control" id="InputDescription" v-model="fields.description" maxlength="255" type="text" required>
+                        <span v-if="errorMessages.errors.description" style="color: red;">{{errorMessages.errors.description[0]}}</span>
                     </div>
 
                     <div class="d-flex justify-content-center">
@@ -124,6 +127,14 @@ export default {
                 name: "",
                 address: "",
                 description: "",
+            },
+            errorMessages: {
+              message: "",
+              errors: {
+                name: null,
+                address: null,
+                description: null,
+              }
             },
         };
     },
@@ -196,6 +207,11 @@ export default {
                         window.location.href = '/place'
                     }
                 })
+                .catch((error) => {
+                  if (error.response && error.response.data.message) {
+                    this.errorMessages = error.response.data;
+                  }
+                });
             } else if (this.modalMode === 'edit') {
                 const url = `/place/${this.fields.id}`;
                 axios.put(url, this.fields).then((response) => {
@@ -203,6 +219,11 @@ export default {
                         window.location.href = '/place'
                     }
                 })
+                .catch((error) => {
+                  if (error.response && error.response.data.message) {
+                    this.errorMessages = error.response.data;
+                  }
+                });
             }
         },
         showConfirm(place) {

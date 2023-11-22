@@ -36,7 +36,7 @@
         </table>
     </div>
 
-    <!--Create new scategory-->
+    <!--Create new category-->
     <v-dialog v-model="showNewCategoryModal" max-width="400" max-height="250">
         <v-card class="card" style=" border-radius: 10px;">
             <v-card-title class="confirm-title">Create a new category</v-card-title>
@@ -44,6 +44,7 @@
                 <div class="mb-3">
                     <label for="InputName" class="form-label">Name</label>
                     <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+                    <span v-if="errorMessages" style="color: red;">{{errorMessages[0]}}</span>
                 </div>
                 <div class="d-flex justify-content-center">
                     <v-btn @click="submit()" color="grey-darken-3">
@@ -94,7 +95,8 @@ export default {
             fields: {
                 name: "",
                 parent_category_id: null,
-            }
+            },
+            errorMessages: "",
         };
     },
     created: async function(){
@@ -175,6 +177,11 @@ export default {
                     window.location.href = `/category`
                 }
             })
+            .catch((error) => {
+              if (error.response && error.response.data.message) {
+                this.errorMessages = error.response.data.errors.name;
+              }
+            });
         },
         showConfirm(category) {
             this.showConfirmation = true;

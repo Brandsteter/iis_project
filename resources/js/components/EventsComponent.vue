@@ -22,7 +22,7 @@
                         <td>{{ event.event_end}}</td>
                         <td>{{ event.place.name}}</td>
                         <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
-                        <td>{{event.creator_user_id}}</td>
+                        <td>{{event.creator.name}}</td>
                         <td><v-btn variant="text"
                                    color="secondary"
                                    @click="openEditModal(event)"
@@ -69,7 +69,7 @@
                         <td>{{ event.event_end}}</td>
                         <td>{{ event.place.name}}</td>
                         <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
-                        <td>{{event.creator_user_id}}</td>
+                        <td>{{event.creator.name}}</td>
                         <td><v-btn variant="text"
                                    color="green"
                                    @click="approveEvent(event)">Approve</v-btn></td>
@@ -92,31 +92,31 @@
 
     <v-dialog v-model="showModal" max-width="400">
         <v-card class="card" style="background-color: lightskyblue; border-radius: 10px;">
-            <v-card-title v-if="modalMode === 'create'">Create new event</v-card-title>
-            <h4 v-if="modalMode === 'create'">Event will be sent to a page moderator for confirmation</h4>
-            <v-card-title v-else-if="modalMode === 'edit'">Edit event</v-card-title>
             <v-card-text>
                 <form>
-                    <label style="font-size: x-large" class="form-label">Create a new event</label>
+                    <label style="font-size: x-large" class="form-label">Edit event</label>
                     <div class="mb-3">
                         <label for="InputName" class="form-label">Name of event</label>
                         <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+                        <span v-if="errorMessages.errors.name" style="color: red;">{{errorMessages.errors.name[0]}}</span>
                     </div>
                     <div class="mb-3">
                         <label for="InputEventStart" class="form-label">Start of event</label>
                         <input type="date" id="InputEventStart" class="form-control" v-model="fields.event_start" maxlength="255" required>
+                        <span v-if="errorMessages.errors.event_start" style="color: red;">{{errorMessages.errors.event_start[0]}}</span>
                     </div>
                     <div class="mb-3">
                       <label for="InputEventStart" class="form-label">Start of event</label>
-                      <input type="time" id="InputEventStart" class="form-control" v-model="fields.event_start_time" maxlength="255" required>
+                      <input type="time" id="InputEventStart" class="form-control" v-model="fields.event_start_time" maxlength="255">
                     </div>
                     <div class="mb-3">
                         <label for="InputEventEnd" class="form-label">End of event</label>
                         <input type="date" id="InputEventEnd" class="form-control" v-model="fields.event_end" maxlength="255" required>
+                        <span v-if="errorMessages.errors.event_end" style="color: red;">{{errorMessages.errors.event_end[0]}}</span>
                     </div>
                     <div class="mb-3">
                         <label for="InputEventEnd" class="form-label">End of event</label>
-                        <input type="time" id="InputEventEnd" class="form-control" v-model="fields.event_end_time" maxlength="255" required>
+                        <input type="time" id="InputEventEnd" class="form-control" v-model="fields.event_end_time" maxlength="255">
                     </div>
                   <div class="mb-3">
                     <label for="InputCapacityMax" class="form-label">Maximal capacity (unlimited if not specified)</label>
@@ -128,6 +128,7 @@
                         <option value="none" selected disabled hidden>Select an Option</option>
                         <option v-for="(place) in placesApproved.data" :value="place.id">{{place.name}}</option>
                     </select>
+                    <span v-if="errorMessages.errors.place_id" style="color: red;">{{errorMessages.errors.place_id[0]}}</span>
                   </div>
                   <div class="mb-3">
                       <label for="InputDescription" class="form-label">Description</label>
@@ -169,6 +170,7 @@
                         <option value="none" selected disabled hidden>Select an Option</option>
                         <option v-for="(category) in categoriesApproved" :value="category.id">{{category.name}}</option>
                     </select>
+                    <span v-if="errorMessages.errors.category_id" style="color: red;">{{errorMessages.errors.category_id[0]}}</span>
                 </div>
                 <div class="d-flex justify-content-center">
                     <v-btn @click="addCategory()" color="grey-darken-3">
@@ -218,6 +220,16 @@ export default {
                 description: "",
                 creator_user_id: "",
             },
+          errorMessages: {
+            message: "",
+            errors: {
+              name: null,
+              event_start: null,
+              event_end: null,
+              place_id: null,
+              category_id: null,
+            }
+          },
         };
     },
     created: async function(){
@@ -287,6 +299,12 @@ export default {
                         window.location.href = '/event'
                     }
                 })
+                .catch((error) => {
+                  if (error.response && error.response.data.message) {
+                    this.errorMessages = error.response.data;
+                    console.log(this.errorMessages);
+                  }
+                });
         },
         openEditModal(event) {
             this.modalMode = 'edit';
@@ -294,13 +312,16 @@ export default {
             this.fields = { ...event };
         },
         submit() {
-            if (this.modalMode === "edit") {
-                axios.put(`/event/${this.fields.id}`, this.fields).then((response) => {
-                    if (response) {
-                        window.location.href = '/event'
-                    }
-                })
-            }
+            axios.put(`/event/${this.fields.id}`, this.fields).then((response) => {
+                if (response) {
+                    window.location.href = '/event'
+                }
+            })
+            .catch((error) => {
+              if (error.response && error.response.data.message) {
+                this.errorMessages = error.response.data;
+              }
+            });
         },
         fetchApprovedPlaces() {
             axios.get('/place/approved')
