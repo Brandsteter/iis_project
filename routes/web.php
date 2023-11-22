@@ -94,11 +94,11 @@ Route::prefix('/event')->group(function () {
         Route::get('/my-events', [\App\Http\Controllers\UserController::class, 'getUserMadeEvents']);
         Route::post('/{event}', [\App\Http\Controllers\UserController::class, 'attend']);
         Route::post('/{event}/unattend', [\App\Http\Controllers\UserController::class, 'unattend']);
+        Route::delete('/{event}', [\App\Http\Controllers\EventController::class, 'delete']);
+        Route::put('/{event}', [\App\Http\Controllers\EventController::class, 'update']);
 
         Route::middleware('moderator')->group(function () {
             Route::get('/unapproved', [\App\Http\Controllers\EventController::class, 'getEventsUnapproved']);
-            Route::delete('/{event}', [\App\Http\Controllers\EventController::class, 'delete']);
-            Route::put('/{event}', [\App\Http\Controllers\EventController::class, 'update']);
             Route::patch('/{event}', [\App\Http\Controllers\EventController::class, 'approve']);
             Route::post('/{event}/add-category', [\App\Http\Controllers\EventController::class, 'addCategory']);
             Route::post('/{event}/remove-category', [\App\Http\Controllers\EventController::class, 'removeCategory']);
@@ -117,6 +117,12 @@ Route::prefix('/event')->group(function () {
 Route::prefix('/calendar')->group(function () {
     Route::middleware('auth')->group(function (){
         Route::get('/', [\App\Http\Controllers\UserController::class, 'calendarPage']);
+    });
+});
+
+Route::prefix('/userMyEvents')->group(function () {
+    Route::middleware('auth')->group(function (){
+        Route::get('/',[\App\Http\Controllers\UserController::class, 'userMyEventsPage']);
     });
 });
 

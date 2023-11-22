@@ -69,8 +69,8 @@ class UserController extends Controller
     public function getUserMadeEvents()
     {
         $user = auth()->user();
-        $events = $user->myEvents;
-        
+        $events = $user->myEvents()->with('place')->paginate(5);
+
         return response()->json($events);
     }
 
@@ -91,5 +91,10 @@ class UserController extends Controller
     public function categoriesPage()
     {
         return view('categories');
+    }
+
+    public function userMyEventsPage()
+    {
+        return view('usermyevents');
     }
 }

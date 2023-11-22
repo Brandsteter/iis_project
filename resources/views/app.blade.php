@@ -46,7 +46,7 @@
 
                     @auth
                     <li>
-                      <v-btn class="w-100" href="/calendar">My events</v-btn>
+                      <v-btn class="w-100" href="/userMyEvents">My events</v-btn>
                     </li>
                     @endauth
 

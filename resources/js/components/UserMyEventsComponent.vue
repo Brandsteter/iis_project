@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(event, index) in eventsApproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+        <tr v-for="(event, index) in events.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
           <td>{{ event.name }}</td>
           <td>{{ event.event_start}}</td>
           <td>{{ event.event_end}}</td>
@@ -25,30 +25,27 @@
           <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
           <td><v-btn variant="text"
                      color="secondary"
-                     @click="openEditModal(event)"
-                     v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                     @click="openEditModal(event)">
             Edit</v-btn></td>
           <td><v-btn variant="text"
                      color="red"
-                     @click="showConfirm(event)"
-                     v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                     @click="showConfirm(event)">
             Delete</v-btn></td>
           <td><v-btn variant="text"
                      color="secondary"
-                     @click="assignCategory(event)"
-                     v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                     @click="assignCategory(event)">
             Add category</v-btn></td>
           <td><v-btn variant="text" color="grey" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
         </tr>
         </tbody>
       </table>
       <Bootstrap5Pagination
-        :data="eventsApproved"
-        @pagination-change-page="fetchApprovedEvents"
+        :data="events"
+        @pagination-change-page="fetchMyEvents"
       />
     </div>
 
-    <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+    <div>
       <h3>Unpproved events</h3>
       <div>
         <table>
@@ -62,7 +59,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(event, index) in eventsUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+          <tr v-for="(event, index) in events.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
             <td>{{ event.name }}</td>
             <td>{{ event.event_start}}</td>
             <td>{{ event.event_end}}</td>
@@ -81,56 +78,65 @@
           </tbody>
         </table>
         <Bootstrap5Pagination
-          :data="eventsUnapproved"
-          @pagination-change-page="fetchUnapprovedEvents"
+          :data="events"
+          @pagination-change-page="fetchMyEvents()"
         />
       </div>
     </div>
   </div>
 
-  <v-dialog v-model="showModal" max-width="400">
-    <v-card class="card" style="background-color: lightskyblue; border-radius: 10px;">
-      <v-card-title v-if="modalMode === 'create'">Create new event</v-card-title>
-      <v-card-title v-else-if="modalMode === 'edit'">Edit event</v-card-title>
-      <v-card-text>
-        <form>
-          <label style="font-size: x-large" class="form-label">Create a new event</label>
-          <div class="mb-3">
-            <label for="InputName" class="form-label">Name of event</label>
-            <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
-          </div>
-          <div class="mb-3">
-            <label for="InputEventStart" class="form-label">Start of event</label>
-            <input type="date" id="InputEventStart" class="form-control" v-model="fields.event_start" maxlength="255" required>
-          </div>
-          <div class="mb-3">
-            <label for="InputEventEnd" class="form-label">End of event</label>
-            <input type="date" id="InputEventEnd" class="form-control" v-model="fields.event_end" maxlength="255" required>
-          </div>
-          <div class="mb-3">
-            <label for="InputCapacityMax" class="form-label">Maximal capacity (unlimited if not specified)</label>
-            <input class="form-control" id="InputCapacityMax" v-model="fields.capacity_max" maxlength="255" type="number">
-          </div>
-          <div class="mb-3">
-            <label for="InputPlace" class="form-label">Select place</label>
-            <select class="form-control" id="InputPlace" v-model="fields.place_id" required>
-              <option value="none" selected disabled hidden>Select an Option</option>
-              <option v-for="(place) in placesApproved.data" :value="place.id">{{place.name}}</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="InputDescription" class="form-label">Description</label>
-            <textarea class="form-control" id="InputDescription" v-model="fields.description" maxlength="255" type="text" required></textarea>
-          </div>
-          <div class="d-flex justify-content-center">
-            <v-btn @click="submit" color="grey-darken-3">
-              Submit
-            </v-btn>
-          </div>
-        </form>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+    <v-dialog v-model="showModal" max-width="400">
+        <v-card class="card" style="background-color: lightskyblue; border-radius: 10px;">
+            <v-card-title v-if="modalMode === 'create'">Create new event</v-card-title>
+            <h4 v-if="modalMode === 'create'">Event will be sent to a page moderator for confirmation</h4>
+            <v-card-title v-else-if="modalMode === 'edit'">Edit event</v-card-title>
+            <v-card-text>
+                <form>
+                    <label style="font-size: x-large" class="form-label">Create a new event</label>
+                    <div class="mb-3">
+                        <label for="InputName" class="form-label">Name of event</label>
+                        <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputEventStart" class="form-label">Start of event</label>
+                        <input type="date" id="InputEventStart" class="form-control" v-model="fields.event_start" maxlength="255" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputEventStart" class="form-label">Start of event</label>
+                        <input type="time" id="InputEventStart" class="form-control" v-model="fields.event_start_time" maxlength="255" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputEventEnd" class="form-label">End of event</label>
+                        <input type="date" id="InputEventEnd" class="form-control" v-model="fields.event_end" maxlength="255" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputEventEnd" class="form-label">End of event</label>
+                        <input type="time" id="InputEventEnd" class="form-control" v-model="fields.event_end_time" maxlength="255" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputCapacityMax" class="form-label">Maximal capacity (unlimited if not specified)</label>
+                        <input class="form-control" id="InputCapacityMax" v-model="fields.capacity_max" maxlength="255" type="number">
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputPlace" class="form-label">Select place</label>
+                        <select class="form-control" id="InputPlace" v-model="fields.place_id" required>
+                            <option value="none" selected disabled hidden>Select an Option</option>
+                            <option v-for="(place) in placesApproved.data" :value="place.id">{{place.name}}</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="InputDescription" v-model="fields.description" maxlength="255" type="text" required></textarea>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <v-btn @click="submit" color="grey-darken-3">
+                            Submit
+                        </v-btn>
+                    </div>
+                </form>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
 
   <!--Delete confirmation window-->
   <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
@@ -181,8 +187,7 @@ export default {
   },
   data() {
     return {
-      eventsApproved: [],
-      eventsUnapproved: [],
+      events: [],
       placesApproved: [],
       categoriesApproved: [],
       authUser: null,
@@ -211,36 +216,25 @@ export default {
     this.authUser = await this.getAuthUser()
   },
   mounted() {
-    this.fetchApprovedEvents();
-    this.fetchUnapprovedEvents();
+    this.fetchMyEvents();
     this.fetchApprovedPlaces();
     this.fetchApprovedCategories();
   },
   methods: {
-    fetchApprovedEvents(page=1) {
-      axios.get('/event/approved?page=' + page)
-        .then(response => {
-          this.eventsApproved = response.data;
-        })
-        .catch(error => {
-          console.error('Error fetching events:', error);
-        })
-    },
-    fetchUnapprovedEvents(page=1) {
-      axios.get('/event/unapproved?page=' + page)
-        .then(response => {
-          this.eventsUnapproved = response.data;
-        })
-        .catch(error => {
-          console.error('Error fetching events:', error);
-        })
-    },
+      fetchMyEvents(page = 1) {
+          axios.get('/event/my-events?page=' + page)
+              .then(response => {
+                  this.events = response.data;
+              })
+              .catch(error => {
+                  console.error('Error fetching events:', error);
+              });
+      },
     deleteEvent(event) {
       const url = `/event/${event.id}`;
       axios.delete(url)
         .then(() => {
-          this.fetchApprovedEvents();
-          this.fetchUnapprovedEvents();
+            this.fetchMyEvents()
         })
         .catch(error => {
           console.error('Error deleting event:', error);

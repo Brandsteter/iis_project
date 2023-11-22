@@ -4,7 +4,6 @@
         <div>
         </div>
         <div>
-            <v-btn @click="openCreateModal" prepend-icon="mdi-plus">Create a new event</v-btn>
             <table>
                 <thead>
                 <tr>
@@ -289,33 +288,13 @@ export default {
                     }
                 })
         },
-        openCreateModal() {
-            this.modalMode = 'create';
-            this.showModal = true;
-            this.fields = {
-                id: "",
-                name: "",
-                event_start: "",
-                event_end: "",
-                capacity_max: "",
-                place_id: "",
-                description: "",
-            }
-        },
         openEditModal(event) {
             this.modalMode = 'edit';
             this.showModal = true;
             this.fields = { ...event };
         },
         submit() {
-            if (this.modalMode === "create") {
-              axios.post('/event', this.fields).then((response) => {
-                if (response) {
-                  window.location.href = '/event'
-                }
-              })
-            }
-            else if (this.modalMode === "edit") {
+            if (this.modalMode === "edit") {
                 axios.put(`/event/${this.fields.id}`, this.fields).then((response) => {
                     if (response) {
                         window.location.href = '/event'
