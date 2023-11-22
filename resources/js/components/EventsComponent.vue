@@ -13,6 +13,7 @@
                     <th>End date</th>
                     <th>Place</th>
                     <th>Capacity</th>
+                    <th>Creator</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -22,6 +23,7 @@
                         <td>{{ event.event_end}}</td>
                         <td>{{ event.place.name}}</td>
                         <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
+                        <td>{{event.creator_user_id}}</td>
                         <td><v-btn variant="text"
                                    color="secondary"
                                    @click="openEditModal(event)"
@@ -58,6 +60,7 @@
                         <th>End date</th>
                         <th>Place</th>
                         <th>Capacity</th>
+                        <th>Creator</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -67,6 +70,7 @@
                         <td>{{ event.event_end}}</td>
                         <td>{{ event.place.name}}</td>
                         <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
+                        <td>{{event.creator_user_id}}</td>
                         <td><v-btn variant="text"
                                    color="green"
                                    @click="approveEvent(event)">Approve</v-btn></td>
@@ -213,11 +217,13 @@ export default {
                 capacity_max: "",
                 place_id: "",
                 description: "",
+                creator_user_id: "",
             },
         };
     },
     created: async function(){
         this.authUser = await this.getAuthUser()
+        this.fields.creator_user_id = this.authUser.id;
     },
     mounted() {
         this.fetchApprovedEvents();
