@@ -25,7 +25,9 @@
             <td>{{ event.event_start}}</td>
             <td>{{ event.event_end}}</td>
             <td>{{ event.place.name}}</td>
-            <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
+            <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
+              {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+            <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
             <td v-if="event.is_approved"><v-icon color="green">mdi-check</v-icon></td>
             <td v-else><v-icon color="red">mdi-close</v-icon></td>
             <td><v-btn variant="text"

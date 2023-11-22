@@ -21,7 +21,9 @@
                         <td>{{ event.event_start}}</td>
                         <td>{{ event.event_end}}</td>
                         <td>{{ event.place.name}}</td>
-                        <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
+                        <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
+                          {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+                        <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
                         <td>{{event.creator.name}}</td>
                         <td><v-btn variant="text"
                                    color="secondary"
@@ -68,7 +70,9 @@
                         <td>{{ event.event_start}}</td>
                         <td>{{ event.event_end}}</td>
                         <td>{{ event.place.name}}</td>
-                        <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
+                        <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
+                          {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+                        <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
                         <td>{{event.creator.name}}</td>
                         <td><v-btn variant="text"
                                    color="green"
@@ -398,6 +402,10 @@ export default {
 
 .confirm-title {
     text-align: center;
+}
+
+.red-text {
+  color: red;
 }
 
 

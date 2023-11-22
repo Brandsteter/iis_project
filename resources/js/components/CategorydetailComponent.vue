@@ -20,8 +20,11 @@
             <td>{{ event.event_start}}</td>
             <td>{{ event.event_end}}</td>
 <!--            <td>{{ event.place.name}}</td>-->
-            <td>{{ event.capacity_current}}/{{checkCapacityValue(event)}}</td>
-<!--            <td><v-btn variant="text"-->
+          <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
+            {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+          <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+
+          <!--            <td><v-btn variant="text"-->
 <!--                       color="secondary"-->
 <!--                       @click="openEditModal(event)">Edit</v-btn></td>-->
 <!--            <td><v-btn variant="text"-->
@@ -104,9 +107,9 @@ export default {
 }
 </script>
 
-
-
-
-
 <style>
+
+.red-text {
+  color: red;
+}
 </style>

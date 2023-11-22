@@ -21,7 +21,10 @@
     </div>
 
     <div v-if="checkIfIsLoggedIn()">
-      <v-btn v-if="!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)" class="attend-button" @click="attendEvent(eventMutable)">
+      <v-btn v-if="(!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)) && (eventMutable.capacity_current !== checkCapacityValue(eventMutable)) " class="attend-button" @click="attendEvent(eventMutable)">
+          Attend
+      </v-btn>
+      <v-btn v-else-if="!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)" :disabled class="attend-button-disabled">
           Attend
       </v-btn>
       <v-btn v-else class="attend-button" color="red" @click="unattendEvent(eventMutable)">
@@ -163,6 +166,14 @@ export default {
         checkIfIsLoggedIn(){
           return (isRole(this.roleEnum.User , this.authUser) || isRole(this.roleEnum.Moderator , this.authUser) || isRole(this.roleEnum.Admin , this.authUser));
         },
+        checkCapacityValue(event) {
+          if (event.capacity_max == null){
+            return "∞";
+          }
+          else {
+            return event.capacity_max;
+          }
+        },
         isRole,
         getAuthUser,
         checkIfUserIsInArrayOfUsers,
@@ -203,6 +214,13 @@ export default {
     background-color: #05c76c;
     color: white;
 }
+
+.attend-button-disabled {
+  margin: 10px;
+  background-color: #949494;
+  color: black;
+}
+
 .users-comment-input {
     padding: 10px;
     background-color: #bbbbbb;

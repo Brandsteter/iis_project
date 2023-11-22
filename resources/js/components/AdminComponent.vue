@@ -42,10 +42,12 @@
                     <div class="mb-3">
                         <label for="InputName" class="form-label">Name</label>
                         <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+                        <span v-if="errorMessages.errors.name" style="color: red;">{{errorMessages.errors.name[0]}}</span>
                     </div>
                     <div class="mb-3">
                         <label for="InputAddress" class="form-label">Email address</label>
                         <input class="form-control" id="InputAddress" v-model="fields.email" maxlength="255" type="text" required>
+                        <span v-if="errorMessages.errors.email" style="color: red;">{{errorMessages.errors.email[0]}}</span>
                     </div>
                   <div class="mb-3">
                     <label for="InputPlace" class="form-label">Select role</label>
@@ -55,17 +57,17 @@
                       <option value="Moderator">Moderator</option>
                       <option value="User">User</option>
                     </select>
+                    <span v-if="errorMessages.errors.role" style="color: red;">{{errorMessages.errors.role[0]}}</span>
                   </div>
                   <div class="mb-3">
                     <label for="InputPassword" class="form-label">Password</label>
                     <input class="form-control" id="InputPassword"  maxlength="255" v-model="fields.password" type="password">
-<!--                    <span v-if="errorMessages.password" style="color: red;">{{ errorMessages.password[0] }}</span>-->
+                    <span v-if="errorMessages.errors.password" style="color: red;">{{errorMessages.errors.password[0]}}</span>
                   </div>
                   <div class="mb-3">
                     <label for="InputPasswordRepeat" class="form-label">Repeat password</label>
                     <input class="form-control" id="InputPasswordRepeat" maxlength="255" v-model="fields.passwordRepeat" type="password">
-<!--                    <span v-if="errorMessages.passwordRepeat" style="color: red;">{{ errorMessages.passwordRepeat[0] }}</span>-->
-<!--                    <span v-if="passwordsDoNotMatch" style="color: red;">Passwords do not match</span>-->
+                    <span v-if="errorMessages.errors.passwordRepeat" style="color: red;">{{errorMessages.errors.passwordRepeat[0]}}</span>
                   </div>
 
                     <div class="d-flex justify-content-center">
@@ -114,6 +116,16 @@ export default {
       modalMode: 'create',
       showConfirmation: false,
       userDeleteConfirm: false,
+      errorMessages: {
+        message: "",
+        errors: {
+          name: null,
+          email: null,
+          password: null,
+          passwordRepeat: null,
+          role: null,
+        }
+      },
     };
   },
   mounted() {
@@ -164,7 +176,7 @@ export default {
     },
     confirmDelete() {
       this.showConfirmation = false;
-      this.deleteEvent(this.userDeleteConfirm);
+      this.deleteUser(this.userDeleteConfirm);
       this.userDeleteConfirm = null;
     },
     cancelDelete() {
@@ -179,6 +191,11 @@ export default {
             window.location.href = '/admin'
           }
         })
+        .catch((error) => {
+          if (error.response && error.response.data.message) {
+            this.errorMessages = error.response.data;
+          }
+        });
       } else if (this.modalMode === 'edit') {
         const url = `/admin/user/${this.fields.id}`;
         axios.put(url, this.fields).then((response) => {
@@ -186,6 +203,11 @@ export default {
             window.location.href = '/admin'
           }
         })
+        .catch((error) => {
+          if (error.response && error.response.data.message) {
+            this.errorMessages = error.response.data;
+          }
+        });
       }
     },
     isRole,
