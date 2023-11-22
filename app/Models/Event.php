@@ -15,6 +15,7 @@ class Event extends Model
         'event_start',
         'event_end',
         'event_start_time',
+        'event_end_time',
         'place_id',
         'creator_user_id',
         'description',
