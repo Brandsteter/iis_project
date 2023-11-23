@@ -49,7 +49,7 @@
                     @mouseleave="hoverOut">
                    <i :class="{ 'fas': index <= (hoverValue || selectedRating), 'far': index > (hoverValue || selectedRating) }" class="fa-star"></i>
                 </span>
-          </div>
+          </div><span v-if="errorMessages.errors.rating" style="color: red;">{{errorMessages.errors.rating[0]}}</span>
 
           <br>
           <div class="inline-components comment-input-box" >
@@ -58,6 +58,8 @@
               Post
             </v-btn>
           </div>
+            <span v-if="errorMessages.errors.body" style="color: red;">{{errorMessages.errors.body[0]}}</span>
+
         </div>
       </div>
       <h2>Comments:</h2>
@@ -109,6 +111,13 @@ export default {
             userEvents: [],
             eventMutable: this.event,
             comments: [],
+            errorMessages: {
+                message: "",
+                errors: {
+                    body: null,
+                    rating: null
+                }
+            },
         };
     },
     mounted() {
@@ -149,16 +158,20 @@ export default {
           axios.post(url, requestData)
               .then(response => {
                 this.fetchComments(eventMutable);
+                this.errorMessages.errors.body = "";
+                this.errorMessages.errors.rating = "";
               })
               .catch(error => {
-                console.error('Error attending event:', error);
+                  if (error.response && error.response.data.message) {
+                      this.errorMessages = error.response.data;
+                  }
               })
         },
         fetchComments(eventMutable){
           const url = `/event/${eventMutable.id}/comments/`;
           axios.get(url)
               .then(response => {
-                this.comments = response.data;
+                this.comments = response.data.reverse();
               })
               .catch(error => {
                 console.error('Error fetching comments:', error);
