@@ -1,5 +1,5 @@
 <template>
-    <h1>Categories</h1>
+    <p class="header-text-format"><b>Categories</b></p>
     <v-btn @click="newCategory" prepend-icon="mdi-plus">Add new category</v-btn>
     <div>
         <hr>
@@ -7,6 +7,16 @@
             <li v-for="category in categoriesTopLevelApproved" class="list-item">
                 <v-btn @click="toggleCollapse(category.name)" density="comfortable" icon="mdi-arrow-down" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length] }"></v-btn>
                 <v-btn class="category-link" :href="`/category/${category.id}/detail`" min-width="300" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length]}">{{ category.name }}</v-btn>
+                <v-btn variant="text"
+                            color="secondary"
+                            @click="categoryOpenEditModal(category)"
+                            v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                            Edit</v-btn>
+                <v-btn variant="text"
+                         color="red"
+                         @click="showConfirm(category)"
+                         v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                         Delete</v-btn>
                 <categoryList v-if="categoryShown === category.name && category.categories !== {}" :categoryId="category.id" :depthIndex="1"></categoryList>
             </li>
         </ul>
@@ -20,7 +30,7 @@
                 <div class="mb-3">
                     <label for="InputName" class="form-label">Name<span style="color: red;">*</span></label>
                     <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
-                    <span v-if="errorMessages" style="color: red;">{{errorMessages[0]}}</span>
+                    <span v-if="errorMessages.errors.name" style="color: red;">{{errorMessages.errors.name[0]}}</span>
                 </div>
                 <span style="color: red;">* - the field is required</span>
                 <div style="margin-bottom: 10px;"></div>
@@ -31,6 +41,27 @@
                 </div>
             </form>
         </v-card>
+    </v-dialog>
+
+    <!--Edit category-->
+    <v-dialog v-model="showEditCategoryModal" max-width="400" max-height="250">
+      <v-card class="card" style=" border-radius: 10px;">
+        <v-card-title class="confirm-title">Create a new category</v-card-title>
+        <form>
+          <div class="mb-3">
+            <label for="InputName" class="form-label">Name<span style="color: red;">*</span></label>
+            <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+            <span v-if="errorMessages.errors.name" style="color: red;">{{errorMessages.errors.name[0]}}</span>
+          </div>
+          <span style="color: red;">* - the field is required</span>
+          <div style="margin-bottom: 10px;"></div>
+          <div class="d-flex justify-content-center">
+            <v-btn @click="submitEdit()" color="grey-darken-3">
+              Submit
+            </v-btn>
+          </div>
+        </form>
+      </v-card>
     </v-dialog>
 
     <!--Category delete confirmation window-->
@@ -73,12 +104,20 @@ export default {
             parentName: null,
             categoryManipulate: null,
             showConfirmation: false,
+            showEditCategoryModal: false,
             showNewCategoryModal: false,
             fields: {
+                id: "",
                 name: "",
+                category: {},
                 parent_category_id: null,
             },
-            errorMessages: "",
+            errorMessages: {
+              message: "",
+              errors: {
+                name: null,
+              }
+            },
         };
     },
     created: async function(){
@@ -131,8 +170,7 @@ export default {
             const url = `/category/${category.id}`;
             axios.delete(url)
                 .then(() => {
-                    this.fetchApprovedCategories();
-                    this.fetchUnapprovedCategories();
+                  window.location.href = "/category";
                 })
                 .catch(error => {
                     console.error('Error deleting category:', error);
@@ -161,9 +199,26 @@ export default {
             })
             .catch((error) => {
               if (error.response && error.response.data.message) {
-                this.errorMessages = error.response.data.errors.name;
+                this.errorMessages = error.response.data.errors;
               }
             });
+        },
+        submitEdit() {
+          const url = `/category/${this.fields.id}`
+          axios.put(url, this.fields).then((response) => {
+            if (response) {
+              window.location.href = `/category`
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.data.message) {
+              this.errorMessages = error.response.data;
+            }
+          });
+        },
+        categoryOpenEditModal(category) {
+          this.showEditCategoryModal = true;
+          this.fields = { ...category };
         },
         showConfirm(category) {
             this.showConfirmation = true;
@@ -235,5 +290,11 @@ export default {
 
 th, td {
     padding: 5px;
+}
+
+.header-text-format {
+  font-size: 30px;
+  margin: 0;
+  color: #07abd5;
 }
 </style>

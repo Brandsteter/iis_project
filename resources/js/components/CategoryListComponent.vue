@@ -5,15 +5,62 @@
             <li v-for="category in children" class="list-item2">
                 <v-btn @click="toggleCollapse(category.name)" density="comfortable" icon="mdi-arrow-down" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length]}"></v-btn>
                 <v-btn class="category-link" :href="`/category/${category.id}/detail`" min-width="200" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length]}">{{ category.name }}</v-btn>
+                <v-btn variant="text"
+                       color="secondary"
+                       @click="categoryOpenEditModal(category)"
+                       v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                  Edit</v-btn>
+                <v-btn variant="text"
+                       color="red"
+                       @click="showConfirm(category)"
+                       v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                  Delete</v-btn>
                 <categoryList v-if="categoryShown === category.name && category.categories !== {}" :categoryId="category.id" :depthIndex="depthIndex+1"></categoryList>
             </li>
         </ul>
 
+        <!--Edit category-->
+        <v-dialog v-model="showEditCategoryModal" max-width="400" max-height="250">
+          <v-card class="card" style=" border-radius: 10px;">
+            <v-card-title class="confirm-title">Create a new category</v-card-title>
+            <form>
+              <div class="mb-3">
+                <label for="InputName" class="form-label">Name<span style="color: red;">*</span></label>
+                <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+                <span v-if="errorMessages.errors.name" style="color: red;">{{errorMessages.errors.name[0]}}</span>
+              </div>
+              <span style="color: red;">* - the field is required</span>
+              <div style="margin-bottom: 10px;"></div>
+              <div class="d-flex justify-content-center">
+                <v-btn @click="submitEdit()" color="grey-darken-3">
+                  Submit
+                </v-btn>
+              </div>
+            </form>
+          </v-card>
+        </v-dialog>
+
+        <!--Category delete confirmation window-->
+        <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
+          <v-card class="card" style=" border-radius: 10px;">
+            <v-card-title class="confirm-title">Do you want to delete this event?</v-card-title>
+            <div class="button-container">
+              <v-btn @click="confirmDelete()"
+                     min-width="80"
+                     color="green">Yes</v-btn>
+              <v-btn @click="cancelDelete()"
+                     min-width="80"
+                     color="red">No</v-btn>
+            </div>
+          </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
-
+import {isRole, getAuthUser} from "../app";
+import categoryList from "./CategoryListComponent.vue";
+import {RoleEnum} from "../enums/RoleEnum";
 export default {
     props: ['categoryId', 'depthIndex'],
     data() {
@@ -23,7 +70,25 @@ export default {
             showChildren: false,
             categoryShown: "",
             categoryColors: ['#91DEFF', '#88C0F3', '#8DA1DE', '#9780C0', '#9D5F98', '#B04C7B'],
+            showConfirmation: false,
+            roleEnum: RoleEnum,
+            showEditCategoryModal: false,
+            fields: {
+              id: "",
+              name: "",
+              category: {},
+              parent_category_id: null,
+            },
+            errorMessages: {
+              message: "",
+              errors: {
+                name: null,
+              }
+            },
         };
+    },
+    created: async function(){
+      this.authUser = await this.getAuthUser()
     },
     mounted() {
         this.getChildCategories(this.categoryId);
@@ -47,6 +112,48 @@ export default {
             this.categoryShown = categoryName;
           }
         },
+        submitEdit() {
+          const url = `/category/${this.fields.id}`
+          axios.put(url, this.fields).then((response) => {
+            if (response) {
+              window.location.href = `/category`
+            }
+          })
+            .catch((error) => {
+              if (error.response && error.response.data.message) {
+                this.errorMessages = error.response.data;
+              }
+            });
+        },
+        deleteCategory(category) {
+          const url = `/category/${category.id}`;
+          axios.delete(url)
+            .then(() => {
+              window.location.href = "/category";
+            })
+            .catch(error => {
+              console.error('Error deleting category:', error);
+            });
+        },
+        categoryOpenEditModal(category) {
+          this.showEditCategoryModal = true;
+          this.fields = { ...category };
+        },
+        showConfirm(category) {
+          this.showConfirmation = true;
+          this.categoryManipulate = category;
+        },
+        confirmDelete() {
+          this.showConfirmation = false;
+          this.deleteCategory(this.categoryManipulate);
+          this.categoryManipulate = null;
+        },
+        cancelDelete() {
+          this.showConfirmation = false;
+          this.categoryManipulate = null;
+        },
+        isRole,
+        getAuthUser,
     }
 };
 </script>

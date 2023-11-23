@@ -101,6 +101,9 @@
                       color="green"
                       @click="approveCategory(category)">Approve</v-btn></td>
            <td><v-btn variant="text"
+                      color="secondary"
+                      @click="categoryOpenEditModal(category)">Edit</v-btn></td>
+           <td><v-btn variant="text"
                       color="red"
                       @click="categoryShowConfirm(category)">Delete</v-btn></td>
          </tr>
@@ -228,6 +231,27 @@
      </v-card>
    </v-dialog>
 
+   <!--Category edit modal-->
+   <v-dialog v-model="categoryShowModal" max-width="400" max-height="250">
+     <v-card class="card" style=" border-radius: 10px;">
+       <v-card-title class="confirm-title">Create a new category</v-card-title>
+       <form>
+         <div class="mb-3">
+           <label for="InputName" class="form-label">Name<span style="color: red;">*</span></label>
+           <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
+           <span v-if="errorMessages.errors.name" style="color: red;">{{errorMessages.errors.name[0]}}</span>
+         </div>
+         <span style="color: red;">* - the field is required</span>
+         <div style="margin-bottom: 10px;"></div>
+         <div class="d-flex justify-content-center">
+           <v-btn @click="editCategory()" color="grey-darken-3">
+             Submit
+           </v-btn>
+         </div>
+       </form>
+     </v-card>
+   </v-dialog>
+
    <!--Category delete confirmation window-->
    <v-dialog v-model="categoryShowConfirmation" max-width="400" max-height="250">
      <v-card class="card" style=" border-radius: 10px;">
@@ -265,6 +289,7 @@ export default {
       roleEnum: RoleEnum,
       eventShowModal: false,
       placeShowModal: false,
+      categoryShowModal: false,
       eventShowConfirmation: false,
       placeShowConfirmation: false,
       categoryShowConfirmation: false,
@@ -423,6 +448,10 @@ export default {
       this.placeShowModal = true;
       this.fields = { ...place };
     },
+    categoryOpenEditModal(category) {
+      this.categoryShowModal = true;
+      this.fields = { ...category };
+    },
     editPlace() {
         const url = `/place/${this.fields.id}`;
         axios.put(url, this.fields).then((response) => {
@@ -438,6 +467,19 @@ export default {
     },
     editEvent() {
       axios.put(`/event/${this.fields.id}`, this.fields).then((response) => {
+        if (response) {
+          window.location.href = '/moderator'
+        }
+      })
+        .catch((error) => {
+          if (error.response && error.response.data.message) {
+            this.errorMessages = error.response.data;
+          }
+        });
+    },
+    editCategory() {
+      const url = `/category/${this.fields.id}`
+      axios.put(url, this.fields).then((response) => {
         if (response) {
           window.location.href = '/moderator'
         }
