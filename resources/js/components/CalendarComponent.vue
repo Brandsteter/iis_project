@@ -1,5 +1,5 @@
 <template>
-  <FullCalendar :options='calendarOptions' />
+    <FullCalendar :options='calendarOptions' />
 </template>
 
 <script>
@@ -25,30 +25,11 @@ export default {
               plugins: [ dayGridPlugin ],
               initialView: 'dayGridMonth',
               events: [],
-              allDayText: 'Celý deň',
             },
             eventColors: ['#aaf6f0', '#f0aaf6', '#aaf6aa', '#f6aaf0', '#aaf0f6'],
           };
     },
-    computed: {
-        monthName() {
-            const monthNames = [
-                'January',
-                'February',
-                'March',
-                'April',
-                'May',
-                'June',
-                'July',
-                'August',
-                'September',
-                'October',
-                'November',
-                'December',
-            ];
-            return monthNames[this.currentMonth];
-        },
-    },
+
     created: async function(){
       this.authUser = await this.getAuthUser()
     },
@@ -91,68 +72,45 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+.fc {
+    color: #07abd5;
+}
+:root {
+    --fc-small-font-size: .85em;
+    --fc-page-bg-color: #ffffff;
+    --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
+    --fc-neutral-text-color: #808080;
+    --fc-border-color: #696969;
 
+    --fc-button-text-color: #fff;
+    --fc-button-bg-color: #07abd5;
+    --fc-button-border-color: #07abd5;
+    --fc-button-hover-bg-color: #1e2b37;
+    --fc-button-hover-border-color: #1a252f;
+    --fc-button-active-bg-color: #1a252f;
+    --fc-button-active-border-color: #151e27;
 
+    --fc-event-bg-color: #3788d8;
+    --fc-event-border-color: #3788d8;
+    --fc-event-text-color: #2f2f2f;
+    --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
 
+    --fc-more-link-bg-color: #d0d0d0;
+    --fc-more-link-text-color: inherit;
 
-.calendar-container {
-    text-align: center;
-    width: max-content;
+    --fc-event-resizer-thickness: 10px;
+    --fc-event-resizer-dot-total-width: 8px;
+    --fc-event-resizer-dot-border-width: 1px;
+
+    --fc-non-business-color: rgba(144, 136, 136, 0.3);
+    --fc-bg-event-color: rgb(143, 223, 130);
+    --fc-bg-event-opacity: 0.3;
+    --fc-highlight-color: rgba(188, 232, 241, 0.3);
+    --fc-today-bg-color: rgba(255, 220, 40, 0.15);
+    --fc-now-indicator-color: red;
 }
 
-table {
-    width: 100%;
-    height: 100%;
-
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-    font-size: 14px;
-}
-
-td {
-    position: relative;
-    cursor: pointer;
-    height: 40px; /* Adjust the height as needed */
-    width: 40px; /* Adjust the width as needed */
-    transition: background-color 0.3s ease; /* Smooth transition for color change */
-}
-
-td:hover {
-    background-color: #aaf6f0; /* Change the color to your desired hover color */
-}
-
-
-th {
-    background-color: #2f2f2f;
-    color: #ffffff;
-}
-
-
-.custom-toolbar {
-    width: 100%;
-    background-color: #2f2f2f;
-}
-
-td:hover {
-    background-color: #aaf6f0;
-}
-
-h3 {
-    margin: 10px;
-    color: #e0e0e0;
-}
-
-
-.weekend {
-    color: #ff5722;
-}
-
-
-
-/* Your custom styles here */
 </style>
+
 
