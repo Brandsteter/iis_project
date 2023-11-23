@@ -2,7 +2,7 @@
   <div>
     <p class="header-text-format"><b>My Events</b></p>
 
-    <div>
+    <div v-if="events.data && events.data.length > 0">
       <div class="list-container">
         <table>
           <thead>
@@ -50,6 +50,10 @@
         />
       </div>
     </div>
+    <div v-else>
+        <p style="font-size: 20px ; margin-left:10px"><b>No events created yet</b></p>
+    </div>
+
     <div>
         <v-btn class="create-event-button" @click="openCreateModal" prepend-icon="mdi-plus">Create a new event</v-btn>
     </div>

@@ -1,45 +1,38 @@
 <template>
     <div>
-        <h1>Category Details</h1>
-        <h2>{{category.name}}</h2>
+        <p class="header-text-format"><b>Category Details</b></p>
+        <p style="font-size: 30px" class="text-format"><b>{{category.name}}</b></p>
     </div>
-    <v-btn @click="newSubcategory" prepend-icon="mdi-plus">Add new subcategory</v-btn>
-    <h3>Events</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Start date</th>
-                <th>End date</th>
-<!--                <th>Place</th>-->
-                <th>Capacity</th>
-            </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(event, index) in category.events" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-            <td>{{ event.name }}</td>
-            <td>{{ event.event_start}}</td>
-            <td>{{ event.event_end}}</td>
-<!--            <td>{{ event.place.name}}</td>-->
-            <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
-              {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
-            <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
-            <td><v-btn variant="text" color="secondary" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
 
-          <!--            <td><v-btn variant="text"-->
-<!--                       color="secondary"-->
-<!--                       @click="openEditModal(event)">Edit</v-btn></td>-->
-<!--            <td><v-btn variant="text"-->
-<!--                       color="red"-->
-<!--                       @click="showConfirm(event)">Delete</v-btn></td>-->
-<!--            <td><v-btn variant="text"-->
-<!--                       color="secondary"-->
-<!--                       @click="assignCategory(event)"-->
-<!--                       v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">-->
-<!--                Add category</v-btn></td>-->
-        </tr>
-        </tbody>
-    </table>
+    <div v-if="category.events.length > 0" class="list-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                    <th>Capacity</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(event, index) in category.events" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+                <td>{{ event.name }}</td>
+                <td>{{ event.event_start}}</td>
+                <td>{{ event.event_end}}</td>
+                <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
+                  {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+                <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+                <td><v-btn variant="text" color="secondary" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div v-else>
+        <p style="font-size: 20px ; margin-left:10px"><b>No events in this category</b></p>
+    </div>
+    <v-btn class="create-event-button" @click="newSubcategory" prepend-icon="mdi-plus">Add new subcategory</v-btn>
+
+
 
     <!--Create new subcategory-->
     <v-dialog v-model="showNewSubcategoryModal" max-width="400" max-height="250">
@@ -60,6 +53,7 @@
             </form>
         </v-card>
     </v-dialog>
+
 </template>
 
 <script>
@@ -114,5 +108,50 @@ export default {
 
 .red-text {
   color: red;
+}
+
+.text-format {
+    margin-left: 10px;
+    color: #5b5b5b;
+}
+
+.create-event-button{
+    margin:20px;
+    background-color: #91deff;
+}
+
+.header-text-format {
+    font-size: 30px;
+    margin: 0;
+    color: #07abd5;
+}
+
+.list-container{
+    background-color: #91deff;
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: -10px;
+    width: 100%;
+}
+td {
+    padding: 10px;
+    background-color: #ffffff;
+}
+td:first-child {
+    border-left-style: solid;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+td:last-child {
+    border-right-style: solid;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
 }
 </style>

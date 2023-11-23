@@ -1,7 +1,6 @@
 <template>
-    <div>
+    <div  v-if="eventsApproved.data && eventsApproved.data.length > 0">
         <p class="header-text-format"><b>Events</b></p>
-
         <div class="list-container">
             <table >
                 <thead>
@@ -51,7 +50,9 @@
             />
         </div>
 
-
+    </div>
+    <div v-else>
+        <p style="font-size: 20px ; margin-left:10px"><b>No events yet</b></p>
     </div>
 
     <v-dialog v-model="showModal" max-width="400">

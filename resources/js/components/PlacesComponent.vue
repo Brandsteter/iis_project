@@ -1,7 +1,7 @@
 <template>
     <div>
         <p class="header-text-format"><b>Places</b></p>
-        <div class="list-container">
+        <div v-if="placesApproved.data" class="list-container">
             <table>
                 <thead>
                 <tr>
@@ -14,15 +14,15 @@
                       <td>{{ place.name }}</td>
                       <td>{{ place.address}}</td>
                       <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                       <td><v-btn variant="text"
                                  color="secondary"
                                  @click="openEditModal(place)"
@@ -36,6 +36,9 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div v-else>
+            <p style="font-size: 20px ; margin-left:10px"><b>No places created yet</b></p>
         </div>
     </div>
     <v-btn class="create-event-button" @click="openCreateModal" prepend-icon="mdi-plus">Create a new place</v-btn>
@@ -97,7 +100,6 @@ export default {
     data() {
         return {
             placesApproved: [],
-            placesUnapproved: [],
             authUser: null,
             roleEnum: RoleEnum,
             showModal: false,
@@ -125,22 +127,12 @@ export default {
     },
     mounted() {
         this.fetchApprovedPlaces();
-        this.fetchUnapprovedPlaces();
     },
     methods: {
         fetchApprovedPlaces() {
             axios.get('/place/approved')
                 .then(response => {
                     this.placesApproved = response.data;
-                })
-                .catch(error => {
-                    console.error('Error fetching events:', error);
-                })
-        },
-        fetchUnapprovedPlaces() {
-            axios.get('/place/unapproved')
-                .then(response => {
-                    this.placesUnapproved = response.data;
                 })
                 .catch(error => {
                     console.error('Error fetching events:', error);
