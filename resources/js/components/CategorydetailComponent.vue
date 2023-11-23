@@ -4,6 +4,7 @@
         <h2>{{category.name}}</h2>
     </div>
     <v-btn @click="newSubcategory" prepend-icon="mdi-plus">Add new subcategory</v-btn>
+    <h3>Events</h3>
     <table>
         <thead>
             <tr>
@@ -20,9 +21,10 @@
             <td>{{ event.event_start}}</td>
             <td>{{ event.event_end}}</td>
 <!--            <td>{{ event.place.name}}</td>-->
-          <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
-            {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
-          <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+            <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
+              {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+            <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+            <td><v-btn variant="text" color="secondary" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
 
           <!--            <td><v-btn variant="text"-->
 <!--                       color="secondary"-->
@@ -43,12 +45,13 @@
     <v-dialog v-model="showNewSubcategoryModal" max-width="400" max-height="250">
         <v-card class="card" style=" border-radius: 10px;">
             <v-card-title class="confirm-title">Create a new sub-category for {{category.name}}</v-card-title>
-            <h4>Category will be sent to a page moderator for confirmation</h4>
             <form>
                 <div class="mb-3">
-                    <label for="InputName" class="form-label">Name</label>
+                    <label for="InputName" class="form-label">Name<span style="color: red;">*</span></label>
                     <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
                 </div>
+                <span style="color: red;">* - the field is required</span>
+                <div style="margin-bottom: 10px;"></div>
                 <div class="d-flex justify-content-center">
                     <v-btn @click="submit()" color="grey-darken-3">
                         Submit

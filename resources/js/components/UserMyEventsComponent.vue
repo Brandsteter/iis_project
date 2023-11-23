@@ -30,20 +30,20 @@
             <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
             <td v-if="event.is_approved"><v-icon color="green">mdi-check</v-icon></td>
             <td v-else><v-icon color="red">mdi-close</v-icon></td>
+            <td><v-btn variant="text" color="secondary" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
             <td><v-btn variant="text"
                        color="secondary"
                        @click="openEditModal(event)">Edit</v-btn></td>
             <td><v-btn variant="text"
-                       color="red"
-                       @click="showConfirm(event)">Delete</v-btn></td>
+                       color="secondary"
+                       @click="assignCategory(event)">Add category</v-btn></td>
             <td v-if="(isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)) && (!event.is_approved)">
               <v-btn variant="text"
                      color="green"
                      @click="approveEvent(event)">Approve</v-btn></td>
             <td><v-btn variant="text"
-                       color="secondary"
-                       @click="assignCategory(event)">Add category</v-btn></td>
-            <td><v-btn variant="text" color="grey" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
+                       color="red"
+                       @click="showConfirm(event)">Delete</v-btn></td>
           </tr>
           </tbody>
         </table>
@@ -62,12 +62,12 @@
                     <label v-if="modalMode === 'create'" style="font-size: x-large" class="form-label">Create a new event</label>
                     <label v-if="modalMode === 'edit'" style="font-size: x-large" class="form-label">Create a new event</label>
                     <div class="mb-3">
-                        <label for="InputName" class="form-label">Name of event</label>
+                        <label for="InputName" class="form-label">Name of event<span style="color: red;">*</span></label>
                         <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
                         <span v-if="errorMessages.errors.name" style="color: red;">{{errorMessages.errors.name[0]}}</span>
                     </div>
                     <div class="mb-3">
-                        <label for="InputEventStart" class="form-label">Start of event</label>
+                        <label for="InputEventStart" class="form-label">Start of event<span style="color: red;">*</span></label>
                         <input type="date" id="InputEventStart" class="form-control" v-model="fields.event_start" maxlength="255" required>
                         <span v-if="errorMessages.errors.event_start" style="color: red;">{{errorMessages.errors.event_start[0]}}</span>
                     </div>
@@ -76,7 +76,7 @@
                         <input type="time" id="InputEventStart" class="form-control" v-model="fields.event_start_time" maxlength="255">
                     </div>
                     <div class="mb-3">
-                        <label for="InputEventEnd" class="form-label">End of event</label>
+                        <label for="InputEventEnd" class="form-label">End of event<span style="color: red;">*</span></label>
                         <input type="date" id="InputEventEnd" class="form-control" v-model="fields.event_end" maxlength="255" required>
                         <span v-if="errorMessages.errors.event_end" style="color: red;">{{errorMessages.errors.event_end[0]}}</span>
                     </div>
@@ -90,7 +90,7 @@
                         <span v-if="errorMessages.errors.capacity_max" style="color: red;">{{errorMessages.errors.capacity_max[0]}}</span>
                     </div>
                     <div class="mb-3">
-                        <label for="InputPlace" class="form-label">Select place</label>
+                        <label for="InputPlace" class="form-label">Select place<span style="color: red;">*</span></label>
                         <select class="form-control" id="InputPlace" v-model="fields.place_id" required>
                             <option value="none" selected disabled hidden>Select an Option</option>
                             <option v-for="(place) in placesApproved.data" :value="place.id">{{place.name}}</option>
@@ -98,9 +98,11 @@
                         <span v-if="errorMessages.errors.place_id" style="color: red;">{{errorMessages.errors.place_id[0]}}</span>
                     </div>
                     <div class="mb-3">
-                        <label for="InputDescription" class="form-label">Description</label>
+                        <label for="InputDescription" class="form-label">Description<span style="color: red;">*</span></label>
                         <textarea class="form-control" id="InputDescription" v-model="fields.description" maxlength="255" type="text" required></textarea>
                     </div>
+                    <span style="color: red;">* - the field is required</span>
+                    <div style="margin-bottom: 10px;"></div>
                     <div class="d-flex justify-content-center">
                         <v-btn @click="submit" color="grey-darken-3">
                             Submit
