@@ -63,6 +63,14 @@
                     @endauth
 
                     @auth
+                      @if(auth()->user()->isRole(\App\Enums\RoleEnum::Moderator) || auth()->user()->isRole(\App\Enums\RoleEnum::Admin))
+                        <li>
+                          <v-btn class="w-100" href="/moderator">Moderator Panel</v-btn>
+                        </li>
+                      @endif
+                    @endauth
+
+                    @auth
                     @if(auth()->user()->isRole(\App\Enums\RoleEnum::Admin))
                     <li>
                         <v-btn class="w-100" href="/admin">Admin Panel</v-btn>

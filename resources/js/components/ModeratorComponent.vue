@@ -95,7 +95,8 @@
          <tbody>
          <tr v-for="(category, index) in categoriesUnapproved" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
            <td>{{category.name}}</td>
-           <td>{{category.parent_category_id}}</td>
+           <td v-if="category.category !== null">{{category.category.name}}</td>
+           <td v-else>--</td>
            <td><v-btn variant="text"
                       color="green"
                       @click="approveCategory(category)">Approve</v-btn></td>

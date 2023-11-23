@@ -1,6 +1,6 @@
 @extends('app')
 @section('content')
-    <div class="p-5">
+    <div>
         <admin></admin>
     </div>
 @endsection
