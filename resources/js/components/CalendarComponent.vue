@@ -73,7 +73,9 @@ export default {
 </script>
 
 <style>
-
+.fc {
+    color: #07abd5;
+}
 :root {
     --fc-small-font-size: .85em;
     --fc-page-bg-color: #ffffff;

@@ -70,8 +70,9 @@
 
         </div>
       </div>
+
       <div class="users-comment-input-all">
-        <div class="comment-box" v-for="(comment, index) in comments">
+        <div class="comment-box" v-for="(comment) in comments">
             <v-btn  class="delete-button" density="compact" variant="text"  v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)"
                    color="red" @click="deleteComment(eventMutable,comment)">
               Delete
@@ -85,8 +86,6 @@
       </div>
 
     </div>
-
-
 
 
 
@@ -233,9 +232,6 @@ export default {
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             const date = new Date(dateString);
             return date.toLocaleDateString('en-US', options);
-        },
-        formatTime(timeString) {
-
         },
         isRole,
         getAuthUser,

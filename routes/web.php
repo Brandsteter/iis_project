@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('app');
+    return view('events');
 });
 
 Route::prefix('/auth')->group(function () {
@@ -58,9 +58,9 @@ Route::prefix('/category')->group(function () {
 
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\CategoryController::class, 'create']);
-        Route::get('/', [\App\Http\Controllers\UserController::class, 'categoriesPage']);
         Route::get('/approved', [\App\Http\Controllers\CategoryController::class, 'getCategoriesApproved']);
         Route::get('/unapproved', [\App\Http\Controllers\CategoryController::class, 'getCategoriesUnapproved']);
+        Route::get('/', [\App\Http\Controllers\UserController::class, 'categoriesPage']);
 
         Route::middleware('moderator')->group(function () {
             Route::delete('/{category}', [\App\Http\Controllers\CategoryController::class, 'delete']);
@@ -94,6 +94,12 @@ Route::prefix('/event')->group(function () {
     Route::get('/approved', [\App\Http\Controllers\EventController::class, 'getEventsApproved']);
     Route::get('/{event}/detail', [\App\Http\Controllers\EventController::class, 'eventDetailPage']);
 
+    Route::prefix('/{event}')->group(function () {
+        Route::prefix('/comments')->group(function () {
+            Route::get('/', [\App\Http\Controllers\CommentController::class, 'getEventComments']);
+        });
+    });
+
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\EventController::class, 'create']);
         Route::get('/attended', [\App\Http\Controllers\UserController::class, 'getUserEvents']);
@@ -113,7 +119,6 @@ Route::prefix('/event')->group(function () {
         Route::prefix('/{event}')->group(function () {
             Route::prefix('/comments')->group(function () {
                 Route::post('/', [\App\Http\Controllers\CommentController::class, 'create']);
-                Route::get('/', [\App\Http\Controllers\CommentController::class, 'getEventComments']);
                 Route::delete('/{comment}', [\App\Http\Controllers\CommentController::class, 'delete'])->middleware('moderator');
             });
         });
