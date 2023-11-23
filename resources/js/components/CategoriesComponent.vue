@@ -3,13 +3,13 @@
     <v-btn @click="newCategory" prepend-icon="mdi-plus">Add new category</v-btn>
     <div>
         <hr>
-        <ul class="nested">
-            <li v-for="(category, index) in categoriesTopLevelApproved">
-                <a :href="`/category/${category.id}/detail`">{{ category.name }}</a>
-                <categoryList :categoryId="category.id"></categoryList>
+        <ul class="custom-list">
+            <li v-for="category in categoriesTopLevelApproved" class="list-item">
+                <v-btn @click="toggleCollapse(category.name)" density="comfortable" icon="mdi-arrow-down"></v-btn>
+                <v-btn class="category-link" :href="`/category/${category.id}/detail`" min-width="300">{{ category.name }}</v-btn>
+                <categoryList v-if="categoryShown === category.name && category.categories !== {}" :categoryId="category.id"></categoryList>
             </li>
         </ul>
-
     </div>
 
     <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
@@ -87,6 +87,8 @@ export default {
             categoriesApproved: [],
             categoriesUnapproved: [],
             categoriesChildren: [],
+            collapsedCategories: [],
+            categoryShown: "",
             authUser: null,
             roleEnum: RoleEnum,
             children: [],
@@ -198,7 +200,13 @@ export default {
             this.showConfirmation = false;
             this.categoryManipulate = null;
         },
-
+        toggleCollapse(categoryName) {
+          if (this.categoryShown === categoryName) {
+            this.categoryShown = "";
+          } else {
+            this.categoryShown = categoryName;
+          }
+        },
         isRole,
         getAuthUser,
     }
@@ -229,6 +237,22 @@ export default {
     gap: 10px;
     margin-top: 10px;
     /* Additional styles for action buttons */
+}
+
+/* Remove default list styles */
+.custom-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* Adjust margins between list items */
+.list-item {
+  margin-bottom: 10px; /* Increase or decrease as needed */
+}
+
+/* Add space between buttons */
+.category-link {
+  margin-left: 10px; /* Adjust the margin as needed */
 }
 
 th, td {
