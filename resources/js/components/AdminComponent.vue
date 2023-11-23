@@ -186,32 +186,38 @@ export default {
       this.userDeleteConfirm = null;
     },
     submit() {
-      if (this.modalMode === 'create') {
-        console.log(this.fields.role)
-        axios.post('/admin/user/', this.fields).then((response) => {
-          if (response) {
-            window.location.href = '/admin'
-          }
-        })
-        .catch((error) => {
-          if (error.response && error.response.data.message) {
-            this.errorMessages = error.response.data;
-          }
-        });
-      } else if (this.modalMode === 'edit') {
-        const url = `/admin/user/${this.fields.id}`;
-        axios.put(url, this.fields).then((response) => {
-          if (response) {
-            window.location.href = '/admin'
-          }
-        })
-        .catch((error) => {
-          if (error.response && error.response.data.message) {
-            this.errorMessages = error.response.data;
-          }
-        });
+      if (((this.fields.password !== null || this.fields.passwordRepeat !== null) && (this.fields.password === this.fields.passwordRepeat)) || (this.fields.password === null || this.fields.passwordRepeat === null)) {
+        if (this.modalMode === 'create') {
+          console.log(this.fields.role)
+          axios.post('/admin/user/', this.fields).then((response) => {
+            if (response) {
+              window.location.href = '/admin'
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.data.message) {
+              this.errorMessages = error.response.data;
+            }
+          });
+        } else if (this.modalMode === 'edit') {
+          const url = `/admin/user/${this.fields.id}`;
+          axios.put(url, this.fields).then((response) => {
+            if (response) {
+              window.location.href = '/admin'
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.data.message) {
+              this.errorMessages = error.response.data;
+            }
+          });
+        }
+      }
+      else {
+        this.errorMessages.errors.passwordRepeat = ["Incorrect password input"];
       }
     },
+
     isRole,
     getAuthUser,
   }
