@@ -141,7 +141,7 @@ export default {
         approvePlace(place) {
             const url = `/place/${place.id}`;
             axios.patch(url)
-                .then(response => {
+                .then(() => {
                     this.fetchApprovedPlaces();
                     this.fetchUnapprovedPlaces();
                 })

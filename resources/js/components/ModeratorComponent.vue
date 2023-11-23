@@ -395,7 +395,7 @@ export default {
     approvePlace(place) {
       const url = `/place/${place.id}`;
       axios.patch(url)
-        .then(response => {
+        .then(() => {
           this.fetchUnapprovedPlaces();
         })
         .catch(error => {
@@ -424,7 +424,7 @@ export default {
     approveCategory(category) {
       const url = `/category/${category.id}`;
       axios.patch(url)
-        .then(response => {
+        .then(() => {
           this.fetchUnapprovedCategories();
         })
         .catch(error => {

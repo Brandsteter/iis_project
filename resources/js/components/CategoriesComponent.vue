@@ -160,7 +160,7 @@ export default {
         approveCategory(category) {
             const url = `/category/${category.id}`;
             axios.patch(url)
-                .then(response => {
+                .then(() => {
                     window.location.href = "/category";
                 })
                 .catch(error => {
@@ -248,30 +248,11 @@ export default {
 </script>
 
 <style>
-/* Your custom styles here */
-.user-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.user-card {
-    border: 1px solid #ccc;
-    padding: 20px;
-    /* Adjust width or other styles as needed */
-}
-
 .user-info p {
     margin: 5px 0;
     /* Adjust spacing or other styles as needed */
 }
 
-.user-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    /* Additional styles for action buttons */
-}
 .button-container {
   margin-top: 10px;
   margin-bottom: 10px;

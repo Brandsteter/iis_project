@@ -60,7 +60,6 @@
 
 <script>
 import {isRole, getAuthUser} from "../app";
-import categoryList from "./CategoryListComponent.vue";
 import {RoleEnum} from "../enums/RoleEnum";
 export default {
     props: ['categoryId', 'depthIndex'],

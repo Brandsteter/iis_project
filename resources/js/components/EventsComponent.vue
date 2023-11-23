@@ -14,7 +14,7 @@
                 </tr>
                 </thead>
                 <tbody class="list-container">
-                <tr v-for="(event, index) in eventsApproved.data">
+                <tr v-for="event in eventsApproved.data">
                         <td >{{ event.name }}</td>
                         <td>{{ event.event_start}}</td>
                         <td>{{ event.event_end}}</td>

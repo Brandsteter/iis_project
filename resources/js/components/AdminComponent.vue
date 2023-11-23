@@ -14,7 +14,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(user, index) in users" :key="user.id" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+        <tr v-for="user in users" :key="user.id">
           <td>{{ user.id }}</td>
           <td>{{ user.name }}</td>
           <td>{{ user.roles[0].role }}</td>
