@@ -125,7 +125,6 @@ export default {
     },
     mounted() {
         this.fetchApprovedCategories();
-        this.fetchUnapprovedCategories();
         this.fetchTopLevelApprovedCategories();
     },
     methods: {
