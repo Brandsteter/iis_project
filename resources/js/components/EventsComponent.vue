@@ -25,22 +25,24 @@
                           {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
                         <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
                         <td>{{event.creator.name}}</td>
+                        <td><v-btn variant="text" color="secondary" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
                         <td><v-btn variant="text"
                                    color="secondary"
                                    @click="openEditModal(event)"
                                    v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
                                    Edit</v-btn></td>
                         <td><v-btn variant="text"
+                                   color="secondary"
+                                   @click="assignCategory(event)"
+                                   v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+                                   Add category</v-btn></td>
+                        <td><v-btn variant="text"
                                    color="red"
                                    @click="showConfirm(event)"
                                    v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
                                    Delete</v-btn></td>
-                        <td><v-btn variant="text"
-                               color="secondary"
-                               @click="assignCategory(event)"
-                               v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-                               Add category</v-btn></td>
-                        <td><v-btn variant="text" color="grey" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
+
+
                 </tr>
                 </tbody>
             </table>
@@ -138,6 +140,8 @@
                       <label for="InputDescription" class="form-label">Description</label>
                     <textarea class="form-control" id="InputDescription" v-model="fields.description" maxlength="255" type="text" required></textarea>
                   </div>
+                  <span style="color: red;">* - the field is required</span>
+                  <div style="margin-bottom: 10px;"></div>
                   <div class="d-flex justify-content-center">
                       <v-btn @click="submit" color="grey-darken-3">
                           Submit

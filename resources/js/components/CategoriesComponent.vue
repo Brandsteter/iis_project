@@ -42,10 +42,12 @@
             <v-card-title class="confirm-title">Create a new category</v-card-title>
             <form>
                 <div class="mb-3">
-                    <label for="InputName" class="form-label">Name</label>
+                    <label for="InputName" class="form-label">Name<span style="color: red;">*</span></label>
                     <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
                     <span v-if="errorMessages" style="color: red;">{{errorMessages[0]}}</span>
                 </div>
+                <span style="color: red;">* - the field is required</span>
+                <div style="margin-bottom: 10px;"></div>
                 <div class="d-flex justify-content-center">
                     <v-btn @click="submit()" color="grey-darken-3">
                         Submit

@@ -40,17 +40,17 @@
             <v-card-text>
                 <form>
                     <div class="mb-3">
-                        <label for="InputName" class="form-label">Name</label>
+                        <label for="InputName" class="form-label">Name<span style="color: red;">*</span></label>
                         <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
                         <span v-if="errorMessages.errors.name" style="color: red;">{{errorMessages.errors.name[0]}}</span>
                     </div>
                     <div class="mb-3">
-                        <label for="InputAddress" class="form-label">Email address</label>
+                        <label for="InputAddress" class="form-label">Email address<span style="color: red;">*</span></label>
                         <input class="form-control" id="InputAddress" v-model="fields.email" maxlength="255" type="text" required>
                         <span v-if="errorMessages.errors.email" style="color: red;">{{errorMessages.errors.email[0]}}</span>
                     </div>
                   <div class="mb-3">
-                    <label for="InputPlace" class="form-label">Select role</label>
+                    <label for="InputPlace" class="form-label">Select role<span style="color: red;">*</span></label>
                     <select class="form-control" id="InputPlace" v-model="fields.role" required>
                       <option value="none" selected disabled hidden>Select an Option</option>
                       <option value="Admin">Admin</option>
@@ -60,16 +60,17 @@
                     <span v-if="errorMessages.errors.role" style="color: red;">{{errorMessages.errors.role[0]}}</span>
                   </div>
                   <div class="mb-3">
-                    <label for="InputPassword" class="form-label">Password</label>
+                    <label for="InputPassword" class="form-label">Password<span style="color: red;">*</span></label>
                     <input class="form-control" id="InputPassword"  maxlength="255" v-model="fields.password" type="password">
                     <span v-if="errorMessages.errors.password" style="color: red;">{{errorMessages.errors.password[0]}}</span>
                   </div>
                   <div class="mb-3">
-                    <label for="InputPasswordRepeat" class="form-label">Repeat password</label>
+                    <label for="InputPasswordRepeat" class="form-label">Repeat password<span style="color: red;">*</span></label>
                     <input class="form-control" id="InputPasswordRepeat" maxlength="255" v-model="fields.passwordRepeat" type="password">
                     <span v-if="errorMessages.errors.passwordRepeat" style="color: red;">{{errorMessages.errors.passwordRepeat[0]}}</span>
                   </div>
-
+                  <span style="color: red;">* - the field is required</span>
+                  <div style="margin-bottom: 10px;"></div>
                     <div class="d-flex justify-content-center">
                         <v-btn @click="submit" color="grey-darken-3">
                             Submit</v-btn>

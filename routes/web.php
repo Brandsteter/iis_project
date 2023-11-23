@@ -96,12 +96,12 @@ Route::prefix('/event')->group(function () {
         Route::post('/{event}/unattend', [\App\Http\Controllers\UserController::class, 'unattend']);
         Route::delete('/{event}', [\App\Http\Controllers\EventController::class, 'delete']);
         Route::put('/{event}', [\App\Http\Controllers\EventController::class, 'update']);
+        Route::post('/{event}/add-category', [\App\Http\Controllers\EventController::class, 'addCategory']);
+        Route::post('/{event}/remove-category', [\App\Http\Controllers\EventController::class, 'removeCategory']);
 
         Route::middleware('moderator')->group(function () {
             Route::get('/unapproved', [\App\Http\Controllers\EventController::class, 'getEventsUnapproved']);
             Route::patch('/{event}', [\App\Http\Controllers\EventController::class, 'approve']);
-            Route::post('/{event}/add-category', [\App\Http\Controllers\EventController::class, 'addCategory']);
-            Route::post('/{event}/remove-category', [\App\Http\Controllers\EventController::class, 'removeCategory']);
         });
 
         Route::prefix('/{event}')->group(function () {

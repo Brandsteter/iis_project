@@ -67,21 +67,22 @@
             <v-card-text>
                 <form>
                     <div class="mb-3">
-                        <label for="InputName" class="form-label">Name</label>
+                        <label for="InputName" class="form-label">Name<span style="color: red;">*</span></label>
                         <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
                         <span v-if="errorMessages.errors.name" style="color: red;">{{errorMessages.errors.name[0]}}</span>
                     </div>
                     <div class="mb-3">
-                        <label for="InputAddress" class="form-label">Address</label>
+                        <label for="InputAddress" class="form-label">Address<span style="color: red;">*</span></label>
                         <input class="form-control" id="InputAddress" v-model="fields.address" maxlength="255" type="text" required>
                         <span v-if="errorMessages.errors.address" style="color: red;">{{errorMessages.errors.address[0]}}</span>
                     </div>
                     <div class="mb-3">
-                        <label for="InputDescription" class="form-label">Description</label>
+                        <label for="InputDescription" class="form-label">Description<span style="color: red;">*</span></label>
                         <input class="form-control" id="InputDescription" v-model="fields.description" maxlength="255" type="text" required>
                         <span v-if="errorMessages.errors.description" style="color: red;">{{errorMessages.errors.description[0]}}</span>
                     </div>
-
+                    <span style="color: red;">* - the field is required</span>
+                    <div style="margin-bottom: 10px;"></div>
                     <div class="d-flex justify-content-center">
                         <v-btn @click="submit" color="grey-darken-3">
                             Submit</v-btn>
