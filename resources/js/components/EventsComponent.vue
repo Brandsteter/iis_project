@@ -1,6 +1,6 @@
 <template>
-    <div  v-if="eventsApproved.data && eventsApproved.data.length > 0">
-        <p class="header-text-format"><b>Events</b></p>
+    <div  v-if="upcomingEvents.length > 0">
+        <p class="header-text-format"><b>Upcoming events</b></p>
         <div class="list-container">
             <table >
                 <thead>
@@ -14,7 +14,7 @@
                 </tr>
                 </thead>
                 <tbody class="list-container">
-                <tr v-for="(event, index) in eventsApproved.data">
+                <tr v-for="(event, index) in upcomingEvents">
                         <td >{{ event.name }}</td>
                         <td>{{ event.event_start}}</td>
                         <td>{{ event.event_end}}</td>
@@ -49,6 +49,60 @@
                 @pagination-change-page="fetchApprovedEvents"
             />
         </div>
+
+    </div>
+    <div  v-if="previousEvents.length > 0">
+      <p class="header-text-format"><b>Previous events</b></p>
+      <div class="list-container">
+        <table >
+          <thead>
+          <tr >
+            <th>Name</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>Place</th>
+            <th>Capacity</th>
+            <th>Creator</th>
+            <th>Attending</th>
+          </tr>
+          </thead>
+          <tbody class="list-container">
+          <tr v-for="(event, index) in previousEvents">
+            <td >{{ event.name }}</td>
+            <td>{{ event.event_start}}</td>
+            <td>{{ event.event_end}}</td>
+            <td>{{ event.place.name}}</td>
+            <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
+              {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+            <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
+            <td>{{event.creator.name}}</td>
+            <td></td>
+            <td><v-btn variant="text" color="secondary" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
+            <td><v-btn variant="text"
+                       color="secondary"
+                       @click="openEditModal(event)"
+                       v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+              Edit</v-btn></td>
+            <td><v-btn variant="text"
+                       color="secondary"
+                       @click="assignCategory(event)"
+                       v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+              Add category</v-btn></td>
+            <td><v-btn variant="text"
+                       color="red"
+                       @click="showConfirm(event)"
+                       v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
+              Delete</v-btn></td>
+
+
+          </tr>
+          </tbody>
+        </table>
+        <Bootstrap5Pagination
+            :data="eventsApproved"
+            @pagination-change-page="fetchApprovedEvents"
+        />
+      </div>
 
     </div>
     <div v-else>
@@ -208,6 +262,14 @@ export default {
         this.fetchUnapprovedEvents();
         this.fetchApprovedPlaces();
         this.fetchApprovedCategories();
+    },
+    computed: {
+      previousEvents() {
+        return (this.eventsApproved.data ?? []).filter(event => new Date(event.event_end) < new Date());
+      },
+      upcomingEvents() {
+        return (this.eventsApproved.data ?? []).filter(event => new Date(event.event_end) >= new Date());
+      }
     },
     methods: {
         fetchApprovedEvents(page=1) {
