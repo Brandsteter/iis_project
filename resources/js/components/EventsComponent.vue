@@ -51,48 +51,7 @@
             />
         </div>
 
-        <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-            <p class="header-text-format"><b>Unapproved events</b></p>
-            <div class="list-container">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Start date</th>
-                        <th>End date</th>
-                        <th>Place</th>
-                        <th>Capacity</th>
-                        <th>Creator</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(event, index) in eventsUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-                        <td>{{ event.name }}</td>
-                        <td>{{ event.event_start}}</td>
-                        <td>{{ event.event_end}}</td>
-                        <td>{{ event.place.name}}</td>
-                        <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
-                          {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
-                        <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
-                        <td>{{event.creator.name}}</td>
-                        <td><v-btn variant="text"
-                                   color="green"
-                                   @click="approveEvent(event)">Approve</v-btn></td>
-                        <td><v-btn variant="text"
-                                   color="secondary"
-                                   @click="openEditModal(event)">Edit</v-btn></td>
-                        <td><v-btn variant="text"
-                                   color="red"
-                                   @click="showConfirm(event)">Delete</v-btn></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <Bootstrap5Pagination
-                    :data="eventsUnapproved"
-                    @pagination-change-page="fetchUnapprovedEvents"
-                />
-            </div>
-        </div>
+
     </div>
 
     <v-dialog v-model="showModal" max-width="400">
@@ -101,12 +60,12 @@
                 <form>
                     <label style="font-size: x-large" class="form-label">Edit event</label>
                     <div class="mb-3">
-                        <label for="InputName" class="form-label">Name of event</label>
+                        <label for="InputName" class="form-label">Name of event<span style="color: red;">*</span></label>
                         <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
                         <span v-if="errorMessages.errors.name" style="color: red;">{{errorMessages.errors.name[0]}}</span>
                     </div>
                     <div class="mb-3">
-                        <label for="InputEventStart" class="form-label">Start of event</label>
+                        <label for="InputEventStart" class="form-label">Start of event<span style="color: red;">*</span></label>
                         <input type="date" id="InputEventStart" class="form-control" v-model="fields.event_start" maxlength="255" required>
                         <span v-if="errorMessages.errors.event_start" style="color: red;">{{errorMessages.errors.event_start[0]}}</span>
                     </div>
@@ -115,7 +74,7 @@
                       <input type="time" id="InputEventStart" class="form-control" v-model="fields.event_start_time" maxlength="255">
                     </div>
                     <div class="mb-3">
-                        <label for="InputEventEnd" class="form-label">End of event</label>
+                        <label for="InputEventEnd" class="form-label">End of event<span style="color: red;">*</span></label>
                         <input type="date" id="InputEventEnd" class="form-control" v-model="fields.event_end" maxlength="255" required>
                         <span v-if="errorMessages.errors.event_end" style="color: red;">{{errorMessages.errors.event_end[0]}}</span>
                     </div>
@@ -128,7 +87,7 @@
                     <input class="form-control" id="InputCapacityMax" v-model="fields.capacity_max" maxlength="255" type="number">
                   </div>
                   <div class="mb-3">
-                    <label for="InputPlace" class="form-label">Select place</label>
+                    <label for="InputPlace" class="form-label">Select place<span style="color: red;">*</span></label>
                     <select class="form-control" id="InputPlace" v-model="fields.place_id" required>
                         <option value="none" selected disabled hidden>Select an Option</option>
                         <option v-for="(place) in placesApproved.data" :value="place.id">{{place.name}}</option>
@@ -136,7 +95,7 @@
                     <span v-if="errorMessages.errors.place_id" style="color: red;">{{errorMessages.errors.place_id[0]}}</span>
                   </div>
                   <div class="mb-3">
-                      <label for="InputDescription" class="form-label">Description</label>
+                      <label for="InputDescription" class="form-label">Description<span style="color: red;">*</span></label>
                     <textarea class="form-control" id="InputDescription" v-model="fields.description" maxlength="255" type="text" required></textarea>
                   </div>
                   <span style="color: red;">* - the field is required</span>
@@ -151,7 +110,7 @@
         </v-card>
     </v-dialog>
 
-    <!--Delete confirmation window-->
+    <!--Event delete confirmation window-->
     <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
         <v-card class="card" style=" border-radius: 10px;">
             <v-card-title class="confirm-title">Do you want to delete this event?</v-card-title>

@@ -12,30 +12,6 @@
         </ul>
     </div>
 
-    <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-        <h1>Unapproved categories</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Parent</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(category, index) in categoriesUnapproved" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-                    <td>{{category.name}}</td>
-                    <td>{{category.parent_category_id}}</td>
-                    <td><v-btn variant="text"
-                               color="green"
-                               @click="approveCategory(category)">Approve</v-btn></td>
-                    <td><v-btn variant="text"
-                               color="red"
-                               @click="showConfirm(category)">Delete</v-btn></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
     <!--Create new category-->
     <v-dialog v-model="showNewCategoryModal" max-width="400" max-height="250">
         <v-card class="card" style=" border-radius: 10px;">
@@ -57,7 +33,7 @@
         </v-card>
     </v-dialog>
 
-    <!--Delete confirmation window-->
+    <!--Category delete confirmation window-->
     <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
         <v-card class="card" style=" border-radius: 10px;">
             <v-card-title class="confirm-title">Do you want to delete this event?</v-card-title>

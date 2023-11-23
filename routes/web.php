@@ -46,6 +46,12 @@ Route::prefix('/admin')->group(function () {
     });
 });
 
+Route::prefix('/moderator')->group(function () {
+  Route::middleware('moderator')->group(function () {
+    Route::get('/', [\App\Http\Controllers\ModeratorController::class, 'moderatorPage']);
+  });
+});
+
 Route::prefix('/category')->group(function () {
     Route::get('/top', [\App\Http\Controllers\CategoryController::class, 'getCategoriesTopLevelApproved']);
     Route::get('/all', [\App\Http\Controllers\CategoryController::class, 'getCategoriesAll']);

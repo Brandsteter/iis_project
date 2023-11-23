@@ -37,42 +37,6 @@
                 </tbody>
             </table>
         </div>
-
-        <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-            <p class="header-text-format"><b>Unapproved places</b></p>
-            <div class="list-container">
-                <table>
-                    <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Adress</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(place, index) in placesUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-                        <td>{{ place.name }}</td>
-                        <td>{{ place.address}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-
-                        <td><v-btn variant="text"
-                                   color="green"
-                                   @click="approvePlace(place)">Approve</v-btn></td>
-                        <td><v-btn variant="text"
-                                   color="secondary"
-                                   @click="openEditModal(place)">Edit</v-btn></td>
-                        <td><v-btn variant="text"
-                                   color="red"
-                                   @click="showConfirm(place)">Delete</v-btn></td>
-
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
     <v-btn class="create-event-button" @click="openCreateModal" prepend-icon="mdi-plus">Create a new place</v-btn>
 <!--Create/Edit modal-->
@@ -109,7 +73,7 @@
         </v-card>
     </v-dialog>
 
-    <!--Delete confirmation window-->
+    <!--Place delete confirmation window-->
     <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
         <v-card class="card" style=" border-radius: 10px;">
             <v-card-title class="confirm-title">Do you want to delete this place?</v-card-title>
