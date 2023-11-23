@@ -52,9 +52,11 @@
                     </li>
                     @endauth
 
+                    @auth
                     <li>
                         <v-btn class="w-100" href="/category">Event Categories</v-btn>
                     </li>
+                    @endauth
 
                     @auth
                     <li>

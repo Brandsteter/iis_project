@@ -93,7 +93,6 @@ export default {
         return {
             categoriesTopLevelApproved: [],
             categoriesApproved: [],
-            categoriesUnapproved: [],
             categoriesChildren: [],
             collapsedCategories: [],
             categoryShown: "",
@@ -146,15 +145,6 @@ export default {
                 })
                 .catch(error => {
                     console.error('Error fetching approved categories:', error);
-                })
-        },
-        fetchUnapprovedCategories() {
-            axios.get('/category/unapproved')
-                .then(response => {
-                    this.categoriesUnapproved = response.data;
-                })
-                .catch(error => {
-                    console.error('Error fetching unapproved categories:', error);
                 })
         },
         approveCategory(category) {
@@ -240,6 +230,9 @@ export default {
           } else {
             this.categoryShown = categoryName;
           }
+        },
+        checkIfIsLoggedIn(){
+          return (isRole(this.roleEnum.User , this.authUser) || isRole(this.roleEnum.Moderator , this.authUser) || isRole(this.roleEnum.Admin , this.authUser));
         },
         isRole,
         getAuthUser,

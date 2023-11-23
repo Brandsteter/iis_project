@@ -94,7 +94,6 @@
                        v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
               Delete</v-btn></td>
 
-
           </tr>
           </tbody>
         </table>

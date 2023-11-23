@@ -58,6 +58,7 @@
 
 <script>
 import {isRole, getAuthUser} from "../app";
+import {RoleEnum} from "../enums/RoleEnum";
 export default {
     props: {
         category: {
@@ -68,6 +69,8 @@ export default {
     data() {
        return {
            userId: null,
+           authUser: null,
+           roleEnum: RoleEnum,
            showNewSubcategoryModal: false,
            fields: {
              name: null,
@@ -84,8 +87,6 @@ export default {
             return event.capacity_max;
           }
       },
-      isRole,
-      getAuthUser,
       newSubcategory() {
         this.showNewSubcategoryModal = true;
       },
@@ -96,9 +97,8 @@ export default {
             }
         })
       },
-    },
-    created: async function(){
-        this.authUser = await this.getAuthUser()
+      isRole,
+      getAuthUser,
     },
 
 }
