@@ -1,8 +1,7 @@
 <template>
     <div>
-        <h1>Places</h1>
-        <div>
-            <v-btn @click="openCreateModal" prepend-icon="mdi-plus">Create a new place</v-btn>
+        <p class="header-text-format"><b>Places</b></p>
+        <div class="list-container">
             <table>
                 <thead>
                 <tr>
@@ -14,6 +13,16 @@
                 <tr v-for="(place, index) in placesApproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
                       <td>{{ place.name }}</td>
                       <td>{{ place.address}}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
                       <td><v-btn variant="text"
                                  color="secondary"
                                  @click="openEditModal(place)"
@@ -30,8 +39,8 @@
         </div>
 
         <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-            <h1>Unapproved places</h1>
-            <div>
+            <p class="header-text-format"><b>Unapproved places</b></p>
+            <div class="list-container">
                 <table>
                     <thead>
                     <tr>
@@ -43,6 +52,12 @@
                     <tr v-for="(place, index) in placesUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
                         <td>{{ place.name }}</td>
                         <td>{{ place.address}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
                         <td><v-btn variant="text"
                                    color="green"
                                    @click="approvePlace(place)">Approve</v-btn></td>
@@ -52,12 +67,14 @@
                         <td><v-btn variant="text"
                                    color="red"
                                    @click="showConfirm(place)">Delete</v-btn></td>
+
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <v-btn class="create-event-button" @click="openCreateModal" prepend-icon="mdi-plus">Create a new place</v-btn>
 <!--Create/Edit modal-->
     <v-dialog v-model="showModal" max-width="600">
         <v-card class="card" style=" border-radius: 10px;">
@@ -248,29 +265,10 @@ export default {
 </script>
 
 <style>
-/* Your custom styles here */
-.user-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.user-card {
-    border: 1px solid #ccc;
-    padding: 20px;
-    /* Adjust width or other styles as needed */
-}
 
 .user-info p {
     margin: 5px 0;
     /* Adjust spacing or other styles as needed */
-}
-
-.user-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    /* Additional styles for action buttons */
 }
 
 .button-container {
@@ -282,7 +280,44 @@ export default {
     text-align: center;
 }
 
-th, td {
-    padding: 5px;
+.header-text-format {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #07abd5;
 }
+
+.list-container{
+    background-color: #91deff;
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: -10px;
+    width: 100%;
+}
+td {
+    padding: 10px;
+    background-color: #ffffff;
+}
+td:first-child {
+    border-left-style: solid;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+td:last-child {
+    border-right-style: solid;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.create-event-button{
+    margin:20px;
+    background-color: #91deff;
+}
+
 </style>

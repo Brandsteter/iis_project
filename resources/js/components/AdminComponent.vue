@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h1>User List (Admin Page)</h1>
-    <div>
-      <v-btn @click="openCreateModal" prepend-icon="mdi-plus">Create a new user</v-btn>
+    <p class="header-text-format"><b>Admin Page</b></p>
+    <div class="list-container">
+        <p style="font-size:20px"><b>User list</b></p>
       <table>
         <thead>
         <tr>
@@ -30,6 +30,7 @@
         </tbody>
       </table>
     </div>
+      <v-btn class="create-event-button" @click="openCreateModal" prepend-icon="mdi-plus">Create a new user</v-btn>
   </div>
 
     <!--Create/Edit User-->
@@ -218,32 +219,49 @@ export default {
 </script>
 
 <style>
-/* Your custom styles here */
-.user-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.user-card {
-  border: 1px solid #ccc;
-  padding: 20px;
-  /* Adjust width or other styles as needed */
-}
-
 .user-info p {
   margin: 5px 0;
   /* Adjust spacing or other styles as needed */
 }
 
-.user-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  /* Additional styles for action buttons */
+.header-text-format {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #07abd5;
 }
 
-th, td {
-  padding: 5px;
+.list-container{
+    background-color: #91deff;
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
 }
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: -10px;
+    width: 100%;
+}
+td {
+    padding: 10px;
+    background-color: #ffffff;
+}
+td:first-child {
+    border-left-style: solid;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+td:last-child {
+    border-right-style: solid;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.create-event-button{
+    margin:20px;
+    background-color: #91deff;
+}
+
 </style>

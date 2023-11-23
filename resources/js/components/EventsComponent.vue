@@ -1,12 +1,11 @@
 <template>
     <div>
-        <h1>Events</h1>
-        <div>
-        </div>
-        <div>
-            <table>
+        <p class="header-text-format"><b>Events</b></p>
+
+        <div class="list-container">
+            <table >
                 <thead>
-                <tr>
+                <tr >
                     <th>Name</th>
                     <th>Start date</th>
                     <th>End date</th>
@@ -15,9 +14,9 @@
                     <th>Creator</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr v-for="(event, index) in eventsApproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
-                        <td>{{ event.name }}</td>
+                <tbody class="list-container">
+                <tr v-for="(event, index) in eventsApproved.data">
+                        <td >{{ event.name }}</td>
                         <td>{{ event.event_start}}</td>
                         <td>{{ event.event_end}}</td>
                         <td>{{ event.place.name}}</td>
@@ -53,8 +52,8 @@
         </div>
 
         <div v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
-            <h1>Unapproved events</h1>
-            <div>
+            <p class="header-text-format"><b>Unapproved events</b></p>
+            <div class="list-container">
                 <table>
                     <thead>
                     <tr>
@@ -374,30 +373,27 @@ export default {
 </script>
 
 <style>
-/* Your custom styles here */
-.user-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+
+.header-text-format {
+    font-size: 30px;
+    margin: 0;
+    color: #07abd5;
 }
 
-.user-card {
-    border: 1px solid #ccc;
-    padding: 20px;
-    /* Adjust width or other styles as needed */
+.list-container{
+    background-color: #91deff;
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
 }
+
+
 
 .user-info p {
     margin: 5px 0;
     /* Adjust spacing or other styles as needed */
 }
 
-.user-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    /* Additional styles for action buttons */
-}
 
 .button-container {
     display: flex;
@@ -413,7 +409,25 @@ export default {
 }
 
 
-th, td {
-    padding: 5px;
+table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: -10px;
+    width: 100%;
+}
+td {
+    padding: 10px;
+    background-color: #ffffff;
+}
+td:first-child {
+    border-left-style: solid;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+td:last-child {
+    border-right-style: solid;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
 }
 </style>
