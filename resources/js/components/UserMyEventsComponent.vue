@@ -395,4 +395,9 @@ td:last-child {
     background-color: #91deff;
 }
 
+.button-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 </style>

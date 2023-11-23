@@ -46,7 +46,7 @@
     <!--Edit category-->
     <v-dialog v-model="showEditCategoryModal" max-width="400" max-height="250">
       <v-card class="card" style=" border-radius: 10px;">
-        <v-card-title class="confirm-title">Create a new category</v-card-title>
+        <v-card-title class="confirm-title">Edit category</v-card-title>
         <form>
           <div class="mb-3">
             <label for="InputName" class="form-label">Name<span style="color: red;">*</span></label>
@@ -65,9 +65,10 @@
     </v-dialog>
 
     <!--Category delete confirmation window-->
-    <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
+    <v-dialog v-model="showConfirmation" max-width="600" max-height="250">
         <v-card class="card" style=" border-radius: 10px;">
-            <v-card-title class="confirm-title">Do you want to delete this event?</v-card-title>
+            <v-card-title class="confirm-title">Do you want to delete this category? </v-card-title>
+            <div class="text-center"> All its subcategories will also be removed and events will lose their category</div>
             <div class="button-container">
                 <v-btn @click="confirmDelete()"
                        min-width="80"
@@ -271,6 +272,10 @@ export default {
     margin-top: 10px;
     /* Additional styles for action buttons */
 }
+.button-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
 /* Remove default list styles */
 .custom-list {
@@ -286,6 +291,10 @@ export default {
 /* Add space between buttons */
 .category-link {
   margin-left: 10px; /* Adjust the margin as needed */
+}
+
+.text-center {
+  align-items: center;
 }
 
 th, td {

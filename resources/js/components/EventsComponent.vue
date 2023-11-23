@@ -368,6 +368,10 @@ export default {
   color: red;
 }
 
+.button-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
 table {
     border-collapse: separate;

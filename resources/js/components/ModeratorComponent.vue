@@ -234,7 +234,7 @@
    <!--Category edit modal-->
    <v-dialog v-model="categoryShowModal" max-width="400" max-height="250">
      <v-card class="card" style=" border-radius: 10px;">
-       <v-card-title class="confirm-title">Create a new category</v-card-title>
+       <v-card-title class="confirm-title">Edit category</v-card-title>
        <form>
          <div class="mb-3">
            <label for="InputName" class="form-label">Name<span style="color: red;">*</span></label>
@@ -253,9 +253,10 @@
    </v-dialog>
 
    <!--Category delete confirmation window-->
-   <v-dialog v-model="categoryShowConfirmation" max-width="400" max-height="250">
+   <v-dialog v-model="categoryShowConfirmation" max-width="600" max-height="250">
      <v-card class="card" style=" border-radius: 10px;">
-       <v-card-title class="confirm-title">Do you want to delete this event?</v-card-title>
+       <v-card-title class="confirm-title">Do you want to delete this category? </v-card-title>
+       <div class="text-center"> All its subcategories will also be removed and events will lose their category</div>
        <div class="button-container">
          <v-btn @click="categoryConfirmDelete()"
                 min-width="80"
@@ -592,5 +593,14 @@ export default {
     border-right-style: solid;
     border-bottom-right-radius: 10px;
     border-top-right-radius: 10px;
+  }
+
+  .button-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .text-center {
+    align-items: center;
   }
 </style>

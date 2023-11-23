@@ -271,6 +271,11 @@ td:last-child {
     border-top-right-radius: 10px;
 }
 
+.button-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .create-event-button{
     margin:20px;
     background-color: #91deff;
