@@ -3,9 +3,9 @@
         <hr>
         <ul class="custom-list">
             <li v-for="category in children" class="list-item2">
-                <v-btn @click="toggleCollapse(category.name)" density="comfortable" icon="mdi-arrow-down"></v-btn>
-                <v-btn class="category-link" :href="`/category/${category.id}/detail`" min-width="200">{{ category.name }}</v-btn>
-                <categoryList v-if="categoryShown === category.name && category.categories !== {}" :categoryId="category.id"></categoryList>
+                <v-btn @click="toggleCollapse(category.name)" density="comfortable" icon="mdi-arrow-down" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length]}"></v-btn>
+                <v-btn class="category-link" :href="`/category/${category.id}/detail`" min-width="200" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length]}">{{ category.name }}</v-btn>
+                <categoryList v-if="categoryShown === category.name && category.categories !== {}" :categoryId="category.id" :depthIndex="depthIndex+1"></categoryList>
             </li>
         </ul>
 
@@ -15,13 +15,14 @@
 <script>
 
 export default {
-    props: ['categoryId'],
+    props: ['categoryId', 'depthIndex'],
     data() {
         return {
             children: [],
             collapsedCategories: [],
             showChildren: false,
             categoryShown: "",
+            categoryColors: ['#91DEFF', '#88C0F3', '#8DA1DE', '#9780C0', '#9D5F98', '#B04C7B'],
         };
     },
     mounted() {

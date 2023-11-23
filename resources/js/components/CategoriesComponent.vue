@@ -5,9 +5,9 @@
         <hr>
         <ul class="custom-list">
             <li v-for="category in categoriesTopLevelApproved" class="list-item">
-                <v-btn @click="toggleCollapse(category.name)" density="comfortable" icon="mdi-arrow-down"></v-btn>
-                <v-btn class="category-link" :href="`/category/${category.id}/detail`" min-width="300">{{ category.name }}</v-btn>
-                <categoryList v-if="categoryShown === category.name && category.categories !== {}" :categoryId="category.id"></categoryList>
+                <v-btn @click="toggleCollapse(category.name)" density="comfortable" icon="mdi-arrow-down" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length] }"></v-btn>
+                <v-btn class="category-link" :href="`/category/${category.id}/detail`" min-width="300" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length]}">{{ category.name }}</v-btn>
+                <categoryList v-if="categoryShown === category.name && category.categories !== {}" :categoryId="category.id" :depthIndex="1"></categoryList>
             </li>
         </ul>
     </div>
@@ -89,6 +89,8 @@ export default {
             categoriesChildren: [],
             collapsedCategories: [],
             categoryShown: "",
+            depthIndex: 0,
+            categoryColors: ['#91DEFF', '#88C0F3', '#8DA1DE', '#9780C0', '#9D5F98', '#B04C7B'],
             authUser: null,
             roleEnum: RoleEnum,
             children: [],
