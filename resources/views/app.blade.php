@@ -29,13 +29,17 @@
               width: 100%;
             }
 
+            .li-bottom{
+                bottom: 0;
+            }
+
         </style>
 
     </head>
     <body>
         <div class="d-flex flex-wrap" style="height: 100vh" id="app">
-            <nav class="col-2 bg-light-blue-accent-1" style="margin-right: 20px;">
-                <ul class="navigation" style="list-style-type: none; padding: 0; ">
+            <nav class="col-2 bg-light-blue-accent-1" style="margin-right: 20px; position: relative;">
+                <ul class="navigation" style="list-style-type: none; padding: 0; margin: 0;">
                     <li class="nav-button">
                         <v-btn class="w-100" href="/event">Events</v-btn>
                     </li>
@@ -81,20 +85,27 @@
                     @endauth
 
                     @auth
-                    <li>
-                        <v-btn class="w-100" href="/auth/logout">Logout</v-btn>
-                    </li>
+                    <ul class="navigation" style="list-style-type: none; padding: 0; margin: 0; position: absolute; bottom: 0; width: 100%;">
+                        <li>
+                            <v-btn class="w-100" href="/auth/logout">Logout</v-btn>
+                        </li>
+                    </ul>
                     @endauth
 
+
                     @guest
-                    <li>
-                        <v-btn class="w-100" href="/auth/login">Login</v-btn>
-                    </li>
-                    <li>
-                        <v-btn class="w-100" href="/auth/register">Register</v-btn>
-                    </li>
+                        <ul class="navigation" style="list-style-type: none; padding: 0; margin: 0; position: absolute; bottom: 0; width: 100%;">
+                            <li class="li-bottom">
+                                <v-btn class="w-100" href="/auth/login">Login</v-btn>
+                            </li>
+                            <li class="li-bottom">
+                                <v-btn class="w-100" href="/auth/register">Register</v-btn>
+                            </li>
+                        </ul>
                     @endguest
+
                 </ul>
+
             </nav>
             <div class="col-9 p-2">
                 @yield("content")
