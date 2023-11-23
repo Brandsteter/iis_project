@@ -19,12 +19,7 @@
         <!-- Icons -->
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
         <style>
-            .page-container {
-                display: flex; /* Use flexbox to position elements */
-                justify-content: center; /* Center items horizontally */
-                align-items: center; /* Center items vertically */
-                height: 100vh; /* Set height to 100% of viewport height */
-            }
+
             .navigation li{
                 border: none;
                 padding: 10px;
@@ -33,12 +28,13 @@
             .nav-button {
               width: 100%;
             }
+
         </style>
 
     </head>
     <body>
         <div class="d-flex flex-wrap" style="height: 100vh" id="app">
-            <nav class="col-2 bg-light-blue-accent-1">
+            <nav class="col-2 bg-light-blue-accent-1" style="margin-right: 20px;">
                 <ul class="navigation" style="list-style-type: none; padding: 0; ">
                     <li class="nav-button">
                         <v-btn class="w-100" href="/event">Events</v-btn>

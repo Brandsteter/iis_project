@@ -1,23 +1,31 @@
 
 <template>
-<h1 class="header-size">{{eventMutable.name}}</h1>
-    <div class="inline-components">
-        <v-icon color="black">mdi-map-marker</v-icon>
-        <p class="text-format">{{ eventMutable.place.name }}</p>
-        <p class="text-format">{{ eventMutable.place.address }}</p>
-    </div>
-    <br>
-    <div class="inline-components">
-        <v-icon color="black">mdi-calendar</v-icon>
-        <p class="text-format">{{eventMutable.event_start }}</p>
-        <p class="text-format"> - </p>
-        <p class="text-format">{{eventMutable.event_end }}</p>
-    </div>
-
-
-    <p class="text-description">Description:</p>
-    <div class="description-box">
-        <p class="text-description">{{ eventMutable.description }}</p>
+    <p class="header-text-format"><b>{{eventMutable.name}}</b></p>
+    <div style="margin-left: 10px ; margin-top: 20px">
+        <div class="inline-components">
+            <v-icon color="dimgrey">mdi-map-marker</v-icon>
+            <p class="text-format"><b>{{ eventMutable.place.name}}</b></p>
+            <p class="text-format"><b>{{ eventMutable.place.address }}</b></p>
+        </div>
+        <br>
+        <div class="inline-components">
+            <v-icon color="dimgrey">mdi-calendar</v-icon>
+            <p class="text-format"><b>{{formattedStartDate }}</b></p>
+            <p class="text-format"><b>{{eventMutable.event_start_time }}</b></p>
+            <p class="text-format"> - </p>
+            <p class="text-format"><b>{{formattedEndDate }}</b></p>
+            <p class="text-format"><b>{{eventMutable.event_end_time}}</b></p>
+        </div>
+        <br>
+        <div class="inline-components">
+            <v-icon color="dimgrey">mdi-account</v-icon>
+            <p class="text-format"><b>By {{eventMutable.creator.name}}</b></p>
+        </div>
+        <hr>
+        <div class="description-box">
+            <p class="text-description">{{ eventMutable.description }}</p>
+        </div>
+        <hr>
     </div>
 
     <div v-if="checkIfIsLoggedIn() && !checkIfEventEnded(event)" >
@@ -62,7 +70,6 @@
 
         </div>
       </div>
-      <h2>Comments:</h2>
       <div class="users-comment-input-all">
         <div class="comment-box" v-for="(comment, index) in comments">
             <v-btn  class="delete-button" density="compact" variant="text"  v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)"
@@ -78,6 +85,7 @@
       </div>
 
     </div>
+
 
 
 
@@ -119,6 +127,14 @@ export default {
                 }
             },
         };
+    },
+    computed: {
+        formattedStartDate() {
+            return this.formatDate(this.eventMutable.event_start);
+        },
+        formattedEndDate() {
+            return this.formatDate(this.eventMutable.event_end);
+        },
     },
     mounted() {
       this.fetchComments(this.eventMutable)
@@ -213,6 +229,14 @@ export default {
         selectRating(value) {
           this.selectedRating = value;
         },
+        formatDate(dateString) {
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', options);
+        },
+        formatTime(timeString) {
+
+        },
         isRole,
         getAuthUser,
         checkIfUserIsInArrayOfUsers,
@@ -224,16 +248,21 @@ export default {
 </script>
 
 <style>
-.header-size{
-    font-size: 50px;
-}
+
 .inline-components {
+    margin-top: -10px;
     display: inline-flex;
     align-items: center;
 }
 .text-format {
-    font-size: 30px;
+    font-size: 20px;
     margin-left: 10px;
+    color: #5b5b5b;
+}
+.header-text-format {
+    font-size: 50px;
+    margin: 0;
+    color: #07abd5;
 }
 
 .text-description{
@@ -241,15 +270,13 @@ export default {
 }
 .description-box{
     padding: 10px;
-    border-radius: 10px;
-    width: 75%;
+    width: 100%;
     margin-right: auto;
     box-sizing: border-box;
-    border: 1px solid black;
 
 }
 .attend-button {
-    margin: 10px;
+    margin: 20px;
     background-color: #05c76c;
     color: white;
 }
@@ -274,7 +301,6 @@ export default {
   right: 0;
 }
 
-
 .comment-text {
   color: #5c5c5c;
   padding: 10px;
@@ -283,7 +309,7 @@ export default {
 .users-comment-input-all {
     position: relative;
     padding: 10px;
-    background-color: #bbbbbb;
+    background-color: rgb(127, 214, 253);
     width: 100%; /* Adjust the value to set the width as a percentage of the page */
     margin-right: auto; /* Center the box horizontally */
     box-sizing: border-box; /* Include padding and border in the box's total width and height */
@@ -291,13 +317,14 @@ export default {
 }
 
 .users-comment-input {
+  margin-bottom: 10px;
   position: relative;
-  margin: 10px;
   background-color: white;
   color: black;
-  padding: 20px;
-  border: 1px solid black;
-  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #7f7f7f;
+  box-sizing: border-box;
 
 }
 .post-button{
@@ -317,4 +344,6 @@ export default {
 .fa-star {
   transition: color 0.5s;
 }
+
+
 </style>
