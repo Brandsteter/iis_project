@@ -1,7 +1,6 @@
 <template>
     <div>
-        <p class="header-text-format"><b>Category Details</b></p>
-        <p style="font-size: 30px" class="text-format"><b>{{category.name}}</b></p>
+        <p class="header-text-format"><b>Events in category {{category.name}}</b></p>
     </div>
 
     <div v-if="category.events.length > 0" class="list-container">

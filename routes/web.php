@@ -80,6 +80,7 @@ Route::prefix('/place')->group(function () {
         Route::get('/', [\App\Http\Controllers\UserController::class, 'placesPage']);
         Route::get('/approved', [\App\Http\Controllers\PlaceController::class, 'getPlacesApproved']);
         Route::get('/unapproved', [\App\Http\Controllers\PlaceController::class, 'getPlacesUnapproved']);
+        Route::get('/{place}/detail', [\App\Http\Controllers\PlaceController::class, 'placeDetailPage']);
 
         Route::middleware('moderator')->group(function () {
             Route::delete('/{place}', [\App\Http\Controllers\PlaceController::class, 'delete']);

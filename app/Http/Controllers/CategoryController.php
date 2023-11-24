@@ -45,7 +45,7 @@ class CategoryController extends Controller
 
     public function getCategoriesUnapproved()
     {
-        $categories = Category::where('is_approved', false)->with('category')->get();
+        $categories = Category::where('is_approved', false)->with('category')->paginate(5);
 
         return response()->json($categories);
 

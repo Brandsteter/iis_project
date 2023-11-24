@@ -33,7 +33,11 @@
                                  @click="showConfirm(place)"
                                  v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
                                  Delete</v-btn></td>
-                </tr>
+                        <td><v-btn variant="text"
+                                   color="grey"
+                                   :href="`/place/${place.id}/detail`">
+                            Detail</v-btn></td>
+                    </tr>
                 </tbody>
             </table>
             <Bootstrap5Pagination

@@ -21,9 +21,13 @@
             <v-icon color="dimgrey">mdi-account</v-icon>
             <p class="text-format"><b>By {{eventMutable.creator.name}}</b></p>
         </div>
+        <br>
+        <div class="inline-components">
+            <p :class="{'red-text': eventMutable.capacity_current === checkCapacityValue(event) }"><b style="font-size: 20px ">Capacity: {{eventMutable.capacity_current}}/{{ checkCapacityValue(event) }}</b></p>
+        </div>
         <hr>
         <div class="description-box">
-            <p class="text-description">{{ eventMutable.description }}</p>
+            <p class="text-description ">{{ eventMutable.description }}</p>
         </div>
         <hr>
     </div>

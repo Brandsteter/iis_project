@@ -97,7 +97,7 @@
          </tr>
          </thead>
          <tbody>
-         <tr v-for="(category, index) in categoriesUnapproved" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+         <tr v-for="(category, index) in categoriesUnapproved.data" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
            <td>{{category.name}}</td>
            <td v-if="category.category !== null">{{category.category.name}}</td>
            <td v-else>--</td>
@@ -424,8 +424,8 @@ export default {
           console.error('Error deleting event:', error);
         });
     },
-    fetchUnapprovedCategories() {
-      axios.get('/category/unapproved')
+    fetchUnapprovedCategories(page=1) {
+      axios.get('/category/unapproved?page=' + page)
         .then(response => {
           this.categoriesUnapproved = response.data;
         })

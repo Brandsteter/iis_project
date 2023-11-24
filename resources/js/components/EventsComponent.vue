@@ -11,6 +11,7 @@
                     <th>Place</th>
                     <th>Capacity</th>
                     <th>Creator</th>
+                    <th>Attending</th>
                 </tr>
                 </thead>
                 <tbody class="list-container">
@@ -23,6 +24,13 @@
                           {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
                         <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
                         <td>{{event.creator.name}}</td>
+
+                        <td v-if="checkIfUserIsInArrayOfUsers(event.users, authUser)">
+                            <v-icon color="green">mdi-check</v-icon>
+                        </td>
+                        <td v-else>
+                           <v-icon color="red">mdi-close</v-icon>
+                        </td>
                         <td><v-btn variant="text" color="secondary" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
                         <td><v-btn variant="text"
                                    color="secondary"
@@ -30,7 +38,7 @@
                                    v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
                                    Edit</v-btn></td>
                         <td><v-btn variant="text"
-                                   color="secondary"
+                                   color="primary"
                                    @click="assignCategory(event)"
                                    v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
                                    Add category</v-btn></td>
@@ -150,7 +158,7 @@
 </template>
 
 <script>
-import {isRole, getAuthUser} from "../app";
+import {isRole, getAuthUser, checkIfUserIsInArrayOfUsers} from "../app";
 import {RoleEnum} from "../enums/RoleEnum";
 import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
@@ -213,6 +221,7 @@ export default {
             axios.get('/event/approved?page=' + page)
                 .then(response => {
                     this.eventsApproved = response.data;
+                    console.log(this.eventsApproved)
                 })
                 .catch(error => {
                     console.error('Error fetching events:', error);
@@ -339,6 +348,7 @@ export default {
 
         isRole,
         getAuthUser,
+        checkIfUserIsInArrayOfUsers,
     }
 };
 </script>
