@@ -20,8 +20,8 @@
         </ul>
 
         <!--Edit category-->
-        <v-dialog v-model="showEditCategoryModal" max-width="400" max-height="250">
-          <v-card class="card" style=" border-radius: 10px;">
+        <v-dialog v-model="showEditCategoryModal" max-width="400" max-height="250" :persistent="true">
+          <v-card class="card" style="background-color: lightskyblue; border-radius: 10px; padding: 10px;">
             <v-card-title class="confirm-title">Edit category</v-card-title>
             <form>
               <div class="mb-3">
@@ -32,9 +32,10 @@
               <span style="color: red;">* - the field is required</span>
               <div style="margin-bottom: 10px;"></div>
               <div class="d-flex justify-content-center">
-                <v-btn @click="submitEdit()" color="grey-darken-3">
-                  Submit
-                </v-btn>
+                <div class="button-container">
+                  <v-btn @click="cancelSubmit" min-width="100" color="grey-darken-3" class="mr-15">Cancel</v-btn>
+                  <v-btn @click="submitEdit" color="grey-darken-3" min-width="100">Submit</v-btn>
+                </div>
               </div>
             </form>
           </v-card>
@@ -42,7 +43,7 @@
 
       <!--Category delete confirmation window-->
       <v-dialog v-model="showConfirmation" max-width="600" max-height="250">
-        <v-card class="card" style=" border-radius: 10px;">
+        <v-card class="card" style="border-radius: 10px;">
           <v-card-title class="confirm-title">Do you want to delete this category? </v-card-title>
           <div class="text-center"> All its subcategories will also be removed and events will lose their category</div>
           <div class="button-container">
@@ -124,6 +125,9 @@ export default {
                 this.errorMessages = error.response.data;
               }
             });
+        },
+        cancelSubmit() {
+          this.showEditCategoryModal = false;
         },
         deleteCategory(category) {
           const url = `/category/${category.id}`;

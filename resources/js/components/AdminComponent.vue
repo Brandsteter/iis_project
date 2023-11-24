@@ -34,8 +34,8 @@
   </div>
 
     <!--Create/Edit User-->
-    <v-dialog v-model="showModal" max-width="600">
-        <v-card class="card" style=" border-radius: 10px;">
+    <v-dialog v-model="showModal" max-width="600" :persistent="true">
+        <v-card style="background-color: lightskyblue; border-radius: 10px;">
             <v-card-title v-if="modalMode === 'create'">Create new user</v-card-title>
             <v-card-title v-else-if="modalMode === 'edit'">Edit user</v-card-title>
             <v-card-text>
@@ -77,8 +77,10 @@
                   <span style="color: red;" v-if="errorMessages.message && errorMessages.message === 'This user is admin, role cannot be changed'">{{errorMessages.message}}</span>
                   <div style="margin-bottom: 10px;"></div>
                     <div class="d-flex justify-content-center">
-                        <v-btn @click="submit" color="grey-darken-3">
-                            Submit</v-btn>
+                      <div class="button-container">
+                        <v-btn @click="cancelSubmit" min-width="100" color="grey-darken-3" class="mr-15">Cancel</v-btn>
+                        <v-btn @click="submit" color="grey-darken-3" min-width="100">Submit</v-btn>
+                      </div>
                     </div>
                 </form>
             </v-card-text>
@@ -253,7 +255,9 @@ export default {
         this.errorMessages.errors.passwordRepeat = ["Incorrect password input"];
       }
     },
-
+    cancelSubmit() {
+      this.showModal = false;
+    },
     isRole,
     getAuthUser,
   }
@@ -308,6 +312,7 @@ export default {
 
   .button-container {
     margin-top: 10px;
+    margin-bottom: 10px;
   }
 
 </style>

@@ -59,7 +59,7 @@
     </div>
   </div>
 
-    <v-dialog v-model="showModal" max-width="400">
+    <v-dialog v-model="showModal" :persistent="true" max-width="400">
         <v-card class="card" style="background-color: lightskyblue; border-radius: 10px;">
             <v-card-text>
                 <form>
@@ -108,9 +108,10 @@
                     <span style="color: red;">* - the field is required</span>
                     <div style="margin-bottom: 10px;"></div>
                     <div class="d-flex justify-content-center">
-                        <v-btn @click="submit" color="grey-darken-3">
-                            Submit
-                        </v-btn>
+                        <div class="button-container">
+                            <v-btn @click="cancelSubmit" min-width="100" color="grey-darken-3" class="mr-15">Cancel</v-btn>
+                            <v-btn @click="submit" color="grey-darken-3" min-width="100">Submit</v-btn>
+                        </div>
                     </div>
                 </form>
             </v-card-text>
@@ -310,6 +311,9 @@ export default {
           }
         });
       }
+    },
+    cancelSubmit() {
+        this.showModal = false;
     },
     fetchApprovedPlaces() {
       axios.get('/place/approved')

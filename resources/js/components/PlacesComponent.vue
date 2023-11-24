@@ -43,10 +43,9 @@
     </div>
     <v-btn class="create-event-button" @click="openCreateModal" prepend-icon="mdi-plus">Create a new place</v-btn>
 <!--Create/Edit modal-->
-    <v-dialog v-model="showModal" max-width="600">
-        <v-card class="card" style=" border-radius: 10px;">
+    <v-dialog v-model="showModal" max-width="600" :persistent="true">
+        <v-card class="card" style="background-color: lightskyblue; border-radius: 10px;">
             <v-card-title v-if="modalMode === 'create'">Create new place</v-card-title>
-            <h4 v-if="modalMode === 'create'"> Place will be sent to a page moderator for confirmation</h4>
             <v-card-title v-else-if="modalMode === 'edit'">Edit place</v-card-title>
             <v-card-text>
                 <form>
@@ -68,8 +67,10 @@
                     <span style="color: red;">* - the field is required</span>
                     <div style="margin-bottom: 10px;"></div>
                     <div class="d-flex justify-content-center">
-                        <v-btn @click="submit" color="grey-darken-3">
-                            Submit</v-btn>
+                      <div class="button-container">
+                        <v-btn @click="cancelSubmit" min-width="100" color="grey-darken-3" class="mr-15">Cancel</v-btn>
+                        <v-btn @click="submit" color="grey-darken-3" min-width="100">Submit</v-btn>
+                      </div>
                     </div>
                 </form>
             </v-card-text>
@@ -199,6 +200,9 @@ export default {
                   }
                 });
             }
+        },
+        cancelSubmit() {
+          this.showModal = false;
         },
         showConfirm(place) {
             this.showConfirmation = true;

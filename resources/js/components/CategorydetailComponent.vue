@@ -35,8 +35,8 @@
 
 
     <!--Create new subcategory-->
-    <v-dialog v-model="showNewSubcategoryModal" max-width="400" max-height="250">
-        <v-card class="card" style=" border-radius: 10px;">
+    <v-dialog v-model="showNewSubcategoryModal" max-width="400" max-height="250" :persistent="true">
+        <v-card class="card" style=" background-color: lightskyblue; border-radius: 10px;">
             <v-card-title class="confirm-title">Create a new sub-category for {{category.name}}</v-card-title>
             <form>
                 <div class="mb-3">
@@ -46,9 +46,10 @@
                 <span style="color: red;">* - the field is required</span>
                 <div style="margin-bottom: 10px;"></div>
                 <div class="d-flex justify-content-center">
-                    <v-btn @click="submit()" color="grey-darken-3">
-                        Submit
-                    </v-btn>
+                  <div class="button-container">
+                    <v-btn @click="cancelSubmit" min-width="100" color="grey-darken-3" class="mr-15">Cancel</v-btn>
+                    <v-btn @click="submit" color="grey-darken-3" min-width="100">Submit</v-btn>
+                  </div>
                 </div>
             </form>
         </v-card>
@@ -97,6 +98,9 @@ export default {
             }
         })
       },
+      cancelSubmit() {
+        this.showNewSubcategoryModal = false;
+      },
       isRole,
       getAuthUser,
     },
@@ -105,53 +109,57 @@ export default {
 </script>
 
 <style>
+  .red-text {
+    color: red;
+  }
 
-.red-text {
-  color: red;
-}
+  .text-format {
+      margin-left: 10px;
+      color: #5b5b5b;
+  }
 
-.text-format {
-    margin-left: 10px;
-    color: #5b5b5b;
-}
+  .create-event-button{
+      margin:20px;
+      background-color: #91deff;
+  }
 
-.create-event-button{
-    margin:20px;
-    background-color: #91deff;
-}
+  .header-text-format {
+      font-size: 30px;
+      margin: 0;
+      color: #07abd5;
+  }
 
-.header-text-format {
-    font-size: 30px;
-    margin: 0;
-    color: #07abd5;
-}
+  .list-container{
+      background-color: #91deff;
+      width: 100%;
+      border-radius: 10px;
+      padding: 10px;
+  }
 
-.list-container{
-    background-color: #91deff;
-    width: 100%;
-    border-radius: 10px;
-    padding: 10px;
-}
+  table {
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      margin-top: -10px;
+      width: 100%;
+  }
+  td {
+      padding: 10px;
+      background-color: #ffffff;
+  }
+  td:first-child {
+      border-left-style: solid;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+  }
 
-table {
-    border-collapse: separate;
-    border-spacing: 0 10px;
-    margin-top: -10px;
-    width: 100%;
-}
-td {
-    padding: 10px;
-    background-color: #ffffff;
-}
-td:first-child {
-    border-left-style: solid;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
+  td:last-child {
+      border-right-style: solid;
+      border-bottom-right-radius: 10px;
+      border-top-right-radius: 10px;
+  }
 
-td:last-child {
-    border-right-style: solid;
-    border-bottom-right-radius: 10px;
-    border-top-right-radius: 10px;
-}
+  .button-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 </style>

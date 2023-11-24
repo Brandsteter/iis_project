@@ -23,8 +23,8 @@
     </div>
 
     <!--Create new category-->
-    <v-dialog v-model="showNewCategoryModal" max-width="400" max-height="250">
-        <v-card class="card" style=" border-radius: 10px;">
+    <v-dialog v-model="showNewCategoryModal" max-width="400" max-height="250" :persistent="true">
+        <v-card class="card" style="background-color: lightskyblue; border-radius: 10px; padding: 10px;">
             <v-card-title class="confirm-title">Create a new category</v-card-title>
             <form>
                 <div class="mb-3">
@@ -35,17 +35,18 @@
                 <span style="color: red;">* - the field is required</span>
                 <div style="margin-bottom: 10px;"></div>
                 <div class="d-flex justify-content-center">
-                    <v-btn @click="submit()" color="grey-darken-3">
-                        Submit
-                    </v-btn>
+                  <div class="button-container">
+                    <v-btn @click="cancelSubmit" min-width="100" color="grey-darken-3" class="mr-15">Cancel</v-btn>
+                    <v-btn @click="submit" color="grey-darken-3" min-width="100">Submit</v-btn>
+                  </div>
                 </div>
             </form>
         </v-card>
     </v-dialog>
 
     <!--Edit category-->
-    <v-dialog v-model="showEditCategoryModal" max-width="400" max-height="250">
-      <v-card class="card" style=" border-radius: 10px;">
+    <v-dialog v-model="showEditCategoryModal" max-width="400" max-height="250" :persistent="true">
+      <v-card class="card" style="background-color: lightskyblue; border-radius: 10px; padding: 10px;">
         <v-card-title class="confirm-title">Edit category</v-card-title>
         <form>
           <div class="mb-3">
@@ -56,9 +57,10 @@
           <span style="color: red;">* - the field is required</span>
           <div style="margin-bottom: 10px;"></div>
           <div class="d-flex justify-content-center">
-            <v-btn @click="submitEdit()" color="grey-darken-3">
-              Submit
-            </v-btn>
+            <div class="button-container">
+              <v-btn @click="cancelSubmit" min-width="100" color="grey-darken-3" class="mr-15">Cancel</v-btn>
+              <v-btn @click="submit" color="grey-darken-3" min-width="100">Submit</v-btn>
+            </div>
           </div>
         </form>
       </v-card>
@@ -205,6 +207,10 @@ export default {
               this.errorMessages = error.response.data;
             }
           });
+        },
+        cancelSubmit() {
+          this.showNewCategoryModal = false;
+          this.showEditCategoryModal = false;
         },
         categoryOpenEditModal(category) {
           this.showEditCategoryModal = true;

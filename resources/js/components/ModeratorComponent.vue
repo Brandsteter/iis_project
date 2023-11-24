@@ -113,7 +113,7 @@
    </div>
 
 <!--   Event edit modal-->
-   <v-dialog v-model="eventShowModal" max-width="400">
+   <v-dialog v-model="eventShowModal" max-width="400" :persistent="true">
      <v-card class="card" style="background-color: lightskyblue; border-radius: 10px;">
        <v-card-text>
          <form>
@@ -160,9 +160,10 @@
            <span style="color: red;">* - the field is required</span>
            <div style="margin-bottom: 10px;"></div>
            <div class="d-flex justify-content-center">
-             <v-btn @click="editEvent" color="grey-darken-3">
-               Submit
-             </v-btn>
+             <div class="button-container">
+               <v-btn @click="cancelSubmit" min-width="100" color="grey-darken-3" class="mr-15">Cancel</v-btn>
+               <v-btn @click="editEvent" color="grey-darken-3" min-width="100">Submit</v-btn>
+             </div>
            </div>
          </form>
        </v-card-text>
@@ -171,7 +172,7 @@
 
    <!--Event delete confirmation window-->
    <v-dialog v-model="eventShowConfirmation" max-width="400" max-height="250">
-     <v-card class="card" style=" border-radius: 10px;">
+     <v-card class="card" style="border-radius: 10px;">
        <v-card-title class="confirm-title">Do you want to delete this event?</v-card-title>
        <div class="button-container">
          <v-btn @click="eventConfirmDelete()"
@@ -185,8 +186,8 @@
    </v-dialog>
 
    <!--Place Edit modal-->
-   <v-dialog v-model="placeShowModal" max-width="600">
-     <v-card class="card" style=" border-radius: 10px;">
+   <v-dialog v-model="placeShowModal" max-width="600" :persistent="true">
+     <v-card class="card" style="background-color: lightskyblue; border-radius: 10px;">
        <v-card-title>Edit place</v-card-title>
        <v-card-text>
          <form>
@@ -208,8 +209,10 @@
            <span style="color: red;">* - the field is required</span>
            <div style="margin-bottom: 10px;"></div>
            <div class="d-flex justify-content-center">
-             <v-btn @click="editPlace" color="grey-darken-3">
-               Submit</v-btn>
+             <div class="button-container">
+               <v-btn @click="cancelSubmit" min-width="100" color="grey-darken-3" class="mr-15">Cancel</v-btn>
+               <v-btn @click="editPlace" color="grey-darken-3" min-width="100">Submit</v-btn>
+             </div>
            </div>
          </form>
        </v-card-text>
@@ -232,8 +235,8 @@
    </v-dialog>
 
    <!--Category edit modal-->
-   <v-dialog v-model="categoryShowModal" max-width="400" max-height="250">
-     <v-card class="card" style=" border-radius: 10px;">
+   <v-dialog v-model="categoryShowModal" max-width="400" max-height="250" :persistent="true">
+     <v-card class="card" style="background-color: lightskyblue; border-radius: 10px;">
        <v-card-title class="confirm-title">Edit category</v-card-title>
        <form>
          <div class="mb-3">
@@ -244,9 +247,10 @@
          <span style="color: red;">* - the field is required</span>
          <div style="margin-bottom: 10px;"></div>
          <div class="d-flex justify-content-center">
-           <v-btn @click="editCategory()" color="grey-darken-3">
-             Submit
-           </v-btn>
+           <div class="button-container">
+             <v-btn @click="cancelSubmit" min-width="100" color="grey-darken-3" class="mr-15">Cancel</v-btn>
+             <v-btn @click="editCategory" color="grey-darken-3" min-width="100">Submit</v-btn>
+           </div>
          </div>
        </form>
      </v-card>
@@ -490,6 +494,11 @@ export default {
             this.errorMessages = error.response.data;
           }
         });
+    },
+    cancelSubmit() {
+      this.categoryShowModal = false;
+      this.placeShowModal = false;
+      this.eventShowModal = false;
     },
     eventShowConfirm(event) {
       this.eventShowConfirmation = true;
