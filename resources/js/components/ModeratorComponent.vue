@@ -507,6 +507,17 @@ export default {
       this.categoryShowModal = false;
       this.placeShowModal = false;
       this.eventShowModal = false;
+      this.resetErrors();
+    },
+    resetErrors() {
+      this.errorMessages.message = "";
+      this.errorMessages.errors.name = null;
+      this.errorMessages.errors.address = null;
+      this.errorMessages.errors.event_start = null;
+      this.errorMessages.errors.event_end = null;
+      this.errorMessages.errors.place_id = null;
+      this.errorMessages.errors.category_id = null;
+      this.errorMessages.errors.description = null;
     },
     eventShowConfirm(event) {
       this.eventShowConfirmation = true;

@@ -211,6 +211,11 @@ export default {
         cancelSubmit() {
           this.showNewCategoryModal = false;
           this.showEditCategoryModal = false;
+          this.resetErrors();
+        },
+        resetErrors() {
+          this.errorMessages.message = "";
+          this.errorMessages.errors.name = null;
         },
         categoryOpenEditModal(category) {
           this.showEditCategoryModal = true;

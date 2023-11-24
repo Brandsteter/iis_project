@@ -128,6 +128,11 @@ export default {
         },
         cancelSubmit() {
           this.showEditCategoryModal = false;
+          this.resetErrors();
+        },
+        resetErrors() {
+          this.errorMessages.message = "";
+          this.errorMessages.errors.name = null;
         },
         deleteCategory(category) {
           const url = `/category/${category.id}`;

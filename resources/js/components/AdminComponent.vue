@@ -257,6 +257,15 @@ export default {
     },
     cancelSubmit() {
       this.showModal = false;
+      this.resetErrors();
+    },
+    resetErrors() {
+      this.errorMessages.message = "";
+      this.errorMessages.errors.name = null;
+      this.errorMessages.errors.email = null;
+      this.errorMessages.errors.role = null;
+      this.errorMessages.errors.password = null;
+      this.errorMessages.errors.passwordRepeat = null;
     },
     isRole,
     getAuthUser,

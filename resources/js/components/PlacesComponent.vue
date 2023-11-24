@@ -211,23 +211,30 @@ export default {
         },
         cancelSubmit() {
           this.showModal = false;
+          this.resetErrors();
         },
-        showConfirm(place) {
-            this.showConfirmation = true;
-            this.placeDeleteConfirm = place;
-        },
-        confirmDelete() {
-            this.showConfirmation = false;
-            this.deletePlace(this.placeDeleteConfirm);
-            this.placeDeleteConfirm = null;
-        },
-        cancelDelete() {
-            this.showConfirmation = false;
-            this.placeDeleteConfirm = null;
-        },
+      resetErrors() {
+          this.errorMessages.message = "";
+          this.errorMessages.errors.name = null;
+          this.errorMessages.errors.address = null;
+          this.errorMessages.errors.description = null;
+      },
+      showConfirm(place) {
+          this.showConfirmation = true;
+          this.placeDeleteConfirm = place;
+      },
+      confirmDelete() {
+          this.showConfirmation = false;
+          this.deletePlace(this.placeDeleteConfirm);
+          this.placeDeleteConfirm = null;
+      },
+      cancelDelete() {
+          this.showConfirmation = false;
+          this.placeDeleteConfirm = null;
+      },
 
-        isRole,
-        getAuthUser,
+      isRole,
+      getAuthUser,
     }
 };
 </script>

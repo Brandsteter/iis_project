@@ -172,9 +172,7 @@ export default {
           };
           axios.post(url, requestData)
               .then(response => {
-                this.fetchComments(eventMutable);
-                this.errorMessages.errors.body = "";
-                this.errorMessages.errors.rating = "";
+                window.location.href = `/event/${eventMutable.id}/detail`
               })
               .catch(error => {
                   if (error.response && error.response.data.message) {

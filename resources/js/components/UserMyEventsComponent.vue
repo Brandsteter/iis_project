@@ -314,6 +314,16 @@ export default {
     },
     cancelSubmit() {
         this.showModal = false;
+        this.resetErrors();
+    },
+    resetErrors() {
+      this.errorMessages.message = "";
+      this.errorMessages.errors.name = null;
+      this.errorMessages.errors.event_end = null;
+      this.errorMessages.errors.event_start = null;
+      this.errorMessages.errors.capacity_max = null;
+      this.errorMessages.errors.category_id = null;
+      this.errorMessages.errors.place_id = null;
     },
     fetchApprovedPlaces() {
       axios.get('/place/approved')
