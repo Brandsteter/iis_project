@@ -25,9 +25,10 @@ export default {
               plugins: [ dayGridPlugin ],
               initialView: 'dayGridMonth',
               events: [],
+              displayEventTime: false,
               eventClick: this.handleEventClick,
             },
-            eventColors: ['#aaf6f0', '#f0aaf6', '#aaf6aa', '#f6aaf0', '#aaf0f6'],
+            eventColors:['#91DEFF', '#88C0F3', '#8DA1DE', '#9780C0', '#9D5F98', '#B04C7B'],
           };
     },
 
@@ -54,6 +55,7 @@ export default {
                   start: `${event.event_start}${startTime}`,
                   end: `${event.event_end}${endTime}`,
                   color: this.eventColors[index % this.eventColors.length],
+                  allDay: false,
                   url: `/event/${event.id}/detail`
                 };
               });

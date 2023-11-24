@@ -77,8 +77,14 @@ class AuthController extends Controller
 
     public function me()
     {
-        return response([
-            "data" => auth()->user()->load("roles"),
-        ]);
+        if (Auth::check()) {
+            return response([
+                "data" => auth()->user()->load("roles"),
+            ]);
+        } else {
+            return response([
+                "error" => "User not logged in",
+            ], 401);
+        }
     }
 }
