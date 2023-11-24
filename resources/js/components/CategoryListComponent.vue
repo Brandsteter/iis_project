@@ -74,6 +74,7 @@ export default {
             categoryColors: ['#91DEFF', '#88C0F3', '#8DA1DE', '#9780C0', '#9D5F98', '#B04C7B'],
             showConfirmation: false,
             roleEnum: RoleEnum,
+            authUser: null,
             showEditCategoryModal: false,
             fields: {
               id: "",
