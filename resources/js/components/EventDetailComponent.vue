@@ -29,7 +29,7 @@
     </div>
 
     <div v-if="checkIfIsLoggedIn() && !checkIfEventEnded(event)" >
-      <v-btn v-if="(!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)) && (eventMutable.capacity_current !== checkCapacityValue(eventMutable)) " class="attend-button" @click="attendEvent(eventMutable)">
+      <v-btn v-if="(!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser) && (eventMutable.capacity_current !== checkCapacityValue(eventMutable)) && (eventMutable.is_approved)) " class="attend-button" @click="attendEvent(eventMutable)">
           Attend
       </v-btn>
       <v-btn v-else-if="!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser)" disabled class="attend-button-disabled">
@@ -38,6 +38,9 @@
       <v-btn v-else class="attend-button" color="red" @click="unattendEvent(eventMutable)">
         Leave event
       </v-btn>
+      <span v-if="!eventMutable.is_approved" style="color: red;">Event is not approved yet</span>
+      <span v-if="(!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser) && (eventMutable.capacity_current === checkCapacityValue(eventMutable)))" style="color: red;">Event is full</span>
+
       </div>
       <div v-else>
         <br>
