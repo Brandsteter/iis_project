@@ -223,7 +223,6 @@ export default {
     submit() {
       if (((this.fields.password !== null || this.fields.passwordRepeat !== null) && (this.fields.password === this.fields.passwordRepeat)) || (this.fields.password === null || this.fields.passwordRepeat === null)) {
         if (this.modalMode === 'create') {
-          console.log(this.fields.role)
           axios.post('/admin/user/', this.fields).then((response) => {
             if (response) {
               window.location.href = '/admin'

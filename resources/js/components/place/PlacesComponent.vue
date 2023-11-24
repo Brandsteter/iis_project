@@ -102,8 +102,8 @@
 </template>
 
 <script>
-import {isRole, getAuthUser} from "../app";
-import {RoleEnum} from "../enums/RoleEnum";
+import {isRole, getAuthUser} from "../../app";
+import {RoleEnum} from "../../enums/RoleEnum";
 import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
 export default {

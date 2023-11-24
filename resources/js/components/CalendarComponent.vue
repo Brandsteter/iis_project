@@ -58,8 +58,6 @@ export default {
                 };
               });
 
-              console.log(this.calendarOptions.events);
-
 
             })
             .catch(error => {

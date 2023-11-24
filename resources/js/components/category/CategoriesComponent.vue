@@ -85,9 +85,9 @@
 </template>
 
 <script>
-import {isRole, getAuthUser} from "../app";
+import {isRole, getAuthUser} from "../../app";
 import categoryList from "./CategoryListComponent.vue";
-import {RoleEnum} from "../enums/RoleEnum";
+import {RoleEnum} from "../../enums/RoleEnum";
 import {Bootstrap5Pagination} from "laravel-vue-pagination";
 
 export default {
@@ -175,7 +175,6 @@ export default {
                 .then(response => {
                     this.parentName = category.name;
                     this.children = response.data;
-                    console.log("Parent" + this.parentName)
                 })
                 .catch(error => {
                     console.error('Error fetching unapproved categories:', error);

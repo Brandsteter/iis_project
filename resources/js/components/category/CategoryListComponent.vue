@@ -61,8 +61,8 @@
 </template>
 
 <script>
-import {isRole, getAuthUser} from "../app";
-import {RoleEnum} from "../enums/RoleEnum";
+import {isRole, getAuthUser} from "../../app";
+import {RoleEnum} from "../../enums/RoleEnum";
 export default {
     props: ['categoryId', 'depthIndex'],
     data() {

@@ -158,8 +158,8 @@
 </template>
 
 <script>
-import {isRole, getAuthUser} from "../app";
-import {RoleEnum} from "../enums/RoleEnum";
+import {isRole, getAuthUser} from "../../app";
+import {RoleEnum} from "../../enums/RoleEnum";
 import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
 export default {
@@ -263,7 +263,6 @@ export default {
         .catch((error) => {
           if (error.response && error.response.data.message) {
             this.errorMessages = error.response.data;
-            console.log(this.errorMessages);
           }
         });
     },

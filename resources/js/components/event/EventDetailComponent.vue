@@ -99,8 +99,8 @@
 </template>
 
 <script>
-import {isRole, getAuthUser, checkIfUserIsInArrayOfUsers} from "../app";
-import {RoleEnum} from "../enums/RoleEnum";
+import {isRole, getAuthUser, checkIfUserIsInArrayOfUsers} from "../../app";
+import {RoleEnum} from "../../enums/RoleEnum";
 
 
 
@@ -150,7 +150,7 @@ export default {
             const url = `/event/${eventMutable.id}`;
             axios.post(url, eventMutable)
                 .then(response => {
-                    this.eventMutable = response.data;
+                    //this.eventMutable = response.data;
                     window.location.href = `${url}/detail`;
                 })
                 .catch(error => {

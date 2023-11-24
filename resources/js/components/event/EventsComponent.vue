@@ -31,14 +31,14 @@
                         <td v-else-if="checkIfIsLoggedIn()">
                            <v-icon color="red">mdi-close</v-icon>
                         </td>
-                        <td><v-btn variant="text" color="secondary" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
+                        <td><v-btn variant="text" color="primary" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
                         <td><v-btn variant="text"
                                    color="secondary"
                                    @click="openEditModal(event)"
                                    v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
                                    Edit</v-btn></td>
                         <td><v-btn variant="text"
-                                   color="primary"
+                                   color="secondary"
                                    @click="assignCategory(event)"
                                    v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)">
                                    Add category</v-btn></td>
@@ -158,8 +158,8 @@
 </template>
 
 <script>
-import {isRole, getAuthUser, checkIfUserIsInArrayOfUsers} from "../app";
-import {RoleEnum} from "../enums/RoleEnum";
+import {isRole, getAuthUser, checkIfUserIsInArrayOfUsers} from "../../app";
+import {RoleEnum} from "../../enums/RoleEnum";
 import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
 export default {
@@ -220,7 +220,6 @@ export default {
             axios.get('/event/approved?page=' + page)
                 .then(response => {
                     this.eventsApproved = response.data;
-                    console.log(this.eventsApproved)
                 })
                 .catch(error => {
                     console.error('Error fetching events:', error);
@@ -267,7 +266,6 @@ export default {
                 .catch((error) => {
                   if (error.response && error.response.data.message) {
                     this.errorMessages = error.response.data;
-                    console.log(this.errorMessages);
                   }
                 });
         },

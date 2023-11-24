@@ -51,17 +51,16 @@ app.use(vuetify);
 
 app.component("register", require("./components/auth/RegisterComponent").default);
 app.component("login", require("./components/auth/LoginComponent").default);
-app.component("root", require("./components/RootComponent").default);
 app.component("calendar", require("./components/CalendarComponent").default);
 app.component("admin", require("./components/AdminComponent").default);
 app.component("moderator", require("./components/ModeratorComponent.vue").default);
-app.component("events", require("./components/EventsComponent").default);
-app.component("places", require("./components/PlacesComponent").default);
-app.component("categories", require("./components/CategoriesComponent").default);
-app.component("categoryList", require("./components/CategoryListComponent.vue").default);
-app.component("categorydetail", require("./components/CategorydetailComponent.vue").default);
-app.component("eventdetail", require("./components/EventDetailComponent.vue").default);
-app.component("usermyevents", require("./components/UserMyEventsComponent.vue").default);
-app.component("placedetail", require("./components/PlaceDetailComponent.vue").default);
+app.component("events", require("./components/event/EventsComponent.vue").default);
+app.component("places", require("./components/place/PlacesComponent.vue").default);
+app.component("categories", require("./components/category/CategoriesComponent.vue").default);
+app.component("categoryList", require("./components/category/CategoryListComponent.vue").default);
+app.component("categorydetail", require("./components/category/CategoryDetailComponent.vue").default);
+app.component("eventdetail", require("./components/event/EventDetailComponent.vue").default);
+app.component("usermyevents", require("./components/event/UserMyEventsComponent.vue").default);
+app.component("placedetail", require("./components/place/PlaceDetailComponent.vue").default);
 
 app.mount('#app');
