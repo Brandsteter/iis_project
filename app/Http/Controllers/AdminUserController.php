@@ -88,7 +88,7 @@ class AdminUserController extends Controller
 
     public function getAllUsers()
     {
-        $users = User::with('roles')->get();
+        $users = User::with('roles')->paginate(5);
 
         return response()->json($users);
     }

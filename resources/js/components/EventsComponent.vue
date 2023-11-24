@@ -212,7 +212,6 @@ export default {
     },
     mounted() {
         this.fetchApprovedEvents();
-        this.fetchUnapprovedEvents();
         this.fetchApprovedPlaces();
         this.fetchApprovedCategories();
     },
@@ -222,15 +221,6 @@ export default {
                 .then(response => {
                     this.eventsApproved = response.data;
                     console.log(this.eventsApproved)
-                })
-                .catch(error => {
-                    console.error('Error fetching events:', error);
-                })
-        },
-        fetchUnapprovedEvents(page=1) {
-            axios.get('/event/unapproved?page=' + page)
-                .then(response => {
-                    this.eventsUnapproved = response.data;
                 })
                 .catch(error => {
                     console.error('Error fetching events:', error);
