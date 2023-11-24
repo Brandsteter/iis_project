@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-            <tr v-for="(event, index) in category.events" :style="{ background: index % 2 === 0 ? 'white' : 'lightgrey' }">
+            <tr v-for="event in category.events">
                 <td>{{ event.name }}</td>
                 <td>{{ event.event_start}}</td>
                 <td>{{ event.event_end}}</td>
@@ -29,7 +29,7 @@
     <div v-else>
         <p style="font-size: 20px ; margin-left:10px"><b>No events in this category</b></p>
     </div>
-    <v-btn class="create-event-button" @click="newSubcategory" prepend-icon="mdi-plus">Add new subcategory</v-btn>
+    <v-btn v-if="checkIfIsLoggedIn()" class="create-event-button" @click="newSubcategory" prepend-icon="mdi-plus">Add new subcategory</v-btn>
 
 
 
@@ -99,6 +99,9 @@ export default {
       },
       cancelSubmit() {
         this.showNewSubcategoryModal = false;
+      },
+      checkIfIsLoggedIn(){
+        return (isRole(this.roleEnum.User , this.authUser) || isRole(this.roleEnum.Moderator , this.authUser) || isRole(this.roleEnum.Admin , this.authUser));
       },
       isRole,
       getAuthUser,

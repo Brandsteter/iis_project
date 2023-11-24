@@ -1,6 +1,6 @@
 <template>
     <p class="header-text-format"><b>Categories</b></p>
-    <v-btn @click="newCategory" prepend-icon="mdi-plus">Add new category</v-btn>
+    <v-btn v-if="checkIfIsLoggedIn()" @click="newCategory" prepend-icon="mdi-plus">Add new category</v-btn>
     <div>
         <hr>
         <ul class="custom-list">
