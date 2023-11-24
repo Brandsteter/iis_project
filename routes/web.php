@@ -55,12 +55,13 @@ Route::prefix('/moderator')->group(function () {
 Route::prefix('/category')->group(function () {
     Route::get('/top', [\App\Http\Controllers\CategoryController::class, 'getCategoriesTopLevelApproved']);
     Route::get('/all', [\App\Http\Controllers\CategoryController::class, 'getCategoriesAll']);
+    Route::get('/approved', [\App\Http\Controllers\CategoryController::class, 'getCategoriesApproved']);
+    Route::get('/unapproved', [\App\Http\Controllers\CategoryController::class, 'getCategoriesUnapproved']);
+    Route::get('/', [\App\Http\Controllers\UserController::class, 'categoriesPage']);
 
-    Route::middleware('auth')->group(function () {
+
+  Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\CategoryController::class, 'create']);
-        Route::get('/approved', [\App\Http\Controllers\CategoryController::class, 'getCategoriesApproved']);
-        Route::get('/unapproved', [\App\Http\Controllers\CategoryController::class, 'getCategoriesUnapproved']);
-        Route::get('/', [\App\Http\Controllers\UserController::class, 'categoriesPage']);
 
         Route::middleware('moderator')->group(function () {
             Route::delete('/{category}', [\App\Http\Controllers\CategoryController::class, 'delete']);
