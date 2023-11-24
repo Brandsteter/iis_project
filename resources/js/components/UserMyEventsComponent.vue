@@ -102,7 +102,7 @@
                         <span v-if="errorMessages.errors.place_id" style="color: red;">{{errorMessages.errors.place_id[0]}}</span>
                     </div>
                     <div class="mb-3">
-                        <label for="InputDescription" class="form-label">Description<span style="color: red;">*</span></label>
+                        <label for="InputDescription" class="form-label">Description</label>
                         <textarea class="form-control" id="InputDescription" v-model="fields.description" maxlength="255" type="text" required></textarea>
                     </div>
                     <span style="color: red;">* - the field is required</span>

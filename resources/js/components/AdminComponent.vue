@@ -61,16 +61,20 @@
                     <span v-if="errorMessages.errors.role" style="color: red;">{{errorMessages.errors.role[0]}}</span>
                   </div>
                   <div class="mb-3">
-                    <label for="InputPassword" class="form-label">Password<span style="color: red;">*</span></label>
+                    <label v-if="modalMode === 'create'" for="InputPassword" class="form-label">Password<span style="color: red;">*</span></label>
+                    <label v-else-if="modalMode === 'edit'" for="InputPassword" class="form-label">Password</label>
                     <input class="form-control" id="InputPassword"  maxlength="255" v-model="fields.password" type="password">
                     <span v-if="errorMessages.errors.password" style="color: red;">{{errorMessages.errors.password[0]}}</span>
                   </div>
                   <div class="mb-3">
-                    <label for="InputPasswordRepeat" class="form-label">Repeat password<span style="color: red;">*</span></label>
+                    <label v-if="modalMode === 'create'" for="InputPassword" class="form-label">Repeat Password<span style="color: red;">*</span></label>
+                    <label v-else-if="modalMode === 'edit'" for="InputPassword" class="form-label">Repeat Password</label>
                     <input class="form-control" id="InputPasswordRepeat" maxlength="255" v-model="fields.passwordRepeat" type="password">
                     <span v-if="errorMessages.errors.passwordRepeat" style="color: red;">{{errorMessages.errors.passwordRepeat[0]}}</span>
                   </div>
                   <span style="color: red;">* - the field is required</span>
+                  <div style="margin-bottom: 10px;"></div>
+                  <span style="color: red;" v-if="errorMessages.message && errorMessages.message === 'This user is admin, role cannot be changed'">{{errorMessages.message}}</span>
                   <div style="margin-bottom: 10px;"></div>
                     <div class="d-flex justify-content-center">
                         <v-btn @click="submit" color="grey-darken-3">
@@ -85,6 +89,7 @@
     <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
         <v-card class="card" style=" border-radius: 10px;">
             <v-card-title class="confirm-title">Do you want to delete this user?</v-card-title>
+            <span v-if="errorMessages.message" style="color: red;">{{errorMessages.message}}</span>
             <div class="button-container">
                 <v-btn @click="confirmDelete()"
                        min-width="80"
@@ -94,6 +99,18 @@
                        color="red">No</v-btn>
             </div>
         </v-card>
+    </v-dialog>
+
+    <!--Delete error window-->
+    <v-dialog v-model="showDeleteErrorModal" max-width="500" max-height="250">
+      <v-card class="card" style=" border-radius: 10px;">
+        <v-card-title class="confirm-title">Error: {{errorMessages.message}} and cannot be deleted</v-card-title>
+        <div class="button-container">
+          <v-btn @click="closeErrorModal"
+                 min-width="80"
+                 color="green">Ok</v-btn>
+        </div>
+      </v-card>
     </v-dialog>
 </template>
 
@@ -118,6 +135,7 @@ export default {
       modalMode: 'create',
       showConfirmation: false,
       userDeleteConfirm: false,
+      showDeleteErrorModal: false,
       errorMessages: {
         message: "",
         errors: {
@@ -149,9 +167,16 @@ export default {
           .then(() => {
             this.fetchUsers();
           })
-          .catch(error => {
-            console.error('Error deleting user:', error);
+          .catch((error) => {
+            if (error.response && error.response.data.message) {
+              this.errorMessages.message = error.response.data.message;
+              this.showDeleteErrorModal = true;
+            }
           });
+    },
+    closeErrorModal() {
+      this.errorMessages.message = "";
+      this.showDeleteErrorModal = false;
     },
     openEditModal(user) {
       this.modalMode = 'edit';
@@ -195,8 +220,13 @@ export default {
             }
           })
           .catch((error) => {
-            if (error.response && error.response.data.message) {
-              this.errorMessages = error.response.data;
+            if (error.response) {
+              if (error.response.data.message) {
+                this.errorMessages.message = error.response.data.message;
+              }
+              if (error.response.data.errors) {
+                this.errorMessages.errors = error.response.data.errors;
+              }
             }
           });
         } else if (this.modalMode === 'edit') {
@@ -207,8 +237,14 @@ export default {
             }
           })
           .catch((error) => {
-            if (error.response && error.response.data.message) {
-              this.errorMessages = error.response.data;
+            if (error.response) {
+              console.log("wat")
+              if (error.response.data.message) {
+                this.errorMessages.message = error.response.data.message;
+              }
+              if (error.response.data.errors) {
+                this.errorMessages.errors = error.response.data.errors;
+              }
             }
           });
         }

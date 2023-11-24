@@ -45,7 +45,7 @@
                 </tbody>
             </table>
             <Bootstrap5Pagination
-                :data="eventsApproved"
+                :data="upcomingEvents"
                 @pagination-change-page="fetchApprovedEvents"
             />
         </div>
@@ -98,7 +98,7 @@
           </tbody>
         </table>
         <Bootstrap5Pagination
-            :data="eventsApproved"
+            :data="previousEvents"
             @pagination-change-page="fetchApprovedEvents"
         />
       </div>
