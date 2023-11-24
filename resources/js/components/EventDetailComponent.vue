@@ -44,7 +44,6 @@
       </v-btn>
       <span v-if="!eventMutable.is_approved" style="color: red;">Event is not approved yet</span>
       <span v-if="(!checkIfUserIsInArrayOfUsers(eventMutable.users, authUser) && (eventMutable.capacity_current === checkCapacityValue(eventMutable)))" style="color: red;">Event is full</span>
-
       </div>
       <div v-else>
         <br>
@@ -78,17 +77,18 @@
         </div>
       </div>
 
-      <div class="users-comment-input-all">
+      <div v-if="this.comments.length > 0" class="users-comment-input-all">
         <div class="comment-box" v-for="(comment) in comments">
-            <v-btn  class="delete-button" density="compact" variant="text"  v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser) || (authUser.name === comment.user.name)"
-                   color="red" @click="deleteComment(eventMutable,comment)">
-              Delete
-            </v-btn>
-            <h5><b>{{comment.user.name}}</b></h5>
-            <span v-for="starIndex in 5" :key="starIndex">
+          <v-btn class="delete-button" density="compact" variant="text"  v-if="checkIfIsLoggedIn() && (isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser) || (authUser.name === comment.user.name))"
+                  color="red" @click="deleteComment(eventMutable,comment)">
+            Delete
+          </v-btn>
+          <h5><b>{{comment.user.name}}</b></h5>
+          <span v-for="starIndex in 5" :key="starIndex">
               <i :class="{ 'fas': starIndex <= comment.rating, 'far': starIndex >= comment.rating }" class="fa-star"></i>
             </span>
-            <p class="comment-text">{{comment.body}}</p>
+          <p class="comment-text">{{comment.body}}</p>
+
         </div>
       </div>
 

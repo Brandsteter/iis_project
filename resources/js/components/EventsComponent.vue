@@ -11,7 +11,7 @@
                     <th>Place</th>
                     <th>Capacity</th>
                     <th>Creator</th>
-                    <th>Attending</th>
+                    <th v-if="checkIfIsLoggedIn()">Attending</th>
                 </tr>
                 </thead>
                 <tbody class="list-container">
@@ -25,10 +25,10 @@
                         <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
                         <td>{{event.creator.name}}</td>
 
-                        <td v-if="checkIfUserIsInArrayOfUsers(event.users, authUser)">
+                        <td v-if="checkIfIsLoggedIn() && checkIfUserIsInArrayOfUsers(event.users, authUser)">
                             <v-icon color="green">mdi-check</v-icon>
                         </td>
-                        <td v-else>
+                        <td v-else-if="checkIfIsLoggedIn()">
                            <v-icon color="red">mdi-close</v-icon>
                         </td>
                         <td><v-btn variant="text" color="secondary" :href="`/event/${event.id}/detail`">Detail</v-btn></td>
@@ -344,6 +344,9 @@ export default {
         assignCategory(event) {
             this.showCategoryAssignment = true;
             this.eventManipulate = event;
+        },
+        checkIfIsLoggedIn(){
+          return (isRole(this.roleEnum.User , this.authUser) || isRole(this.roleEnum.Moderator , this.authUser) || isRole(this.roleEnum.Admin , this.authUser));
         },
 
         isRole,
