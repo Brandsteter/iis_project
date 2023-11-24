@@ -36,6 +36,10 @@
                 </tr>
                 </tbody>
             </table>
+            <Bootstrap5Pagination
+                :data="placesApproved"
+                @pagination-change-page="fetchApprovedPlaces"
+            />
         </div>
         <div v-else>
             <p style="font-size: 20px ; margin-left:10px"><b>No places created yet</b></p>
@@ -95,6 +99,7 @@
 <script>
 import {isRole, getAuthUser} from "../app";
 import {RoleEnum} from "../enums/RoleEnum";
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
 export default {
     data() {
@@ -122,6 +127,9 @@ export default {
             },
         };
     },
+    components: {
+      Bootstrap5Pagination
+    },
     created: async function(){
         this.authUser = await this.getAuthUser()
     },
@@ -129,8 +137,8 @@ export default {
         this.fetchApprovedPlaces();
     },
     methods: {
-        fetchApprovedPlaces() {
-            axios.get('/place/approved')
+        fetchApprovedPlaces(page=1) {
+            axios.get('/place/approved?page=' + page)
                 .then(response => {
                     this.placesApproved = response.data;
                 })

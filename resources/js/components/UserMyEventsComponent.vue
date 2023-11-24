@@ -46,7 +46,7 @@
         </table>
         <Bootstrap5Pagination
           :data="events"
-          @pagination-change-page="fetchMyEvents()"
+          @pagination-change-page="fetchMyEvents"
         />
       </div>
     </div>
@@ -215,7 +215,7 @@ export default {
   },
   methods: {
       fetchMyEvents(page=1) {
-          axios.get('/event/my-events?page= + page')
+          axios.get('/event/my-events?page='+ page)
               .then(response => {
                   this.events = response.data;
               })
