@@ -18,8 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('event_id');
 
-            $table->boolean('has_paid')->default(false);
-
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('event_id')->references('id')->on('roles')->cascadeOnDelete();
         });
