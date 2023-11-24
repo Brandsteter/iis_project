@@ -32,7 +32,7 @@ class EventController extends Controller
             'name' => ['required', 'string', 'unique:events,name','max:255'],
             'event_start' => ['required', 'date', 'after_or_equal:' . now()->toDateString()],
             'event_end' => ['required', 'date', 'after_or_equal:event_start'],
-            'capacity_max' => ['nullable', 'integer', 'max:255'],
+            'capacity_max' => ['nullable', 'integer'],
             'place_id' => ['required', Rule::exists('places', 'id')],
             'event_start_time' => ['nullable', 'date_format:H:i'],
             'event_end_time' => ['nullable', 'date_format:H:i'],

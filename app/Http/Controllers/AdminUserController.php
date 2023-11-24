@@ -57,6 +57,7 @@ class AdminUserController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email', 'max:255'],
             'password' => ['nullable', 'string', 'min:6'],
             'passwordRepeat' => ['nullable', 'same:password'],
             'role' => ['required', 'string']
