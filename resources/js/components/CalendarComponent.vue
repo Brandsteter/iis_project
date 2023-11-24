@@ -25,6 +25,7 @@ export default {
               plugins: [ dayGridPlugin ],
               initialView: 'dayGridMonth',
               events: [],
+              eventClick: this.handleEventClick,
             },
             eventColors: ['#aaf6f0', '#f0aaf6', '#aaf6aa', '#f6aaf0', '#aaf0f6'],
           };
@@ -52,7 +53,8 @@ export default {
                   title: event.name,
                   start: `${event.event_start}${startTime}`,
                   end: `${event.event_end}${endTime}`,
-                  color: this.eventColors[index % this.eventColors.length]
+                  color: this.eventColors[index % this.eventColors.length],
+                  url: `/event/${event.id}/detail`
                 };
               });
 
@@ -63,6 +65,12 @@ export default {
             .catch(error => {
               console.error('Error fetching events:', error);
             });
+      },
+      handleEventClick(info) {
+        const eventUrl = info.event.url;
+        if (eventUrl) {
+          window.location.href = eventUrl;
+        }
       },
       isRole,
       getAuthUser,

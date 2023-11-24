@@ -19,7 +19,7 @@
           <td>{{ user.name }}</td>
           <td>{{ user.roles[0].role }}</td>
           <td>{{ user.email }}</td>
-          <td>{{user.created_at}}</td>
+          <td>{{user.created_at.split('T')[0]}}</td>
           <td><v-btn variant="text"
                      color="secondary"
                      @click="openEditModal(user)">Edit User</v-btn></td>
