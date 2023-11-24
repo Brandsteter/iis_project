@@ -78,6 +78,10 @@
          </tr>
          </tbody>
        </table>
+         <Bootstrap5Pagination
+             :data="placesUnapproved"
+             @pagination-change-page="fetchUnapprovedPlaces"
+         />
      </div>
    </div>
 
@@ -108,6 +112,10 @@
                       @click="categoryShowConfirm(category)">Delete</v-btn></td>
          </tr>
          </tbody>
+           <Bootstrap5Pagination
+               :data="categoriesUnapproved"
+               @pagination-change-page="fetchUnapprovedCategories"
+           />
        </table>
      </div>
    </div>
@@ -349,8 +357,8 @@ export default {
         })
     },
 
-    fetchUnapprovedPlaces() {
-      axios.get('/place/unapproved')
+    fetchUnapprovedPlaces(page=1) {
+      axios.get('/place/unapproved?page=' + page)
         .then(response => {
           this.placesUnapproved = response.data;
         })
