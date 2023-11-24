@@ -76,7 +76,7 @@
 
       <div class="users-comment-input-all">
         <div class="comment-box" v-for="(comment) in comments">
-            <v-btn  class="delete-button" density="compact" variant="text"  v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser)"
+            <v-btn  class="delete-button" density="compact" variant="text"  v-if="isRole(roleEnum.Moderator , authUser) || isRole(roleEnum.Admin , authUser) || (authUser.name === comment.user.name)"
                    color="red" @click="deleteComment(eventMutable,comment)">
               Delete
             </v-btn>
