@@ -5,7 +5,8 @@
         <hr>
         <ul class="custom-list">
             <li v-for="category in categoriesTopLevelApproved" class="list-item">
-                <v-btn @click="toggleCollapse(category.name)" density="comfortable" icon="mdi-arrow-down" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length] }"></v-btn>
+                <v-btn v-if="categoryShown === category.name && category.categories !== {}" @click="toggleCollapse(category.name)" density="comfortable" icon="mdi-arrow-right" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length] }"></v-btn>
+                <v-btn v-else @click="toggleCollapse(category.name)" density="comfortable" icon="mdi-arrow-down" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length] }"></v-btn>
                 <v-btn class="category-link" :href="`/category/${category.id}/detail`" min-width="300" :style="{ backgroundColor: categoryColors[depthIndex % categoryColors.length]}">{{ category.name }}</v-btn>
                 <v-btn variant="text"
                             color="secondary"

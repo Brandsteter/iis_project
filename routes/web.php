@@ -120,7 +120,7 @@ Route::prefix('/event')->group(function () {
         Route::prefix('/{event}')->group(function () {
             Route::prefix('/comments')->group(function () {
                 Route::post('/', [\App\Http\Controllers\CommentController::class, 'create']);
-                Route::delete('/{comment}', [\App\Http\Controllers\CommentController::class, 'delete']);
+                Route::delete('/{comment}', [\App\Http\Controllers\CommentController::class, 'delete'])->middleware('moderator');
             });
         });
     });
