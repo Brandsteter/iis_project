@@ -76,10 +76,11 @@ Route::prefix('/category')->group(function () {
 });
 
 Route::prefix('/place')->group(function () {
+    Route::get('/approved', [\App\Http\Controllers\PlaceController::class, 'getPlacesApproved']);
+
     Route::middleware('auth')->group(function () {
         Route::post('/', [\App\Http\Controllers\PlaceController::class, 'create']);
         Route::get('/', [\App\Http\Controllers\UserController::class, 'placesPage']);
-        Route::get('/approved', [\App\Http\Controllers\PlaceController::class, 'getPlacesApproved']);
         Route::get('/unapproved', [\App\Http\Controllers\PlaceController::class, 'getPlacesUnapproved']);
         Route::get('/{place}/detail', [\App\Http\Controllers\PlaceController::class, 'placeDetailPage']);
 

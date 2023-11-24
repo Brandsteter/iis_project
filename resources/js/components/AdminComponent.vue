@@ -14,7 +14,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="user in users" :key="user.id">
+        <tr v-for="user in users.data" :key="user.id">
           <td>{{ user.id }}</td>
           <td>{{ user.name }}</td>
           <td>{{ user.roles[0].role }}</td>
@@ -29,6 +29,10 @@
         </tr>
         </tbody>
       </table>
+      <Bootstrap5Pagination
+          :data="users"
+          @pagination-change-page="fetchUsers"
+      />
     </div>
       <v-btn class="create-event-button" @click="openCreateModal" prepend-icon="mdi-plus">Create a new user</v-btn>
   </div>
@@ -119,6 +123,7 @@
 <script>
 import {isRole, getAuthUser} from "../app";
 import {RoleEnum} from "../enums/RoleEnum";
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 export default {
   data() {
     return {
@@ -150,12 +155,15 @@ export default {
       },
     };
   },
+  components: {
+    Bootstrap5Pagination
+  },
   mounted() {
     this.fetchUsers();
   },
   methods: {
-    fetchUsers() {
-      axios.get('/admin/users')
+    fetchUsers(page=1) {
+      axios.get('/admin/users?page=' + page)
         .then(response => {
           this.users = response.data; // Update the users data property
         })

@@ -22,11 +22,14 @@ export function isRole(role, user) {
 }
 
 export async function getAuthUser() {
-    let user = null;
-    await axios.get("/auth/me").then((response) => {
-        user = response.data.data;
-    });
-    return user;
+    let user = null
+    try {
+        const response = await axios.get("/auth/me");
+        return response.data.data;
+    } catch (error) {
+        // If the request fails, it means the user is not logged in
+        throw new Error("User not logged in");
+    }
 }
 
 export function checkIfUserIsInArrayOfUsers(users, user){
