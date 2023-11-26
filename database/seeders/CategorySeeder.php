@@ -21,7 +21,7 @@ class CategorySeeder extends Seeder
         $data1 = [
             'name' => 'Culture',
             'parent_category_id' => null,
-            'is_approved' => 1
+            'is_approved' => true
         ];
 
         if (Category::where('name',$data1['name'])->count() == 0)
@@ -34,7 +34,7 @@ class CategorySeeder extends Seeder
         $data2 = [
           'name' => 'Music',
           'parent_category_id' => $parentCategoryCulture->id,
-          'is_approved' => 1
+          'is_approved' => true
         ];
 
         if (Category::where('name',$data2['name'])->count() == 0)
@@ -47,7 +47,7 @@ class CategorySeeder extends Seeder
         $data3 = [
           'name' => 'Blues',
           'parent_category_id' => $parentCategoryMusic->id,
-          'is_approved' => 1
+          'is_approved' => true
         ];
 
         if (Category::where('name',$data3['name'])->count() == 0)
@@ -58,7 +58,7 @@ class CategorySeeder extends Seeder
         $data4 = [
           'name' => 'Art',
           'parent_category_id' => $parentCategoryCulture->id,
-          'is_approved' => 1
+          'is_approved' => true
         ];
 
         if (Category::where('name',$data4['name'])->count() == 0)
@@ -69,7 +69,7 @@ class CategorySeeder extends Seeder
         $data5 = [
           'name' => 'Seminars',
           'parent_category_id' => null,
-          'is_approved' => 0
+          'is_approved' => false
         ];
 
         if (Category::where('name',$data5['name'])->count() == 0)

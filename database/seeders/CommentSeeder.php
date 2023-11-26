@@ -21,13 +21,13 @@ class CommentSeeder extends Seeder
     public function run()
     {
       $CommentEventTheatre = Event::where('name', 'Theatre Performance')->first();
-      $creatorDoe = User::where('name', 'John Doe')->first();
-      $creatorFranta = User::where('name', 'Franta Bezny')->first();
+      $creatorUser = User::where('name', 'user')->first();
+      $creatorMiro = User::where('name', 'S0zil5')->first();
 
         $data1 = [
             'event_id' => $CommentEventTheatre->id,
-            'user_id' => $creatorDoe->id,
-            'body' => 'Velice prumerne',
+            'user_id' => $creatorUser->id,
+            'body' => 'Decent event',
             'rating' => 3
         ];
 
@@ -39,8 +39,8 @@ class CommentSeeder extends Seeder
 
         $data2 = [
           'event_id' => $CommentEventTheatre->id,
-          'user_id' => $creatorFranta->id,
-          'body' => 'Moc jsem si to užil',
+          'user_id' => $creatorMiro->id,
+          'body' => 'Good event',
           'rating' => 5
         ];
 
