@@ -23,7 +23,8 @@
                         <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
                           {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
                         <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
-                        <td>{{event.creator.name}}</td>
+                        <td v-if="event.creator !== null">{{event.creator.name}}</td>
+                        <td v-else>Deleted user</td>
 
                         <td v-if="checkIfIsLoggedIn() && checkIfUserIsInArrayOfUsers(event.users, authUser)">
                             <v-icon color="green">mdi-check</v-icon>

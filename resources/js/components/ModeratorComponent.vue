@@ -24,7 +24,8 @@
            <td :class="{'red-text': event.capacity_current === checkCapacityValue(event)}" v-if="event.capacity_current === checkCapacityValue(event)">
              {{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
            <td v-else>{{ event.capacity_current }}/{{ checkCapacityValue(event) }}</td>
-           <td>{{event.creator.name}}</td>
+           <td v-if="event.creator === null">Deleted User</td>
+           <td v-else>{{event.creator.name}}</td>
            <td><v-btn variant="text"
                       color="green"
                       @click="approveEvent(event)">Approve</v-btn></td>

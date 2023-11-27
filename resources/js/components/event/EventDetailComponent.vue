@@ -19,6 +19,7 @@
         <br>
         <div class="inline-components">
             <v-icon color="dimgrey">mdi-account</v-icon>
+            <p class="text-format" v-if="eventMutable.creator === null"><b>By deleted user</b></p>
             <p class="text-format"><b>By {{eventMutable.creator.name}}</b></p>
         </div>
         <br>
