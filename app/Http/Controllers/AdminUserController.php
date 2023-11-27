@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
+use App\Models\Event;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -44,6 +45,12 @@ class AdminUserController extends Controller
             return response([
                 'message' => 'This user is admin'
             ], 400);
+        }
+
+        $userEvents = Event::where('creator_user_id', $user->id)->get();
+
+        foreach ($userEvents as $event) {
+            $event->update(['creator_user_id' => null]);
         }
 
         $user->delete();

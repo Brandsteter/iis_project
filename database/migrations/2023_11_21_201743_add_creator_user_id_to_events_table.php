@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->foreignId('creator_user_id');
+            $table->foreignId('creator_user_id')->nullable();
             $table->foreign('creator_user_id')->references('id')->on('users');
         });
     }
