@@ -64,7 +64,7 @@
             <v-card-text>
                 <form>
                     <label v-if="modalMode === 'create'" style="font-size: x-large" class="form-label">Create a new event</label>
-                    <label v-if="modalMode === 'edit'" style="font-size: x-large" class="form-label">Create a new event</label>
+                    <label v-if="modalMode === 'edit'" style="font-size: x-large" class="form-label">Edit event</label>
                     <div class="mb-3">
                         <label for="InputName" class="form-label">Name of event<span style="color: red;">*</span></label>
                         <input id="InputName" class="form-control" v-model="fields.name" type="text" maxlength="255" aria-describedby="emailHelp" required>
@@ -234,134 +234,140 @@ export default {
                   console.error('Error approving event:', error);
               });
       },
-    deleteEvent(event) {
-      const url = `/event/${event.id}`;
-      axios.delete(url)
-        .then(() => {
-            this.fetchMyEvents()
-        })
-        .catch(error => {
-          console.error('Error deleting event:', error);
-        });
-    },
-    checkCapacityValue(event) {
-      if (event.capacity_max == null){
-        return "∞";
-      }
-      else {
-        return event.capacity_max;
-      }
-    },
-    addCategory() {
-      const url = `/event/${this.eventManipulate.id}/add-category`;
-      axios.post(url, this.eventCategory)
-        .then((response) => {
-          if (response) {
-            window.location.href = '/userMyEvents'
-          }
-        })
-        .catch((error) => {
-          if (error.response && error.response.data.message) {
-            this.errorMessages = error.response.data;
-          }
-        });
-    },
-    openCreateModal() {
-      const today = new Date();
-      this.modalMode = 'create';
-      this.showModal = true;
-      this.fields = {
-        id: "",
-        name: "",
-        event_start: today.toISOString().split('T')[0],
-        event_end: "",
-        capacity_max: "",
-        place_id: "",
-        description: "",
-      }
-    },
-    openEditModal(event) {
-      this.modalMode = 'edit';
-      this.showModal = true;
-      this.fields = { ...event };
-    },
-    submit() {
-      if (this.modalMode === "create") {
-        axios.post('/event', this.fields).then((response) => {
-          if (response) {
-            window.location.href = '/userMyEvents'
-          }
-        })
-        .catch((error) => {
-          if (error.response && error.response.data.message) {
-            this.errorMessages = error.response.data;
-          }
-        });
-      }
-      else if (this.modalMode === "edit") {
-        axios.put(`/event/${this.fields.id}`, this.fields).then((response) => {
-          if (response) {
-            window.location.href = '/userMyEvents'
-          }
-        })
-        .catch((error) => {
-          if (error.response && error.response.data.message) {
-            this.errorMessages = error.response.data;
-          }
-        });
-      }
-    },
-    cancelSubmit() {
-        this.showModal = false;
-        this.resetErrors();
-    },
-    resetErrors() {
-      this.errorMessages.message = "";
-      this.errorMessages.errors.name = null;
-      this.errorMessages.errors.event_end = null;
-      this.errorMessages.errors.event_start = null;
-      this.errorMessages.errors.capacity_max = null;
-      this.errorMessages.errors.category_id = null;
-      this.errorMessages.errors.place_id = null;
-    },
-    fetchApprovedPlaces() {
-      axios.get('/place/approved')
-        .then(response => {
-          this.placesApproved = response.data;
-        })
-        .catch(error => {
-          console.error('Error fetching events:', error);
-        })
-    },
-    fetchApprovedCategories() {
-      axios.get('/category/approved')
-        .then(response => {
-          this.categoriesApproved = response.data;
-        })
-        .catch(error => {
-          console.error('Error fetching categories', error);
-        })
-    },
-    showConfirm(event) {
-      this.showConfirmation = true;
-      this.eventDeleteConfirm = event;
-    },
-    confirmDelete() {
-      this.showConfirmation = false;
-      this.deleteEvent(this.eventDeleteConfirm);
-      this.eventDeleteConfirm = null;
-    },
-    cancelDelete() {
-      this.showConfirmation = false;
-      this.eventDeleteConfirm = null;
-    },
-    assignCategory(event) {
-      this.showCategoryAssignment = true;
-      this.eventManipulate = event;
-    },
+      deleteEvent(event) {
+        const url = `/event/${event.id}`;
+        axios.delete(url)
+          .then(() => {
+              this.fetchMyEvents()
+          })
+          .catch(error => {
+            console.error('Error deleting event:', error);
+          });
+      },
+      checkCapacityValue(event) {
+        if (event.capacity_max == null){
+          return "∞";
+        }
+        else {
+          return event.capacity_max;
+        }
+      },
+      addCategory() {
+        const url = `/event/${this.eventManipulate.id}/add-category`;
+        axios.post(url, this.eventCategory)
+          .then((response) => {
+            if (response) {
+              window.location.href = '/userMyEvents'
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.data.message) {
+              this.errorMessages = error.response.data;
+            }
+          });
+      },
+      openCreateModal() {
+        const today = new Date();
+        this.modalMode = 'create';
+        this.showModal = true;
+        this.fields = {
+          id: "",
+          name: "",
+          event_start: today.toISOString().split('T')[0],
+          event_end: "",
+          capacity_max: "",
+          place_id: "",
+          description: "",
+        }
+      },
+      openEditModal(event) {
+        this.modalMode = 'edit';
+        this.showModal = true;
+        this.fields = { ...event };
+      },
+      submit() {
+        if (this.modalMode === "create") {
+          axios.post('/event', this.fields).then((response) => {
+            if (response) {
+              window.location.href = '/userMyEvents'
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.data.message) {
+              this.errorMessages = error.response.data;
+            }
+          });
+        }
+        else if (this.modalMode === "edit") {
+          this.fields.event_start_time = this.formatTime(this.fields.event_start_time);
+          this.fields.event_end_time = this.formatTime(this.fields.event_end_time);
+          axios.put(`/event/${this.fields.id}`, this.fields).then((response) => {
+            if (response) {
+              window.location.href = '/userMyEvents'
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.data.message) {
+              this.errorMessages = error.response.data;
+            }
+          });
+        }
+      },
+      cancelSubmit() {
+          this.showModal = false;
+          this.resetErrors();
+      },
+      resetErrors() {
+        this.errorMessages.message = "";
+        this.errorMessages.errors.name = null;
+        this.errorMessages.errors.event_end = null;
+        this.errorMessages.errors.event_start = null;
+        this.errorMessages.errors.capacity_max = null;
+        this.errorMessages.errors.category_id = null;
+        this.errorMessages.errors.place_id = null;
+      },
+      fetchApprovedPlaces() {
+        axios.get('/place/approved')
+          .then(response => {
+            this.placesApproved = response.data;
+          })
+          .catch(error => {
+            console.error('Error fetching events:', error);
+          })
+      },
+      fetchApprovedCategories() {
+        axios.get('/category/approved')
+          .then(response => {
+            this.categoriesApproved = response.data;
+          })
+          .catch(error => {
+            console.error('Error fetching categories', error);
+          })
+      },
+      showConfirm(event) {
+        this.showConfirmation = true;
+        this.eventDeleteConfirm = event;
+      },
+      confirmDelete() {
+        this.showConfirmation = false;
+        this.deleteEvent(this.eventDeleteConfirm);
+        this.eventDeleteConfirm = null;
+      },
+      cancelDelete() {
+        this.showConfirmation = false;
+        this.eventDeleteConfirm = null;
+      },
+      assignCategory(event) {
+        this.showCategoryAssignment = true;
+        this.eventManipulate = event;
+      },
+      formatTime(val) {
+        const [hours, minutes] = val.split(':');
+        return `${hours}:${minutes}`;
+      },
 
-    isRole,
-    getAuthUser,
+      isRole,
+      getAuthUser,
   }
 };
 </script>
