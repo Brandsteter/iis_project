@@ -29,8 +29,8 @@ class EventSeeder extends Seeder
         $data1 = [
             'name' => 'Theatre Performance',
             'capacity_max' => null,
-            'capacity_current' => 2,
-            'is_approved' => 1,
+            'capacity_current' => 3,
+            'is_approved' => true,
             'description' => 'Dramatical theatre performance',
             'event_start' => '2023-11-23',
             'event_end' => '2023-11-23',
@@ -44,6 +44,7 @@ class EventSeeder extends Seeder
         {
             $event = Event::create($data1);
             $event->categories()->attach($categoryCulture);
+            $event->users()->attach($creatorAdmin);
         }
 
 
@@ -51,7 +52,7 @@ class EventSeeder extends Seeder
           'name' => 'Music festival',
           'capacity_max' => null,
           'capacity_current' => 2,
-          'is_approved' => 1,
+          'is_approved' => true,
           'description' => 'Blues music festival',
           'event_start' => '2024-01-12',
           'event_end' => '2024-01-14',
@@ -70,7 +71,7 @@ class EventSeeder extends Seeder
         $data3 = [
           'name' => 'School party',
           'capacity_max' => 150,
-          'is_approved' => 0,
+          'is_approved' => false,
           'description' => 'A party for all introvert IT students',
           'event_start' => '2024-01-12',
           'event_end' => '2024-01-13',

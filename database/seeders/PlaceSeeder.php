@@ -22,7 +22,7 @@ class PlaceSeeder extends Seeder
             'name' => 'Semilasso',
             'address' => 'Nové Semilasso, Palackého tř. 3048/124, 612 00 Brno-Královo Pole',
             'description' => 'Brněnské kulturní centrum',
-            'is_approved' => 1
+            'is_approved' => true
         ];
 
         if (Place::where('name',$data1['name'])->count() == 0)
@@ -34,7 +34,7 @@ class PlaceSeeder extends Seeder
           'name' => 'Koleje Pod Palackého Vrchem',
           'address' => 'Kolejní 2, 612 00 Brno-Královo Pole',
           'description' => 'Studentské koleje',
-          'is_approved' => 1
+          'is_approved' => true
         ];
 
         if (Place::where('name',$data2['name'])->count() == 0)
@@ -46,7 +46,7 @@ class PlaceSeeder extends Seeder
           'name' => 'VUT FIT',
           'address' => 'Božetěchova 2/1, 612 00 Brno-Královo Pole',
           'description' => 'Fakulta informačních technologií',
-          'is_approved' => 1
+          'is_approved' => true
         ];
 
         if (Place::where('name',$data3['name'])->count() == 0)
@@ -58,7 +58,7 @@ class PlaceSeeder extends Seeder
           'name' => 'Hotel Vista',
           'address' => 'Hudcova 72, 621 00 Brno-Medlánky',
           'description' => 'Hotel Vista',
-          'is_approved' => 0
+          'is_approved' => false
         ];
 
         if (Place::where('name',$data4['name'])->count() == 0)

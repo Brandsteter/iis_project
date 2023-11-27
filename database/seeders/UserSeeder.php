@@ -23,9 +23,9 @@ class UserSeeder extends Seeder
         $eventFestival = Event::where('name', 'Music Festival')->first();
 
         $data1 = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@mail.com',
-            'password' => Hash::make('pwd123')
+            'name' => 'user',
+            'email' => 'user@user.com',
+            'password' => Hash::make('USER123')
         ];
 
         if (User::where('email',$data1['email'])->count() == 0)
@@ -38,9 +38,9 @@ class UserSeeder extends Seeder
         }
 
       $data2 = [
-        'name' => 'Franta Bezny',
-        'email' => 'frantabezny@mail.com',
-        'password' => Hash::make('heslo123')
+        'name' => 'S0zil5',
+        'email' => 'vairenao@mail.com',
+        'password' => Hash::make('USER123')
       ];
 
       if (User::where('email',$data2['email'])->count() == 0)
