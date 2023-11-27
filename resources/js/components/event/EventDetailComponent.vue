@@ -188,7 +188,7 @@ export default {
               })
         },
         fetchComments(eventMutable){
-          const url = `/event/${eventMutable.id}/comments/`;
+          const url = `/event/${eventMutable.id}/comments`;
           axios.get(url)
               .then(response => {
                 this.comments = response.data.reverse();
