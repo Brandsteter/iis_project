@@ -95,6 +95,7 @@
     <v-dialog v-model="showConfirmation" max-width="400" max-height="250">
         <v-card class="card" style=" border-radius: 10px;">
             <v-card-title class="confirm-title">Do you want to delete this user?</v-card-title>
+            <div class="text-center"> All events created by this user will be deleted</div>
             <span v-if="errorMessages.message" style="color: red;">{{errorMessages.message}}</span>
             <div class="button-container">
                 <v-btn @click="confirmDelete()"
@@ -247,7 +248,6 @@ export default {
           })
           .catch((error) => {
             if (error.response) {
-              console.log("wat")
               if (error.response.data.message) {
                 this.errorMessages.message = error.response.data.message;
               }
@@ -324,6 +324,10 @@ export default {
   .create-event-button{
       margin:20px;
       background-color: #91deff;
+  }
+
+  .text-center {
+    align-items: center;
   }
 
   .button-container {
