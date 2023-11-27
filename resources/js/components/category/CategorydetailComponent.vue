@@ -2,6 +2,9 @@
     <div>
         <p class="header-text-format"><b>Events in category {{category.name}}</b></p>
     </div>
+    <div>
+        <v-btn v-if="checkIfIsLoggedIn()" class="create-event-button" @click="newSubcategory()" prepend-icon="mdi-plus">Add new subcategory</v-btn>
+    </div>
 
     <div v-if="category.events.length > 0" class="list-container">
         <table>
@@ -29,7 +32,7 @@
     <div v-else>
         <p style="font-size: 20px ; margin-left:10px"><b>No events in this category</b></p>
     </div>
-    <v-btn v-if="checkIfIsLoggedIn()" class="create-event-button" @click="newSubcategory" prepend-icon="mdi-plus">Add new subcategory</v-btn>
+
 
 
 
@@ -78,6 +81,9 @@ export default {
            },
        }
     },
+    created: async function(){
+        this.authUser = await this.getAuthUser()
+    },
     methods: {
       checkCapacityValue(event) {
           if (event.capacity_max == null){
@@ -103,6 +109,7 @@ export default {
       checkIfIsLoggedIn(){
         return (isRole(this.roleEnum.User , this.authUser) || isRole(this.roleEnum.Moderator , this.authUser) || isRole(this.roleEnum.Admin , this.authUser));
       },
+
       isRole,
       getAuthUser,
     },
