@@ -135,7 +135,7 @@ class EventController extends Controller
     public function eventDetailPage(Event $event)
     {
         $event->load(['place', 'users', 'creator']);
-        return view('eventdetail', compact('event'));
+        return view('eventDetail', compact('event'));
     }
 
 }

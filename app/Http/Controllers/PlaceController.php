@@ -72,6 +72,6 @@ class PlaceController extends Controller
 
     public function placeDetailPage(Place $place)
     {
-        return view('placedetail', compact('place'));
+        return view('placeDetail', compact('place'));
     }
 }
